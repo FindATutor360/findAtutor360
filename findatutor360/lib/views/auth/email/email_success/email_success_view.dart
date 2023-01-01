@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class EmailSuccess extends StatelessWidget {
-  const EmailSuccess({super.key});
+class EmailSuccessView extends StatelessWidget {
+  const EmailSuccessView({super.key});
 
   @override
   Widget build(BuildContext context) {
