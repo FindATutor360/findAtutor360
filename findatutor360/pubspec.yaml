@@ -39,6 +39,8 @@ dependencies:
   flutter_svg: ^1.1.6
   badges: ^2.0.3
   iconsax: ^0.0.8
+  go_router: ^6.0.0
+  flutter_onboard: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -63,7 +65,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/svgIcons/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -74,10 +76,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: NavIcon
-  #     fonts:
-  #       - asset: assets/fonts/NavIcon.ttf
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
