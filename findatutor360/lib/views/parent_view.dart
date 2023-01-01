@@ -6,6 +6,7 @@ import 'package:findatutor360/views/main/settings/settings_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:badges/badges.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ParentView extends StatefulWidget {
   const ParentView({Key? key}) : super(key: key);
@@ -43,16 +44,22 @@ class _ParentViewState extends State<ParentView> {
         unselectedItemColor: const Color.fromRGBO(121, 132, 142, 1),
         showSelectedLabels: true,
         showUnselectedLabels: false,
+        selectedLabelStyle: const TextStyle(
+            fontFamily: 'Manrope',
+            fontWeight: FontWeight.w400,
+            color: Color.fromRGBO(4, 128, 181, 1)),
+        iconSize: 26,
+        selectedFontSize: 10,
         items: [
           const BottomNavigationBarItem(
-              icon: Icon(Icons.roofing_outlined, size: 30),
+              icon: Icon(Iconsax.home),
               label: 'Home',
-              activeIcon: Icon(Icons.roofing_rounded, size: 30),
+              activeIcon: Icon(Iconsax.home_15),
               tooltip: 'HomeView'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.storefront_outlined, size: 30),
+              icon: Icon(Iconsax.shop),
               label: 'Shop',
-              activeIcon: Icon(Icons.storefront_rounded, size: 30),
+              activeIcon: Icon(Iconsax.shop5),
               tooltip: 'Buy books and more'),
           BottomNavigationBarItem(
               icon: Badge(
@@ -60,19 +67,19 @@ class _ParentViewState extends State<ParentView> {
                   badgeContent: const Text('1',
                       style: TextStyle(fontSize: 10, color: Colors.white)),
                   badgeColor: const Color.fromRGBO(252, 57, 46, 1),
-                  child: const Icon(Icons.mail_outlined, size: 30)),
+                  child: const Icon(Iconsax.sms)),
               label: 'Message',
-              activeIcon: const Icon(Icons.mail_rounded, size: 30),
+              activeIcon: const Icon(Iconsax.sms5),
               tooltip: 'Chat with tutors'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.shopping_cart_outlined, size: 30),
+              icon: Icon(Iconsax.shopping_cart),
               label: 'Cart',
-              activeIcon: Icon(Icons.shopping_cart_rounded, size: 30),
+              activeIcon: Icon(Iconsax.shopping_cart5),
               tooltip: 'View your cart'),
           const BottomNavigationBarItem(
-              icon: Icon(Icons.settings_outlined, size: 30),
+              icon: Icon(Iconsax.setting),
               label: 'Settings',
-              activeIcon: Icon(Icons.settings_rounded, size: 30),
+              activeIcon: Icon(Iconsax.setting5),
               tooltip: 'Profile Settings'),
         ],
       ),
