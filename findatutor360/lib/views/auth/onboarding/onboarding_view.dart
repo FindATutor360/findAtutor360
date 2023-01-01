@@ -1,4 +1,5 @@
 import 'package:findatutor360/routes/index.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
 
@@ -13,11 +14,13 @@ class OnboardingView extends StatelessWidget {
       body: OnBoard(
         pageController: _pageController,
         onBoardData: onBoardData,
-        titleStyles: const TextStyle(
-          color: Color.fromRGBO(30, 33, 36, 1),
+        titleStyles: TextStyle(
+          color: const Color.fromRGBO(30, 33, 36, 1),
           fontFamily: 'Manrope',
           fontSize: 34,
-          fontWeight: FontWeight.w700,
+          fontWeight: defaultTargetPlatform == TargetPlatform.android
+              ? FontWeight.w700
+              : FontWeight.w700,
           letterSpacing: 0.15,
         ),
         descriptionStyles: const TextStyle(
@@ -58,7 +61,6 @@ class OnboardingView extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(4, 118, 175, 1),
-                  backgroundBlendMode: BlendMode.darken,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
