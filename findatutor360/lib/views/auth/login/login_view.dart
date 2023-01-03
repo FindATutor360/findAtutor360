@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
 import 'package:findatutor360/custom_widgets/header/custom_header.dart';
+import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,18 +14,16 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: SingleChildScrollView(
+    return Scaffold(
+        body: SingleChildScrollView(
+      child: SafeArea(
         child: Column(
           children: [
             const CustomHeader(),
             const SizedBox(height: 20),
-            Text('Login to get started',
-                style: GoogleFonts.manrope(
-                    color: const Color.fromRGBO(48, 53, 57, 1),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600)),
+            const MainText(
+              text: 'Login to get started',
+            ),
             const SizedBox(height: 80),
             CustomTextFormField(
                 label: const Text('Email',
@@ -67,7 +66,6 @@ class LoginView extends StatelessWidget {
             PrimaryButton(
                 isIconPresent: false,
                 text: 'Login',
-                fontSize: 22,
                 fontWeight: FontWeight.w600,
                 onPressed: () {
                   router.go('/parent');
@@ -112,7 +110,7 @@ class LoginView extends StatelessWidget {
             ]),
           ],
         ),
-      )),
-    );
+      ),
+    ));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
 import 'package:findatutor360/custom_widgets/header/custom_header.dart';
+import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -20,18 +21,16 @@ class _RegisterViewState extends State<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: SingleChildScrollView(
+    return Scaffold(
+        body: SingleChildScrollView(
+      child: SafeArea(
         child: Column(
           children: [
             const CustomHeader(),
             const SizedBox(height: 20),
-            Text('Create your account',
-                style: GoogleFonts.manrope(
-                    color: const Color.fromRGBO(48, 53, 57, 1),
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600)),
+            const MainText(
+              text: 'Create your account',
+            ),
             const SizedBox(height: 50),
             CustomTextFormField(
                 label: const Text('Fullname',
@@ -107,10 +106,9 @@ class _RegisterViewState extends State<RegisterView> {
             PrimaryButton(
                 isIconPresent: false,
                 text: 'Create Account',
-                fontSize: 22,
                 fontWeight: FontWeight.w600,
                 onPressed: () {
-                  router.go('/parent');
+                  router.go('/email_verify');
                 }),
             const SizedBox(height: 20),
             Row(
@@ -152,7 +150,7 @@ class _RegisterViewState extends State<RegisterView> {
             ]),
           ],
         ),
-      )),
-    );
+      ),
+    ));
   }
 }
