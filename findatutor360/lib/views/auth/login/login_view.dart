@@ -25,7 +25,7 @@ class LoginView extends StatelessWidget {
                     color: const Color.fromRGBO(48, 53, 57, 1),
                     fontSize: 24,
                     fontWeight: FontWeight.w600)),
-            const SizedBox(height: 50),
+            const SizedBox(height: 80),
             CustomTextFormField(
                 label: const Text('Email',
                     style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
