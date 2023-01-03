@@ -78,7 +78,7 @@ class PrimaryButton extends StatelessWidget {
                 onPressed: onPressed,
                 child: Text(text,
                     style: GoogleFonts.manrope(
-                        fontSize: fontSize ?? 18,
+                        fontSize: fontSize ?? 20,
                         fontWeight: fontWeight ?? FontWeight.w400,
                         color: textColor ?? Colors.white))),
       ),
