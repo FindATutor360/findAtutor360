@@ -1,7 +1,7 @@
 import 'package:findatutor360/routes/index.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingView extends StatelessWidget {
   OnboardingView({super.key});
@@ -14,13 +14,10 @@ class OnboardingView extends StatelessWidget {
       body: OnBoard(
         pageController: _pageController,
         onBoardData: onBoardData,
-        titleStyles: TextStyle(
+        titleStyles: GoogleFonts.manrope(
           color: const Color.fromRGBO(30, 33, 36, 1),
-          fontFamily: 'Manrope',
           fontSize: 34,
-          fontWeight: defaultTargetPlatform == TargetPlatform.android
-              ? FontWeight.w700
-              : FontWeight.w700,
+          fontWeight: FontWeight.w700,
           letterSpacing: 0.15,
         ),
         descriptionStyles: const TextStyle(

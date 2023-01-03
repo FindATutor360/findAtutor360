@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class PrimaryButton extends StatelessWidget {
   final Color? buttonColor;
   final Color? textColor;
   final Color? iconColor;
   final IconData? iconName;
+  final bool? isIconPresent;
+  final FontWeight? fontWeight;
   final String text;
   final double? height;
   final double? width;
@@ -17,7 +19,9 @@ class PrimaryButton extends StatelessWidget {
       this.textColor,
       this.iconColor,
       this.iconName,
+      this.fontWeight,
       required this.text,
+      required this.isIconPresent,
       this.height,
       this.width,
       this.fontSize,
@@ -29,35 +33,54 @@ class PrimaryButton extends StatelessWidget {
     return Card(
       elevation: 0,
       child: SizedBox(
-        width: width ?? MediaQuery.of(context).size.width * 0.8,
+        width: width ?? MediaQuery.of(context).size.width * 0.85,
         height: height ?? MediaQuery.of(context).size.height * 0.06,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor:
-                  buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-                side: BorderSide(
-                    color: buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
-                    width: 2),
-              ),
-            ),
-            onPressed: onPressed,
-            child: Row(
-              children: [
-                Icon(
-                  iconName ?? Iconsax.arrow_right_1,
-                  color: iconColor ?? Colors.white,
+        child: isIconPresent == true
+            ? ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                        color:
+                            buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                        width: 2),
+                  ),
                 ),
-                const SizedBox(width: 60),
-                Text(text,
-                    style: TextStyle(
+                onPressed: onPressed,
+                child: Row(
+                  children: [
+                    Icon(
+                      iconName,
+                      color: iconColor ?? Colors.white,
+                    ),
+                    const SizedBox(width: 60),
+                    Text(text,
+                        style: GoogleFonts.manrope(
+                            fontSize: fontSize ?? 18,
+                            fontWeight: fontWeight ?? FontWeight.w400,
+                            color: textColor ?? Colors.white)),
+                  ],
+                ))
+            : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor:
+                      buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                    side: BorderSide(
+                        color:
+                            buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                        width: 2),
+                  ),
+                ),
+                onPressed: onPressed,
+                child: Text(text,
+                    style: GoogleFonts.manrope(
                         fontSize: fontSize ?? 18,
-                        fontWeight: FontWeight.w400,
-                        fontFamily: 'Manrope',
-                        color: textColor ?? Colors.white)),
-              ],
-            )),
+                        fontWeight: fontWeight ?? FontWeight.w400,
+                        color: textColor ?? Colors.white))),
       ),
     );
   }
