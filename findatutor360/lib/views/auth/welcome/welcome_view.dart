@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -34,9 +35,9 @@ class WelcomeView extends StatelessWidget {
             PrimaryButton(
                 isIconPresent: true,
                 text: 'Browse as a guest',
-                buttonColor: const Color.fromRGBO(222, 224, 227, 1),
-                textColor: const Color.fromRGBO(4, 118, 175, 1),
-                iconColor: const Color.fromRGBO(4, 118, 175, 1),
+                buttonColor: customTheme['lightGrayColor'],
+                textColor: customTheme['primaryColor'],
+                iconColor: customTheme['primaryColor'],
                 iconName: Iconsax.people,
                 onPressed: () {
                   router.go('/parent');

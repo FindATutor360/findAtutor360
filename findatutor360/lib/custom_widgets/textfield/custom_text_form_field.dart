@@ -5,6 +5,7 @@ class CustomTextFormField extends StatelessWidget {
   final Widget? label;
   final Widget? suffixIcon;
   final String? hint;
+  final bool? autofocus;
   final bool obscureText;
   final TextInputType keyboardType;
   final TextEditingController? controller;
@@ -15,6 +16,7 @@ class CustomTextFormField extends StatelessWidget {
     this.label,
     this.suffixIcon,
     this.hint,
+    this.autofocus = false,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
     this.controller,

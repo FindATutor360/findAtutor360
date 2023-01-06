@@ -1,4 +1,5 @@
 import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,33 +16,33 @@ class OnboardingView extends StatelessWidget {
         pageController: _pageController,
         onBoardData: onBoardData,
         titleStyles: GoogleFonts.manrope(
-          color: const Color.fromRGBO(30, 33, 36, 1),
+          color: customTheme['mainTextColor'],
           fontSize: 34,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.15,
         ),
-        descriptionStyles: const TextStyle(
+        descriptionStyles: TextStyle(
           fontFamily: 'Manrope',
           fontSize: 16,
           fontWeight: FontWeight.w400,
-          color: Color.fromRGBO(121, 132, 142, 1),
+          color: customTheme['secondaryTextColor'],
         ),
-        pageIndicatorStyle: const PageIndicatorStyle(
+        pageIndicatorStyle: PageIndicatorStyle(
           width: 100,
-          inactiveColor: Color.fromRGBO(154, 202, 229, 1),
-          activeColor: Color.fromRGBO(4, 118, 175, 1),
-          inactiveSize: Size(8, 8),
-          activeSize: Size(13, 11),
+          inactiveColor: customTheme['secondaryColor'],
+          activeColor: customTheme['primaryColor'],
+          inactiveSize: const Size(8, 8),
+          activeSize: const Size(13, 11),
         ),
         //Skip button
         skipButton: TextButton(
           onPressed: () {
             router.go('/welcome');
           },
-          child: const Text(
+          child: Text(
             "Skip",
             style: TextStyle(
-              color: Color.fromRGBO(4, 118, 175, 1),
+              color: customTheme['primaryColor'],
               fontSize: 16,
               fontFamily: 'Manrope',
             ),
@@ -57,13 +58,13 @@ class OnboardingView extends StatelessWidget {
                 height: 50,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: const Color.fromRGBO(4, 118, 175, 1),
+                  color: customTheme['primaryColor'],
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Text(
                   state.isLastPage ? "Get Started" : "Next",
-                  style: const TextStyle(
-                    color: Colors.white,
+                  style: TextStyle(
+                    color: customTheme['whiteColor'],
                     fontFamily: 'Manrope',
                     fontSize: 18,
                   ),

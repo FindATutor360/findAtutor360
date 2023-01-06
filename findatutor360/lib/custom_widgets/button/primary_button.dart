@@ -1,3 +1,4 @@
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -38,13 +39,11 @@ class PrimaryButton extends StatelessWidget {
         child: isIconPresent == true
             ? ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                  backgroundColor: buttonColor ?? customTheme['primaryColor'],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                     side: BorderSide(
-                        color:
-                            buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                        color: buttonColor ?? customTheme['primaryColor']!,
                         width: 2),
                   ),
                 ),
@@ -53,25 +52,23 @@ class PrimaryButton extends StatelessWidget {
                   children: [
                     Icon(
                       iconName,
-                      color: iconColor ?? Colors.white,
+                      color: iconColor ?? customTheme['whiteColor']!,
                     ),
                     const SizedBox(width: 60),
                     Text(text,
                         style: GoogleFonts.manrope(
                             fontSize: fontSize ?? 18,
                             fontWeight: fontWeight ?? FontWeight.w400,
-                            color: textColor ?? Colors.white)),
+                            color: textColor ?? customTheme['whiteColor']!)),
                   ],
                 ))
             : ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                  backgroundColor: buttonColor ?? customTheme['primaryColor'],
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                     side: BorderSide(
-                        color:
-                            buttonColor ?? const Color.fromRGBO(4, 118, 175, 1),
+                        color: buttonColor ?? customTheme['primaryColor']!,
                         width: 2),
                   ),
                 ),
@@ -80,7 +77,7 @@ class PrimaryButton extends StatelessWidget {
                     style: GoogleFonts.manrope(
                         fontSize: fontSize ?? 20,
                         fontWeight: fontWeight ?? FontWeight.w400,
-                        color: textColor ?? Colors.white))),
+                        color: textColor ?? customTheme['whiteColor']!))),
       ),
     );
   }
