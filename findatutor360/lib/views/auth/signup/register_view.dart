@@ -3,6 +3,7 @@ import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
 import 'package:findatutor360/custom_widgets/header/custom_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -33,8 +34,8 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             const SizedBox(height: 50),
             CustomTextFormField(
-                label: const Text('Fullname',
-                    style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
+                label: Text('Fullname',
+                    style: TextStyle(color: customTheme['secondaryTextColor'])),
                 hint: 'Enter your fullname',
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
@@ -45,8 +46,8 @@ class _RegisterViewState extends State<RegisterView> {
                 }),
             const SizedBox(height: 20),
             CustomTextFormField(
-                label: const Text('Email',
-                    style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
+                label: Text('Email',
+                    style: TextStyle(color: customTheme['secondaryTextColor'])),
                 hint: 'Enter your email',
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
@@ -57,8 +58,8 @@ class _RegisterViewState extends State<RegisterView> {
                 }),
             const SizedBox(height: 30),
             CustomTextFormField(
-                label: const Text('Password',
-                    style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
+                label: Text('Password',
+                    style: TextStyle(color: customTheme['secondaryTextColor'])),
                 hint: 'Enter your password',
                 obscureText: true,
                 suffixIcon: const Icon(Iconsax.eye),
@@ -71,8 +72,8 @@ class _RegisterViewState extends State<RegisterView> {
                 }),
             const SizedBox(height: 20),
             CustomTextFormField(
-                label: const Text('Confirm Password',
-                    style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
+                label: Text('Confirm Password',
+                    style: TextStyle(color: customTheme['secondaryTextColor'])),
                 hint: 'Confirm your password',
                 obscureText: true,
                 suffixIcon: const Icon(Iconsax.eye),
@@ -93,7 +94,7 @@ class _RegisterViewState extends State<RegisterView> {
                       fontWeight: FontWeight.w400,
                     )),
                 value: checkedValue,
-                activeColor: const Color.fromRGBO(4, 118, 175, 1),
+                activeColor: customTheme['primaryColor'],
                 onChanged: (newValue) {
                   setState(() {
                     checkedValue = newValue!;
@@ -134,7 +135,7 @@ class _RegisterViewState extends State<RegisterView> {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text('Already have an account?',
                   style: GoogleFonts.manrope(
-                      color: const Color.fromRGBO(48, 53, 57, 1),
+                      color: customTheme['mainTextColor'],
                       fontSize: 15,
                       fontWeight: FontWeight.w400)),
               TextButton(
@@ -143,7 +144,7 @@ class _RegisterViewState extends State<RegisterView> {
                 },
                 child: Text('Login',
                     style: GoogleFonts.manrope(
-                        color: const Color.fromRGBO(4, 118, 175, 1),
+                        color: customTheme['primaryColor'],
                         fontSize: 15,
                         fontWeight: FontWeight.w400)),
               ),

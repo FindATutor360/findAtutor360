@@ -3,6 +3,7 @@ import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
 import 'package:findatutor360/custom_widgets/header/custom_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -26,8 +27,8 @@ class LoginView extends StatelessWidget {
             ),
             const SizedBox(height: 80),
             CustomTextFormField(
-                label: const Text('Email',
-                    style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
+                label: Text('Email',
+                    style: TextStyle(color: customTheme['secondaryTextColor'])),
                 hint: 'Enter your email',
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
@@ -38,10 +39,11 @@ class LoginView extends StatelessWidget {
                 }),
             const SizedBox(height: 30),
             CustomTextFormField(
-                label: const Text('Password',
-                    style: TextStyle(color: Color.fromRGBO(121, 132, 142, 1))),
+                label: Text('Password',
+                    style: TextStyle(color: customTheme['secondaryTextColor'])),
                 hint: 'Enter your password',
                 obscureText: true,
+                autofocus: true,
                 suffixIcon: const Icon(Iconsax.eye),
                 keyboardType: TextInputType.visiblePassword,
                 validator: (value) {
@@ -58,7 +60,7 @@ class LoginView extends StatelessWidget {
                   onPressed: null,
                   child: Text('Forgot password?',
                       style: GoogleFonts.manrope(
-                          color: const Color.fromRGBO(4, 118, 175, 1),
+                          color: customTheme['primaryColor'],
                           fontSize: 15,
                           fontWeight: FontWeight.w400)),
                 )),
@@ -94,7 +96,7 @@ class LoginView extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text('Don\'t have an account?',
                   style: GoogleFonts.manrope(
-                      color: const Color.fromRGBO(48, 53, 57, 1),
+                      color: customTheme['mainTextColor'],
                       fontSize: 15,
                       fontWeight: FontWeight.w400)),
               TextButton(
@@ -103,7 +105,7 @@ class LoginView extends StatelessWidget {
                 },
                 child: Text('Sign up',
                     style: GoogleFonts.manrope(
-                        color: const Color.fromRGBO(4, 118, 175, 1),
+                        color: customTheme['primaryColor'],
                         fontSize: 15,
                         fontWeight: FontWeight.w400)),
               ),

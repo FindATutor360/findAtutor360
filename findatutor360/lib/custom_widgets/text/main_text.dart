@@ -1,3 +1,4 @@
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -12,7 +13,7 @@ class MainText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(text,
         style: GoogleFonts.manrope(
-            color: const Color.fromRGBO(48, 53, 57, 1),
+            color: customTheme['mainTextColor'],
             fontSize: 24,
             fontWeight: FontWeight.w600));
   }

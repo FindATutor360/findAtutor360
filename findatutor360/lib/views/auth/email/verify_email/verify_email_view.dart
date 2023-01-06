@@ -2,6 +2,7 @@ import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
 import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,11 +31,11 @@ class VerifyEmailView extends StatelessWidget {
                           defaultTargetPlatform == TargetPlatform.android
                               ? Iconsax.arrow_left
                               : Iconsax.arrow_left_2,
-                          color: const Color.fromRGBO(30, 33, 36, 1),
+                          color: customTheme['mainTextColor'],
                           size: 25)),
                 ),
-                const Divider(
-                  color: Color.fromRGBO(30, 33, 36, .1),
+                Divider(
+                  color: customTheme['dividerColor'],
                   thickness: 1,
                 ),
               ],
@@ -54,7 +55,7 @@ class VerifyEmailView extends StatelessWidget {
                     'To continue, enter the code we just sent to',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
-                        color: const Color.fromRGBO(121, 132, 142, 1),
+                        color: customTheme['secondaryTextColor'],
                         fontSize: 16,
                         fontWeight: FontWeight.w400),
                   ),
@@ -62,7 +63,7 @@ class VerifyEmailView extends StatelessWidget {
                     'youremailaddress@gmail.com',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
-                        color: const Color.fromRGBO(30, 33, 36, 1),
+                        color: customTheme['mainTextColor'],
                         fontSize: 16,
                         fontWeight: FontWeight.w600),
                   ),
@@ -85,7 +86,7 @@ class VerifyEmailView extends StatelessWidget {
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text('Didn\'t receive the code ?',
                   style: GoogleFonts.manrope(
-                      color: const Color.fromRGBO(48, 53, 57, 1),
+                      color: customTheme['mainTextColor'],
                       fontSize: 15,
                       fontWeight: FontWeight.w400)),
               TextButton(
@@ -94,7 +95,7 @@ class VerifyEmailView extends StatelessWidget {
                 },
                 child: Text('Resend',
                     style: GoogleFonts.manrope(
-                        color: const Color.fromRGBO(4, 118, 175, 1),
+                        color: customTheme['primaryColor'],
                         fontSize: 15,
                         fontWeight: FontWeight.w400)),
               ),

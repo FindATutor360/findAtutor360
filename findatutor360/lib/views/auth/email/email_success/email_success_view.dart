@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -14,6 +15,7 @@ class EmailSuccessView extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 40),
             Image.asset('assets/images/success.png',
                 width: MediaQuery.of(context).size.width),
             const SizedBox(height: 40),
@@ -24,21 +26,21 @@ class EmailSuccessView extends StatelessWidget {
             Container(
               margin: const EdgeInsets.only(left: 30, right: 30),
               child: Text(
-                'Your verification was successful. Press the button below to get started',
+                'Your account was created successfully \n You can now login to your account',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.manrope(
-                    color: const Color.fromRGBO(121, 132, 142, 1),
+                    color: customTheme['secondaryTextColor'],
                     fontSize: 16,
                     fontWeight: FontWeight.w400),
               ),
             ),
             const SizedBox(height: 40),
             PrimaryButton(
-              text: 'Get Started',
+              text: 'Go to Login',
               isIconPresent: false,
               fontWeight: FontWeight.w600,
               onPressed: () {
-                router.go('/parent');
+                router.go('/login');
               },
             ),
           ],

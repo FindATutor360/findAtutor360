@@ -1,3 +1,4 @@
+import 'package:findatutor360/views/auth/splash/splash_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
@@ -18,9 +19,15 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) {
-        return OnboardingView();
+        return const SplashView();
       },
       routes: <RouteBase>[
+        GoRoute(
+          path: 'onboarding',
+          builder: (BuildContext context, GoRouterState state) {
+            return OnboardingView();
+          },
+        ),
         GoRoute(
           path: 'welcome',
           builder: (BuildContext context, GoRouterState state) {
