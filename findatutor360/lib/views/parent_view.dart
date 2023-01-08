@@ -1,4 +1,5 @@
 // import 'package:findatutor360/constants/icon/index.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:findatutor360/views/main/cart/cart_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
@@ -55,7 +56,7 @@ class _ParentViewState extends State<ParentView> {
               icon: Icon(Iconsax.home),
               label: 'Home',
               activeIcon: Icon(Iconsax.home_15),
-              tooltip: 'HomeView'),
+              tooltip: 'Home'),
           const BottomNavigationBarItem(
               icon: Icon(Iconsax.shop),
               label: 'Shop',
@@ -64,9 +65,10 @@ class _ParentViewState extends State<ParentView> {
           BottomNavigationBarItem(
               icon: Badge(
                   position: const BadgePosition(top: -5, end: -2),
-                  badgeContent: const Text('1',
-                      style: TextStyle(fontSize: 10, color: Colors.white)),
-                  badgeColor: const Color.fromRGBO(252, 57, 46, 1),
+                  badgeContent: Text('1',
+                      style: TextStyle(
+                          fontSize: 10, color: customTheme['whiteColor'])),
+                  badgeColor: customTheme['badgeColor']!,
                   child: const Icon(Iconsax.sms)),
               label: 'Message',
               activeIcon: const Icon(Iconsax.sms5),

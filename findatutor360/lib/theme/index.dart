@@ -9,6 +9,8 @@ const customTheme = {
   'mainTextColor': Color.fromRGBO(30, 33, 36, 1),
   'secondaryTextColor': Color.fromRGBO(121, 132, 142, 1),
   'dividerColor': Color.fromRGBO(30, 33, 36, .1),
+  'activeSliderColor': Color.fromRGBO(230, 246, 254, 1),
+  'badgeColor': Color.fromRGBO(252, 57, 46, 1),
   'successColor': Color.fromRGBO(0, 0, 0, 1),
   'errorColor': Color.fromRGBO(0, 0, 0, 1),
   'warningColor': Color.fromRGBO(0, 0, 0, 1),
