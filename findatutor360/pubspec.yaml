@@ -42,6 +42,9 @@ dependencies:
   go_router: ^6.0.0
   flutter_onboard: ^2.0.0
   flutter_animated_splash: ^0.0.10
+  cached_network_image: ^3.2.3
+  dashed_circle: ^0.0.2
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:
