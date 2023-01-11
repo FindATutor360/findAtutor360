@@ -1,4 +1,5 @@
 import 'package:findatutor360/views/auth/splash/splash_view.dart';
+import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
@@ -68,6 +69,12 @@ final GoRouter router = GoRouter(
           path: 'home',
           builder: (BuildContext context, GoRouterState state) {
             return const HomeView();
+          },
+        ),
+        GoRoute(
+          path: 'category',
+          builder: (BuildContext context, GoRouterState state) {
+            return const CategoryView();
           },
         ),
         GoRoute(
