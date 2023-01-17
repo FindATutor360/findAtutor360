@@ -45,6 +45,7 @@ dependencies:
   cached_network_image: ^3.2.3
   dashed_circle: ^0.0.2
   carousel_slider: ^4.2.1
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
