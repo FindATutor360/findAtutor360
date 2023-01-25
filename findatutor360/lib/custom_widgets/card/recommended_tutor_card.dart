@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:findatutor360/custom_widgets/button/custom_like_button.dart';
 import 'package:findatutor360/custom_widgets/card/card_status.dart';
 import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
-import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:flutter/material.dart';
 
 class RecommededTutorCard extends StatelessWidget {

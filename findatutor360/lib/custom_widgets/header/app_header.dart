@@ -27,7 +27,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const CustomIconButton(
-                onPressed: null,
+                onPressed: (null),
                 icon: Icon(Iconsax.menu_1),
               ),
               Container(
@@ -79,6 +79,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
+        Expanded(
+          child: Divider(
+            color: customTheme['dividerColor'],
+            thickness: 1,
+          ),
+        ),
       ],
     );
   }
@@ -86,6 +92,6 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size(
         double.maxFinite,
-        60,
+        65,
       );
 }
