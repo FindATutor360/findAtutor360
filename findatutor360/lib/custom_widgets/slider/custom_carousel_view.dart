@@ -37,9 +37,9 @@ class _CustomCarouselViewState extends State<CustomCarouselView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(top: 10),
-      height: MediaQuery.of(context).size.height * 0.26,
-      width: MediaQuery.of(context).size.width * 0.9,
+      margin: const EdgeInsets.only(top: 10, left: 10, right: 10),
+      height: MediaQuery.of(context).size.height * 0.28,
+      width: MediaQuery.of(context).size.width * 0.8,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: customTheme['primaryColor'],
