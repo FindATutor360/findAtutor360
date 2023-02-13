@@ -1,5 +1,6 @@
 import 'package:findatutor360/custom_widgets/card/category_widget.dart';
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
+import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
 import 'package:findatutor360/custom_widgets/slider/custom_carousel_view.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
@@ -17,9 +18,10 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: customTheme['whiteColor'],
         appBar: const AppHeader(),
-        drawer: const Drawer(),
+        drawer: const CustomDrawer(),
         body: CustomScrollView(
           slivers: [
             SliverList(

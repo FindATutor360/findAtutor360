@@ -9,10 +9,12 @@ class PrimaryButton extends StatelessWidget {
   final IconData? iconName;
   final bool? isIconPresent;
   final FontWeight? fontWeight;
+  final BorderRadiusGeometry borderRadius;
   final String text;
   final double? height;
   final double? width;
   final double? fontSize;
+  final double? spaceBetweenIconAndText;
   final GestureTapCallback? onPressed;
   const PrimaryButton(
       {Key? key,
@@ -21,6 +23,8 @@ class PrimaryButton extends StatelessWidget {
       this.iconColor,
       this.iconName,
       this.fontWeight,
+      this.spaceBetweenIconAndText,
+      this.borderRadius = BorderRadius.zero,
       required this.text,
       required this.isIconPresent,
       this.height,
@@ -41,7 +45,9 @@ class PrimaryButton extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: buttonColor ?? customTheme['primaryColor'],
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: borderRadius == BorderRadius.zero
+                        ? borderRadius
+                        : BorderRadius.circular(8),
                     side: BorderSide(
                         color: buttonColor ?? customTheme['primaryColor']!,
                         width: 2),
@@ -54,7 +60,7 @@ class PrimaryButton extends StatelessWidget {
                       iconName,
                       color: iconColor ?? customTheme['whiteColor']!,
                     ),
-                    const SizedBox(width: 60),
+                    SizedBox(width: spaceBetweenIconAndText ?? 60),
                     Text(text,
                         style: GoogleFonts.manrope(
                             fontSize: fontSize ?? 18,
