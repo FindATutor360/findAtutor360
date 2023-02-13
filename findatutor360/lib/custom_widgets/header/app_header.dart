@@ -26,9 +26,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CustomIconButton(
-                onPressed: (null),
-                icon: Icon(Iconsax.menu_1),
+              CustomIconButton(
+                onPressed: (() {
+                  Scaffold.of(context).openDrawer();
+                }),
+                icon: const Icon(Iconsax.menu_1),
               ),
               Container(
                 margin: const EdgeInsets.only(right: 10),
