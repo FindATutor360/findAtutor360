@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:findatutor360/theme/index.dart';
 
-class setting_userCard extends StatelessWidget {
-  const setting_userCard({
+class SettingUserCard extends StatelessWidget {
+  const SettingUserCard({
     Key? key,
   }) : super(key: key);
 
@@ -11,32 +12,32 @@ class setting_userCard extends StatelessWidget {
     return Container(
       width: 300,
       height: 100,
-      padding: new EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(10.0),
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(15.0),
         ),
-        color: Color(0xFF0476AF),
+        color: customTheme['primaryColor'],
         elevation: 5,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            const ListTile(
+            ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: Color(0xFFE6F6FE),
+                  backgroundColor: const Color(0xFFE6F6FE),
                   radius: 20,
                   child: Text(
                     'A',
                     style: TextStyle(
-                        fontSize: 18, color: Color.fromARGB(255, 92, 139, 234)),
+                        fontSize: 18, color: customTheme['primaryColor']),
                   ), //Text
                 ),
-                title: Text('Anthony Rudiger',
+                title: const Text('Anthony Rudiger',
                     style: TextStyle(
                       fontSize: 18.0,
                       color: Color(0xFFE6F6FE),
                     )),
-                subtitle: Text('Anthony Rudiger.',
+                subtitle: const Text('Anthony Rudiger.',
                     style: TextStyle(
                       fontSize: 14.0,
                       color: Color(0xFFE6F6FE),

@@ -1,21 +1,30 @@
-import 'package:findatutor360/views/main/settings/setting_userProfileCard.dart';
-import 'package:findatutor360/views/main/settings/settings_userLogoutCard.dart';
+import 'package:day_night_switcher/day_night_switcher.dart';
+import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/settings/setting_user_profile_card.dart';
+import 'package:findatutor360/views/main/settings/settings_user_logout_card.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class settings_viewCard extends StatelessWidget {
-  const settings_viewCard({
+class SettingsViewContent extends StatefulWidget {
+  const SettingsViewContent({
     Key? key,
   }) : super(key: key);
 
   @override
+  State<SettingsViewContent> createState() => _SettingsViewContentState();
+}
+
+class _SettingsViewContentState extends State<SettingsViewContent> {
+  /// Whether dark mode is enabled.
+  bool isDarkModeEnabled = false;
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 550,
+      height: 610,
       child: ListView(
         children: [
           ///User Profile Card
-          setting_userCard(),
+          const SettingUserCard(),
 
           //Settins List
           _SingleSection(
@@ -25,28 +34,35 @@ class settings_viewCard extends StatelessWidget {
                 title: "Language",
                 icon: Iconsax.language_circle,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "Notification",
                 icon: Iconsax.notification,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
-              const _CustomListTile(
+              _CustomListTile(
                 title: "Dark Mode",
                 icon: Iconsax.moon,
-                trailing: Icon(Iconsax.moon),
+                trailing: SizedBox(
+                  width: 60,
+                  height: 55,
+                  child: DayNightSwitcher(
+                    isDarkModeEnabled: isDarkModeEnabled,
+                    onStateChanged: onStateChanged,
+                  ),
+                ),
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 5,
               )
             ],
@@ -58,75 +74,75 @@ class settings_viewCard extends StatelessWidget {
                 title: "Security",
                 icon: Iconsax.lock,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "Payment Methods",
                 icon: Iconsax.card,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "Payment history",
                 icon: Iconsax.money,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
             ],
           ),
-          const _SingleSection(
+          _SingleSection(
             title: "About & Help",
             children: [
               const _CustomListTile(
                 title: "Frequently Asked Questions",
                 icon: Iconsax.message,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "Contact Support",
                 icon: Iconsax.headphone,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "Privacy Policy",
                 icon: Iconsax.shield_security2,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                   title: "Terms of Service", icon: Iconsax.book),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "Community Guidleines",
                 icon: Iconsax.flag,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
               const _CustomListTile(
                 title: "About the App",
                 icon: Iconsax.information,
               ),
-              const Divider(
-                color: Colors.grey,
+              Divider(
+                color: customTheme['dividerColor'],
                 thickness: 1,
               ),
             ],
@@ -134,13 +150,21 @@ class settings_viewCard extends StatelessWidget {
           //Setting List End
 
           ///User LogOut Card
-          settings_userLogoutCard(),
-          SizedBox(
-            height: 20,
-          ) // End of User LogOut Card
+
+          const SettingsUserLogoutCard(),
+          // SizedBox(
+          //   height: 20,
+          // ) // End of User LogOut Card
         ],
       ),
     );
+  }
+
+  /// Called when the state (day / night) has changed.
+  void onStateChanged(bool isDarkModeEnabled) {
+    setState(() {
+      this.isDarkModeEnabled = isDarkModeEnabled;
+    });
   }
 }
 
