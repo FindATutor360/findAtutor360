@@ -47,7 +47,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                           child: const Icon(Iconsax.notification)),
                     ),
                     const SizedBox(width: 5),
-                    const Center(
+                    Center(
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF0476AF),
                         radius: 20,
