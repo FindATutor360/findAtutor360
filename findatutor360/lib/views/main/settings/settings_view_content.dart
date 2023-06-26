@@ -1,4 +1,5 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
+import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/setting_user_profile_card.dart';
 import 'package:findatutor360/views/main/settings/settings_user_logout_card.dart';
@@ -207,10 +208,9 @@ class _SingleSection extends StatelessWidget {
         const SizedBox(height: 16),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title.toUpperCase(),
-            style:
-                Theme.of(context).textTheme.headline3?.copyWith(fontSize: 16),
+          child: MainText(
+            text: title.toUpperCase(),
+            fontSize: 16,
           ),
         ),
         Container(

@@ -2,6 +2,7 @@ import 'package:findatutor360/views/auth/splash/splash_view.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
+import 'package:findatutor360/views/main/message/chat_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
 import 'package:findatutor360/views/main/cart/cart_view.dart';
@@ -82,6 +83,12 @@ final GoRouter router = GoRouter(
           path: 'recommended_tutors',
           builder: (BuildContext context, GoRouterState state) {
             return const RecommendedTutorsView();
+          },
+        ),
+        GoRoute(
+          path: 'chat',
+          builder: (BuildContext context, GoRouterState state) {
+            return const ChatView();
           },
         ),
         GoRoute(
