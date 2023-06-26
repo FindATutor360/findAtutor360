@@ -4,7 +4,6 @@ import 'package:findatutor360/views/main/shop/shop_books.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../custom_widgets/card/category_widget.dart';
-import '../../../custom_widgets/card/shop_category_widget.dart';
 import '../../../custom_widgets/drawer/custom_drawer.dart';
 import '../../../custom_widgets/slider/custom_carousel_view.dart';
 
@@ -25,7 +24,7 @@ class ShopView extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          const category_scrollview(),
+          const CategoryScrollview(),
           SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
@@ -45,8 +44,8 @@ class ShopView extends StatelessWidget {
   }
 }
 
-class category_scrollview extends StatelessWidget {
-  const category_scrollview({
+class CategoryScrollview extends StatelessWidget {
+  const CategoryScrollview({
     Key? key,
   }) : super(key: key);
 

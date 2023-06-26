@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
@@ -33,21 +32,18 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
               Container(
                 margin: const EdgeInsets.only(right: 10),
                 child: Row(
-                  children: [
-                    const SizedBox(width: 5),
+                  children: const [
+                    SizedBox(width: 5),
                     CustomIconButton(
-                      onPressed: null,
-                      icon: Badge(
-                          position: const BadgePosition(top: -5, end: -2),
-                          badgeContent: Text(badgeCount ?? '1',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: customTheme['whiteColor'])),
-                          badgeColor: customTheme['badgeColor']!,
-                          child: const Icon(Iconsax.notification)),
-                    ),
-                    const SizedBox(width: 5),
-                    const Center(
+                        onPressed: null,
+                        icon: Badge(
+                            label: Text('1',
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.white)),
+                            backgroundColor: Color.fromRGBO(252, 57, 46, 1),
+                            child: Icon(Iconsax.sms))),
+                    SizedBox(width: 5),
+                    Center(
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF0476AF),
                         radius: 20,
