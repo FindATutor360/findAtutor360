@@ -9,6 +9,7 @@ const customTheme = {
   'lightGrayColor': Color.fromRGBO(222, 224, 227, 1),
   'activeCourseColor': Color.fromRGBO(239, 232, 219, 1),
   'mainTextColor': Color.fromRGBO(30, 33, 36, 1),
+  'mainTextSecondaryColor': Color.fromRGBO(119, 121, 123, 1),
   'secondaryTextColor': Color.fromRGBO(121, 132, 142, 1),
   'dividerColor': Color.fromRGBO(30, 33, 36, .1),
   'activeSliderColor': Color.fromRGBO(230, 246, 254, 1),
