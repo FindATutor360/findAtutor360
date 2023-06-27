@@ -47,6 +47,11 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_rating_bar: ^4.0.1
   day_night_switcher: ^0.2.0+1
+  flutter_chat_ui: ^1.6.6
+  mime: ^1.0.4
+  open_filex: ^4.3.2
+  image_picker: ^1.0.0
+  file_picker: ^5.3.1
 
 dev_dependencies:
   flutter_test:

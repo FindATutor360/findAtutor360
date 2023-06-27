@@ -32,7 +32,7 @@ class MessageView extends StatelessWidget {
                 return MessageTile(
                   onTap: () => router.push('/chat'),
                   imageUrl: imageUrl,
-                  userName: 'Elsie',
+                  userName: 'Asante Junior',
                   message: 'We meeting tonight?',
                   time: '18:22',
                   messageNumber: '2',
