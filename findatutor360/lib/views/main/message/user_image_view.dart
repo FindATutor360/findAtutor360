@@ -3,12 +3,10 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
 class UserImage extends StatelessWidget {
-  const UserImage({
-    super.key,
-    required this.imageUrl,
-  });
-
   final String? imageUrl;
+  final double radius;
+
+  const UserImage({super.key, required this.imageUrl, this.radius = 20});
 
   @override
   Widget build(BuildContext context) {
@@ -17,12 +15,12 @@ class UserImage extends StatelessWidget {
           'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
       placeholder: (context, url) => CircleAvatar(
         backgroundColor: customTheme['secondaryColor']!,
-        radius: 20,
+        radius: radius,
       ),
       imageBuilder: (context, image) => CircleAvatar(
         backgroundImage: image,
         backgroundColor: customTheme['secondaryColor']!,
-        radius: 20,
+        radius: radius,
       ),
       errorWidget: (context, url, error) => const Icon(Icons.error),
     );
