@@ -258,7 +258,7 @@ class _ChatViewState extends State<ChatView> {
             inputBackgroundColor: customTheme['primaryColor']!,
             inputTextColor: customTheme['whiteColor']!,
             inputContainerDecoration: BoxDecoration(
-                color: Colors.transparent,
+                color: customTheme['primaryColor'],
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.elliptical(20, 15),
                   topRight: Radius.elliptical(20, 15),
