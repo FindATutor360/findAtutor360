@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/message/user_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart' as http;
+import 'package:iconsax/iconsax.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:mime/mime.dart';
@@ -212,6 +215,36 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(
+          backgroundColor: customTheme['primaryColor'],
+          elevation: 0.4,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            color: customTheme['whiteColor'],
+            onPressed: () => Navigator.pop(context),
+          ),
+          title: Row(
+            children: [
+              const UserImage(
+                  radius: 18,
+                  imageUrl:
+                      'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
+              const SizedBox(width: 8),
+              Column(
+                children: [
+                  const Text('Kwamie'),
+                  Text(
+                    'Programmer/Writer',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: customTheme['whiteColor'],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
         body: Chat(
           messages: _messages,
           onAttachmentPressed: _handleAttachmentPressed,
@@ -221,6 +254,16 @@ class _ChatViewState extends State<ChatView> {
           showUserAvatars: true,
           showUserNames: true,
           user: _user,
+          theme: DefaultChatTheme(
+            inputBackgroundColor: customTheme['primaryColor']!,
+            inputTextColor: customTheme['whiteColor']!,
+            inputContainerDecoration: BoxDecoration(
+                color: Colors.transparent,
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.elliptical(20, 15),
+                  topRight: Radius.elliptical(20, 15),
+                )),
+          ),
         ),
       );
 }

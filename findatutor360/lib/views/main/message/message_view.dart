@@ -44,7 +44,7 @@ class MessageView extends StatelessWidget {
                     thickness: 1,
                     indent: 60);
               },
-              itemCount: 10)),
+              itemCount: 5)),
     );
   }
 }
