@@ -1,12 +1,10 @@
-// import 'package:findatutor360/constants/icon/index.dart';
-import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:findatutor360/views/main/cart/cart_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
 import 'package:findatutor360/views/main/settings/settings_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
-import 'package:badges/badges.dart';
+
 import 'package:iconsax/iconsax.dart';
 
 class ParentView extends StatefulWidget {
@@ -51,34 +49,32 @@ class _ParentViewState extends State<ParentView> {
             color: Color.fromRGBO(4, 128, 181, 1)),
         iconSize: 26,
         selectedFontSize: 10,
-        items: [
-          const BottomNavigationBarItem(
+        items: const [
+          BottomNavigationBarItem(
               icon: Icon(Iconsax.home),
               label: 'Home',
               activeIcon: Icon(Iconsax.home_15),
               tooltip: 'Home'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Iconsax.shop),
               label: 'Shop',
               activeIcon: Icon(Iconsax.shop5),
               tooltip: 'Buy books and more'),
           BottomNavigationBarItem(
               icon: Badge(
-                  position: const BadgePosition(top: -5, end: -2),
-                  badgeContent: Text('1',
-                      style: TextStyle(
-                          fontSize: 10, color: customTheme['whiteColor'])),
-                  badgeColor: customTheme['badgeColor']!,
-                  child: const Icon(Iconsax.sms)),
+                  label: Text('1',
+                      style: TextStyle(fontSize: 10, color: Colors.white)),
+                  backgroundColor: Color.fromRGBO(252, 57, 46, 1),
+                  child: Icon(Iconsax.sms)),
               label: 'Message',
-              activeIcon: const Icon(Iconsax.sms5),
+              activeIcon: Icon(Iconsax.sms5),
               tooltip: 'Chat with tutors'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Iconsax.shopping_cart),
               label: 'Cart',
               activeIcon: Icon(Iconsax.shopping_cart5),
               tooltip: 'View your cart'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Iconsax.setting),
               label: 'Settings',
               activeIcon: Icon(Iconsax.setting5),

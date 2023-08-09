@@ -1,4 +1,3 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dashed_circle/dashed_circle.dart';
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
@@ -41,17 +40,14 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       icon: Icon(Iconsax.search_normal_1),
                     ),
                     const SizedBox(width: 5),
-                    CustomIconButton(
-                      onPressed: null,
-                      icon: Badge(
-                          position: const BadgePosition(top: -5, end: -2),
-                          badgeContent: Text(badgeCount ?? '1',
-                              style: TextStyle(
-                                  fontSize: 10,
-                                  color: customTheme['whiteColor'])),
-                          badgeColor: customTheme['badgeColor']!,
-                          child: const Icon(Iconsax.notification)),
-                    ),
+                    const CustomIconButton(
+                        onPressed: null,
+                        icon: Badge(
+                            label: Text('1',
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.white)),
+                            backgroundColor: Color.fromRGBO(252, 57, 46, 1),
+                            child: Icon(Iconsax.sms))),
                     const SizedBox(width: 5),
                     DashedCircle(
                       dashes: 20,
