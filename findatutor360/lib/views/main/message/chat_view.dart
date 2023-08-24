@@ -252,11 +252,11 @@ class _ChatViewState extends State<ChatView> {
           onPreviewDataFetched: _handlePreviewDataFetched,
           onSendPressed: _handleSendPressed,
           showUserAvatars: true,
-          showUserNames: true,
           user: _user,
           theme: DefaultChatTheme(
             inputBackgroundColor: customTheme['primaryColor']!,
             inputTextColor: customTheme['whiteColor']!,
+            primaryColor: customTheme['primaryColor']!,
             inputContainerDecoration: BoxDecoration(
                 color: customTheme['primaryColor'],
                 borderRadius: const BorderRadius.only(
