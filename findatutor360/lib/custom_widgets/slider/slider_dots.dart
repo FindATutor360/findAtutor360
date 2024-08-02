@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 
 class SliderDots extends StatelessWidget {
   const SliderDots({
-    Key? key,
+    super.key,
     required List<Widget> carouselTextList,
     required int current,
   })  : _carouselTextList = carouselTextList,
-        _current = current,
-        super(key: key);
+        _current = current;
 
   final List<Widget> _carouselTextList;
   final int _current;

@@ -8,11 +8,11 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   final String? badgeCount;
   //final bool? isHome;
   const Header({
-    Key? key,
+    super.key,
     this.imageUrl,
     this.badgeCount,
     //required this.isHome,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(right: 10),
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     SizedBox(width: 5),
                     CustomIconButton(
                         onPressed: null,

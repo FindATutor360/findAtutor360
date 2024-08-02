@@ -7,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -124,23 +124,24 @@ class CustomDrawer extends StatelessWidget {
                   router.push('/my_wallet');
                 },
               ),
-              const SizedBox(
-                height: 30,
-              ),
-              Container(
-                margin: const EdgeInsets.only(bottom: 10),
-                child: Center(
-                  child: PrimaryButton(
-                    text: 'Logout',
-                    width: 150,
-                    height: 45,
-                    spaceBetweenIconAndText: 20,
-                    isIconPresent: true,
-                    onPressed: () {
-                      router.push('/login');
-                    },
-                    iconName: Iconsax.logout,
-                    buttonColor: customTheme['badgeColor'],
+              const SizedBox(height: 25),
+              Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Center(
+                    child: PrimaryButton(
+                      text: 'Logout',
+                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: MediaQuery.of(context).size.height * 0.06,
+                      spaceBetweenIconAndText: 20,
+                      isIconPresent: true,
+                      onPressed: () {
+                        router.push('/login');
+                      },
+                      iconName: Iconsax.logout,
+                      buttonColor: customTheme['badgeColor'],
+                    ),
                   ),
                 ),
               )

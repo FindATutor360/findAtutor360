@@ -7,10 +7,10 @@ class ShopCategoryWidget extends StatefulWidget {
   final String? text;
   const ShopCategoryWidget(
     columnedList, {
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   State<ShopCategoryWidget> createState() => _CategoryWidgetState();

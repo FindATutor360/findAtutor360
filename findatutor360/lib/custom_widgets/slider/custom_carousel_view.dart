@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 class CustomCarouselView extends StatefulWidget {
   const CustomCarouselView({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<CustomCarouselView> createState() => _CustomCarouselViewState();

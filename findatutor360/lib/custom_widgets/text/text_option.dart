@@ -8,10 +8,10 @@ class TextOption extends StatelessWidget {
   final String? mainText;
 
   const TextOption({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.mainText,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

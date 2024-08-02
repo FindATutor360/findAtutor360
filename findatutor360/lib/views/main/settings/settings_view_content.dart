@@ -8,8 +8,8 @@ import 'package:iconsax/iconsax.dart';
 
 class SettingsViewContent extends StatefulWidget {
   const SettingsViewContent({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SettingsViewContent> createState() => _SettingsViewContentState();
@@ -152,8 +152,10 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
 
           ///User LogOut Card
 
-          const SettingsUserLogoutCard(),
-          // SizedBox(
+          Container(
+              margin: const EdgeInsets.only(bottom: 50),
+              child: const SettingsUserLogoutCard()),
+          // const SizedBox(
           //   height: 20,
           // ) // End of User LogOut Card
         ],
@@ -174,11 +176,10 @@ class _CustomListTile extends StatelessWidget {
   final IconData icon;
   final Widget? trailing;
   const _CustomListTile({
-    Key? key,
     required this.title,
     required this.icon,
     this.trailing,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -194,10 +195,9 @@ class _SingleSection extends StatelessWidget {
   final String title;
   final List<Widget> children;
   const _SingleSection({
-    Key? key,
     required this.title,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
