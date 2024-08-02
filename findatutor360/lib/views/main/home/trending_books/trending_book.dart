@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 
 class TrendingBookWidget extends StatelessWidget {
   const TrendingBookWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class TrendingBookWidget extends StatelessWidget {
                             text: 'GH₵ 50.0',
                             fontSize: 16,
                             color: customTheme['mainTextColor']),
-                        Container(width: 30),
+                        //Container(width: 30),
                         const CustomLikeButton()
                       ],
                     ),

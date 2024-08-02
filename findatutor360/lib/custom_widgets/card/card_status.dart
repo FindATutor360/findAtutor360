@@ -6,8 +6,8 @@ class CardStatus extends StatelessWidget {
   final bool isOnline;
   const CardStatus({
     this.isOnline = true,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

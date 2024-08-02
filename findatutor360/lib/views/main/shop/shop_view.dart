@@ -25,10 +25,10 @@ class ShopView extends StatelessWidget {
             height: 30,
           ),
           const CategoryScrollview(),
-          SingleChildScrollView(
+          const SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
-              children: const [
+              children: [
                 SizedBox(height: 20),
                 ShopBookWidget(),
                 SizedBox(height: 20),
@@ -46,14 +46,14 @@ class ShopView extends StatelessWidget {
 
 class CategoryScrollview extends StatelessWidget {
   const CategoryScrollview({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return const SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Row(children: const [
+      child: Row(children: [
         CategoryWidget(
           text: 'Geography',
           icon: Iconsax.microscope,

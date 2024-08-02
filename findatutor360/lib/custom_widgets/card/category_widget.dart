@@ -6,10 +6,10 @@ class CategoryWidget extends StatefulWidget {
   final IconData? icon;
   final String? text;
   const CategoryWidget({
-    Key? key,
+    super.key,
     required this.icon,
     required this.text,
-  }) : super(key: key);
+  });
 
   @override
   State<CategoryWidget> createState() => _CategoryWidgetState();

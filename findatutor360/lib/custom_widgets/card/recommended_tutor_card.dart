@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 
 class RecommededTutorCard extends StatelessWidget {
   const RecommededTutorCard({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

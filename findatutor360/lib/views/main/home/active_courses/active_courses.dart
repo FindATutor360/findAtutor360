@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 class ActiveCourse extends StatelessWidget {
   const ActiveCourse({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

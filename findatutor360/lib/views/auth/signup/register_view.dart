@@ -112,9 +112,9 @@ class _RegisterViewState extends State<RegisterView> {
                   router.go('/email_verify');
                 }),
             const SizedBox(height: 20),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 SecondaryButton(
                     imageSrc: 'assets/images/google.png',
                     onPressed: null,

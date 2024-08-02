@@ -4,14 +4,18 @@ import 'package:iconsax/iconsax.dart';
 
 class CustomLikeButton extends StatelessWidget {
   const CustomLikeButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        // padding: EdgeInsets.all(0),
-        onPressed: null,
-        icon: Icon(Iconsax.heart, size: 24, color: customTheme['errorColor']!));
+    return Container(
+      margin: const EdgeInsets.only(left: 10),
+      child: IconButton(
+          padding: const EdgeInsets.all(2),
+          onPressed: null,
+          icon:
+              Icon(Iconsax.heart, size: 20, color: customTheme['errorColor']!)),
+    );
   }
 }

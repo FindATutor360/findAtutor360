@@ -8,7 +8,7 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:iconsax/iconsax.dart';
 
 class ParentView extends StatefulWidget {
-  const ParentView({Key? key}) : super(key: key);
+  const ParentView({super.key});
 
   @override
   State<ParentView> createState() => _ParentViewState();

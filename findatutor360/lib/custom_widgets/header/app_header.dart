@@ -10,11 +10,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? badgeCount;
   //final bool? isHome;
   const AppHeader({
-    Key? key,
+    super.key,
     this.imageUrl,
     this.badgeCount,
     //required this.isHome,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -73,9 +73,9 @@ class LoginView extends StatelessWidget {
                   router.go('/parent');
                 }),
             const SizedBox(height: 20),
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
+              children: [
                 SecondaryButton(
                     imageSrc: 'assets/images/google.png',
                     onPressed: null,
