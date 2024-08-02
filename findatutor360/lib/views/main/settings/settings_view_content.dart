@@ -27,7 +27,7 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
           ///User Profile Card
           const SettingUserCard(),
 
-          //Settins List
+          //Settings List
           _SingleSection(
             title: "General",
             children: [
@@ -155,9 +155,6 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
           Container(
               margin: const EdgeInsets.only(bottom: 50),
               child: const SettingsUserLogoutCard()),
-          // const SizedBox(
-          //   height: 20,
-          // ) // End of User LogOut Card
         ],
       ),
     );
