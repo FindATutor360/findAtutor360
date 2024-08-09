@@ -4,7 +4,7 @@ import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
 import 'package:findatutor360/custom_widgets/slider/custom_carousel_view.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
-import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';

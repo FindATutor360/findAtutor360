@@ -1,17 +1,26 @@
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/drawer/drawer_element.dart';
-import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
-class CustomDrawer extends StatelessWidget {
+class CustomDrawer extends StatefulWidget {
   const CustomDrawer({
     super.key,
   });
 
   @override
+  State<CustomDrawer> createState() => _CustomDrawerState();
+}
+
+class _CustomDrawerState extends State<CustomDrawer> {
+  late AuthController _authController;
+  @override
   Widget build(BuildContext context) {
+    _authController = context.watch<AuthController>();
     return Drawer(
       backgroundColor: customTheme['drawerColor'],
       child: ListView(
@@ -136,8 +145,10 @@ class CustomDrawer extends StatelessWidget {
                       height: MediaQuery.of(context).size.height * 0.06,
                       spaceBetweenIconAndText: 20,
                       isIconPresent: true,
-                      onPressed: () {
-                        router.push('/login');
+                      onPressed: () async {
+                        await _authController.logout(context);
+
+                        await router.pushReplacement('/login');
                       },
                       iconName: Iconsax.logout,
                       buttonColor: customTheme['badgeColor'],
@@ -151,4 +162,6 @@ class CustomDrawer extends StatelessWidget {
       ),
     );
   }
+
+  Future<void> logOut() async {}
 }

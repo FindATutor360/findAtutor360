@@ -1,7 +1,7 @@
-import 'package:findatutor360/routes/index.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class OnboardingView extends StatelessWidget {
@@ -37,7 +37,7 @@ class OnboardingView extends StatelessWidget {
         //Skip button
         skipButton: TextButton(
           onPressed: () {
-            router.go('/welcome');
+            context.pushReplacement('/welcome');
           },
           child: Text(
             "Skip",
@@ -52,7 +52,7 @@ class OnboardingView extends StatelessWidget {
           builder: (context, ref, child) {
             final state = ref.watch(onBoardStateProvider);
             return InkWell(
-              onTap: () => _onNextTap(state),
+              onTap: () => _onNextTap(state, context),
               child: Container(
                 width: 130,
                 height: 50,
@@ -77,14 +77,14 @@ class OnboardingView extends StatelessWidget {
     );
   }
 
-  void _onNextTap(OnBoardState onBoardState) {
+  void _onNextTap(OnBoardState onBoardState, BuildContext context) {
     if (!onBoardState.isLastPage) {
       _pageController.animateToPage(onBoardState.page + 1,
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeInOutSine);
     } else {
       //print("nextButton pressed");
-      router.go('/welcome');
+      context.pushReplacement('/welcome');
     }
   }
 }

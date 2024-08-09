@@ -1,16 +1,30 @@
 import 'package:findatutor360/firebase_options.dart';
+import 'package:findatutor360/providers/app_providers.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/utils/injection_container.dart';
+import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'routes/index.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
+  setupLocator();
+
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  initAppConfig();
+
+  runApp(
+    MultiProvider(
+      providers: AppProviders.providers,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,4 +52,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
     );
   }
+}
+
+Future<void> initAppConfig() async {
+  final prefs = AppPreferences();
+  await prefs.init();
 }

@@ -1,43 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:findatutor360/views/main/cart/cart_view.dart';
-import 'package:findatutor360/views/main/message/message_view.dart';
-import 'package:findatutor360/views/main/settings/settings_view.dart';
-import 'package:findatutor360/views/main/shop/shop_view.dart';
-import 'package:findatutor360/views/main/home/home_view.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:iconsax/iconsax.dart';
 
 class ParentView extends StatefulWidget {
-  const ParentView({super.key});
+  const ParentView({required this.navigationShell, super.key});
+
+  final StatefulNavigationShell navigationShell;
+  static const route = '/dashboard';
 
   @override
   State<ParentView> createState() => _ParentViewState();
 }
 
 class _ParentViewState extends State<ParentView> {
-  int _currentIndex = 0;
-  final List<Widget> _views = const [
-    HomeView(),
-    ShopView(),
-    MessageView(),
-    CartView(),
-    SettingsView()
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _views,
-      ),
+      body: widget.navigationShell,
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color.fromRGBO(222, 224, 227, 1),
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
+        currentIndex: widget.navigationShell.currentIndex,
+        onTap: (i) => onPageChange(i, context),
         type: BottomNavigationBarType.shifting,
         selectedItemColor: const Color.fromRGBO(4, 118, 175, 1),
         unselectedItemColor: const Color.fromRGBO(121, 132, 142, 1),
@@ -82,5 +66,16 @@ class _ParentViewState extends State<ParentView> {
         ],
       ),
     );
+  }
+
+  void onPageChange(
+    int page,
+    BuildContext context,
+  ) {
+    final routes = ['/home', '/shop', '/message', '/cart', '/settings'];
+
+    final currentRoute = routes[page];
+
+    GoRouter.of(context).push(currentRoute);
   }
 }

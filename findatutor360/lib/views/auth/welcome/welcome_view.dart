@@ -1,6 +1,6 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -40,7 +40,7 @@ class WelcomeView extends StatelessWidget {
                 iconColor: customTheme['primaryColor'],
                 iconName: Iconsax.people,
                 onPressed: () {
-                  router.go('/parent');
+                  router.go('/home');
                 })
           ],
         ),
