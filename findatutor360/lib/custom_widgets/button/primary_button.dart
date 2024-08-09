@@ -17,7 +17,7 @@ class PrimaryButton extends StatelessWidget {
   final double? spaceBetweenIconAndText;
   final GestureTapCallback? onPressed;
   const PrimaryButton(
-      {Key? key,
+      {super.key,
       this.buttonColor,
       this.textColor,
       this.iconColor,
@@ -30,8 +30,7 @@ class PrimaryButton extends StatelessWidget {
       this.height,
       this.width,
       this.fontSize,
-      required this.onPressed})
-      : super(key: key);
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

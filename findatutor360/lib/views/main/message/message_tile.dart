@@ -45,7 +45,7 @@ class MessageTile extends StatelessWidget {
                     fontSize: 15,
                     color: customTheme['mainTextSecondaryColor'],
                     fontWeight: FontWeight.w600),
-                const SizedBox(height: 10),
+                const SizedBox(height: 8),
                 Container(
                   height: 25,
                   width: 25,

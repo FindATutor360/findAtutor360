@@ -7,8 +7,8 @@ import 'package:iconsax/iconsax.dart';
 
 class ShopBookWidget extends StatelessWidget {
   const ShopBookWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -93,6 +93,12 @@ class ShopBookWidget extends StatelessWidget {
                             children: [
                               TextButton.icon(
                                   onPressed: (() {}),
+                                  // style: ButtonStyle(
+                                  //   // backgroundColor: MaterialStateProperty.all(
+                                  //   //     customTheme['primaryColor']),
+                                  //   maximumSize: MaterialStateProperty.all(
+                                  //       const Size(100, 40)),
+                                  // ),
                                   icon: Icon(
                                     Iconsax.buy_crypto,
                                     color: customTheme['whiteColor'],
@@ -101,7 +107,7 @@ class ShopBookWidget extends StatelessWidget {
                                   label: Text("GH6 Buy",
                                       style: TextStyle(
                                         color: customTheme['whiteColor'],
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.w500,
                                       ))),
                             ],

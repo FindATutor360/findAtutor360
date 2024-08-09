@@ -37,9 +37,9 @@ class HomeView extends StatelessWidget {
                       router.push('/category');
                     },
                   ),
-                  SingleChildScrollView(
+                  const SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
-                    child: Row(children: const [
+                    child: Row(children: [
                       CategoryWidget(
                         text: 'Geography',
                         icon: Iconsax.microscope,
@@ -110,10 +110,10 @@ class HomeView extends StatelessWidget {
                     height: 16,
                   ),
                   // ActiveCourse(),
-                  SingleChildScrollView(
+                  const SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: const [
+                      children: [
                         SizedBox(width: 20),
                         ActiveCourse(),
                         SizedBox(width: 20),
@@ -142,10 +142,10 @@ class HomeView extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              SingleChildScrollView(
+              const SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  children: const [
+                  children: [
                     SizedBox(width: 20),
                     TrendingBookWidget(),
                     SizedBox(width: 20),
@@ -156,7 +156,7 @@ class HomeView extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
             ])),
           ],

@@ -7,13 +7,12 @@ class SecondaryButton extends StatelessWidget {
   final String imageSrc;
   final GestureTapCallback? onPressed;
   const SecondaryButton(
-      {Key? key,
+      {super.key,
       this.buttonColor,
       this.height,
       this.width,
       required this.imageSrc,
-      required this.onPressed})
-      : super(key: key);
+      required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

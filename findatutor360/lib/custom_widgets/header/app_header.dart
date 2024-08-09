@@ -10,11 +10,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? badgeCount;
   //final bool? isHome;
   const AppHeader({
-    Key? key,
+    super.key,
     this.imageUrl,
     this.badgeCount,
     //required this.isHome,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.white)),
                             backgroundColor: Color.fromRGBO(252, 57, 46, 1),
-                            child: Icon(Iconsax.sms))),
+                            child: Icon(Iconsax.notification))),
                     const SizedBox(width: 5),
                     DashedCircle(
                       dashes: 20,

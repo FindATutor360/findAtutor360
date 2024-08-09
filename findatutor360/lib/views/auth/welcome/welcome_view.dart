@@ -32,16 +32,19 @@ class WelcomeView extends StatelessWidget {
                   router.go('/login');
                 }),
             const SizedBox(height: 20),
-            PrimaryButton(
-                isIconPresent: true,
-                text: 'Browse as a guest',
-                buttonColor: customTheme['lightGrayColor'],
-                textColor: customTheme['primaryColor'],
-                iconColor: customTheme['primaryColor'],
-                iconName: Iconsax.people,
-                onPressed: () {
-                  router.go('/parent');
-                })
+            Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: PrimaryButton(
+                  isIconPresent: true,
+                  text: 'Browse as a guest',
+                  buttonColor: customTheme['lightGrayColor'],
+                  textColor: customTheme['primaryColor'],
+                  iconColor: customTheme['primaryColor'],
+                  iconName: Iconsax.people,
+                  onPressed: () {
+                    router.go('/parent');
+                  }),
+            )
           ],
         ),
       ),

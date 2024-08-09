@@ -9,13 +9,13 @@ class MainText extends StatelessWidget {
   final TextOverflow? overflow;
   final Color? color;
   const MainText({
-    Key? key,
+    super.key,
     required this.text,
     this.fontSize = 24,
     this.fontWeight = FontWeight.w600,
     this.color,
     this.overflow,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

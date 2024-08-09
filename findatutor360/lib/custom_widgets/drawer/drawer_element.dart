@@ -7,11 +7,11 @@ class DrawerElement extends StatelessWidget {
   final void Function()? onPressed;
   final IconData? icon;
   const DrawerElement({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

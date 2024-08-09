@@ -35,13 +35,16 @@ class EmailSuccessView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            PrimaryButton(
-              text: 'Go to Login',
-              isIconPresent: false,
-              fontWeight: FontWeight.w600,
-              onPressed: () {
-                router.go('/login');
-              },
+            Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: PrimaryButton(
+                text: 'Go to Login',
+                isIconPresent: false,
+                fontWeight: FontWeight.w600,
+                onPressed: () {
+                  router.go('/login');
+                },
+              ),
             ),
           ],
         ),

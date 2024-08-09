@@ -4,8 +4,8 @@ import 'package:findatutor360/theme/index.dart';
 
 class SettingsUserLogoutCard extends StatelessWidget {
   const SettingsUserLogoutCard({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
