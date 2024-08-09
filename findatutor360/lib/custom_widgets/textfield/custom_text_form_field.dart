@@ -35,20 +35,29 @@ class CustomTextFormField extends StatelessWidget {
               color: const Color.fromRGBO(4, 118, 175, 1)),
           keyboardType: keyboardType,
           obscureText: obscureText,
+          validator: validator,
           decoration: InputDecoration(
-              label: label,
-              labelStyle:
-                  const TextStyle(color: Color.fromRGBO(121, 132, 142, 1)),
-              hintText: hint,
-              suffixIcon: suffixIcon,
-              floatingLabelBehavior: FloatingLabelBehavior.auto,
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(
-                      color: Color.fromRGBO(141, 150, 159, 1), width: 1)),
-              focusedBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 1, color: Color.fromRGBO(4, 118, 175, 1)))),
+            label: label,
+            labelStyle:
+                const TextStyle(color: Color.fromRGBO(121, 132, 142, 1)),
+            hintText: hint,
+            suffixIcon: suffixIcon,
+            floatingLabelBehavior: FloatingLabelBehavior.auto,
+            enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                    color: Color.fromRGBO(141, 150, 159, 1), width: 1)),
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                    width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
+            errorBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(
+                    color: Color.fromRGBO(241, 4, 4, 1), width: 1)),
+            focusedErrorBorder: const OutlineInputBorder(
+                borderSide: BorderSide(
+                    width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
+          ),
         ));
   }
 }

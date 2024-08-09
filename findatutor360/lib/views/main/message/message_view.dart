@@ -1,6 +1,6 @@
 import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
-import 'package:findatutor360/routes/index.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'message_tile.dart';
@@ -30,7 +30,7 @@ class MessageView extends StatelessWidget {
           body: ListView.separated(
               itemBuilder: (context, index) {
                 return MessageTile(
-                  onTap: () => router.push('/chat'),
+                  onTap: () => router.push('/message/chat'),
                   imageUrl: imageUrl,
                   userName: 'Asante Junior',
                   message: 'We meeting tonight?',

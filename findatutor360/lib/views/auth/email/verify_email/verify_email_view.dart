@@ -1,15 +1,74 @@
-import 'package:findatutor360/custom_widgets/button/primary_button.dart';
+import 'dart:async';
+import 'dart:developer';
+
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
-import 'package:findatutor360/routes/index.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/utils/operation_runner.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
-class VerifyEmailView extends StatelessWidget {
+class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
+
+  @override
+  State<VerifyEmailView> createState() => _VerifyEmailViewState();
+}
+
+class _VerifyEmailViewState extends State<VerifyEmailView> {
+  late AuthController authController;
+  User? user;
+  Timer? emailVerificationTimer;
+  final int verificationTimeout = 8;
+  final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
+
+  @override
+  void initState() {
+    super.initState();
+    authController = context.read<AuthController>();
+    user = FirebaseAuth.instance.currentUser;
+    navigateUser();
+  }
+
+  Future<void> navigateUser() async {
+    if (user != null) {
+      emailVerificationTimer =
+          Timer.periodic(const Duration(seconds: 3), (timer) async {
+        await user!.reload();
+        user = FirebaseAuth.instance.currentUser;
+
+        if (user!.emailVerified) {
+          timer.cancel();
+          emailVerificationTimer?.cancel();
+          context.pushReplacement('/home');
+
+          log("User Email verified", name: 'debug');
+        }
+      });
+
+      await Future.delayed(Duration(seconds: verificationTimeout));
+      if (!user!.emailVerified) {
+        emailVerificationTimer?.cancel();
+        context.pushReplacement('/register');
+      }
+    } else {
+      log("No user found", name: 'debug');
+
+      context.pushReplacement('/register');
+    }
+  }
+
+  @override
+  void dispose() {
+    isLoading.dispose();
+    emailVerificationTimer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +84,7 @@ class VerifyEmailView extends StatelessWidget {
                   margin: const EdgeInsets.only(top: 20, left: 15),
                   child: IconButton(
                       onPressed: () {
-                        router.go('/register');
+                        context.go('/register');
                       },
                       icon: Icon(
                           defaultTargetPlatform == TargetPlatform.android
@@ -52,7 +111,7 @@ class VerifyEmailView extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'To continue, enter the code we just sent to',
+                    'To continue, verify the code we just sent to',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
                         color: customTheme['secondaryTextColor'],
@@ -60,7 +119,7 @@ class VerifyEmailView extends StatelessWidget {
                         fontWeight: FontWeight.w400),
                   ),
                   Text(
-                    'youremailaddress@gmail.com',
+                    user?.email ?? '', // Display the user's email
                     textAlign: TextAlign.center,
                     style: GoogleFonts.manrope(
                         color: customTheme['mainTextColor'],
@@ -71,27 +130,26 @@ class VerifyEmailView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            const CustomTextFormField(
-                hint: 'Enter code', keyboardType: TextInputType.number),
-            const SizedBox(height: 10),
-            PrimaryButton(
-              text: 'Continue',
-              isIconPresent: false,
-              fontWeight: FontWeight.w600,
-              onPressed: () {
-                router.go('/email_success');
+            ValueListenableBuilder<bool>(
+              valueListenable: isLoading,
+              builder: (context, isLoading, child) {
+                return isLoading
+                    ? const CircularProgressIndicator() // Show the loader
+                    : const SizedBox.shrink(); // Hide the loader
               },
             ),
             const SizedBox(height: 10),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('Didn\'t receive the code ?',
+              Text('Didn\'t receive the code?',
                   style: GoogleFonts.manrope(
                       color: customTheme['mainTextColor'],
                       fontSize: 15,
                       fontWeight: FontWeight.w400)),
               TextButton(
                 onPressed: () {
-                  //implement resend code here
+                  user?.sendEmailVerification(); // Resend verification email
+                  showSnackMessage(context, 'Verification email resent.',
+                      isError: false);
                 },
                 child: Text('Resend',
                     style: GoogleFonts.manrope(
