@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "989449612573",
+    "project_id": "findautor-app",
+    "storage_bucket": "findautor-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:989449612573:android:af5d8c48e727d742a445f4",
+        "android_client_info": {
+          "package_name": "com.example.findatutor360"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQFfC_sEDjnD6XTmmhvR_POIXoKlD0FoE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
