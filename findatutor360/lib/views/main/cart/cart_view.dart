@@ -3,11 +3,13 @@ import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/header.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CartView extends StatelessWidget {
   const CartView({super.key});
+  static const path = '/chatView';
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +61,7 @@ class CartView extends StatelessWidget {
                         isIconPresent: false,
                         text: 'Go to shop',
                         onPressed: () {
-                          router.go('/shop');
+                          router.go(ShopView.path);
                         }),
                   )
                 ]))));

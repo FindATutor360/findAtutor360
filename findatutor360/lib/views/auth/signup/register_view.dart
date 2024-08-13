@@ -3,6 +3,8 @@
 import 'dart:developer';
 // ignore: unused_import
 import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
+import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +22,7 @@ import 'package:findatutor360/utils/operation_runner.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
+  static const path = '/registerView';
 
   @override
   State<RegisterView> createState() => _RegisterViewState();
@@ -225,7 +228,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                           fontWeight: FontWeight.w400)),
                   TextButton(
                     onPressed: () {
-                      context.go('/login');
+                      context.go(LoginView.path);
                     },
                     child: Text('Login',
                         style: GoogleFonts.manrope(
@@ -264,7 +267,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
 
     if (user != null) {
       log("Navigating to email verification", name: 'debug');
-      context.go('/email_verify');
+      context.go(VerifyEmailView.path);
     } else {
       log("User not created", name: 'debug');
     }
@@ -283,7 +286,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     );
 
     if (user != null) {
-      context.pushReplacement('/email_verify');
+      context.pushReplacement(VerifyEmailView.path);
     } else {
       log("User not created", name: 'debug');
     }
@@ -295,7 +298,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     );
 
     if (user != null) {
-      context.go('/email_verify');
+      context.go(VerifyEmailView.path);
     } else {
       log("User not created", name: 'debug');
     }

@@ -26,129 +26,127 @@ final _cartKey = GlobalKey<NavigatorState>(debugLabel: 'shellNotification');
 
 List<RouteBase> get routes => [
       GoRoute(
-        path: '/',
+        path: SplashView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const SplashView();
         },
-        routes: <RouteBase>[
-          GoRoute(
-            path: 'onboarding',
-            builder: (BuildContext context, GoRouterState state) {
-              return OnboardingView();
-            },
-          ),
-          GoRoute(
-            path: 'welcome',
-            builder: (BuildContext context, GoRouterState state) {
-              return const WelcomeView();
-            },
-          ),
-          GoRoute(
-            path: 'login',
-            builder: (BuildContext context, GoRouterState state) {
-              return const LoginView();
-            },
-          ),
-          GoRoute(
-            path: 'register',
-            builder: (BuildContext context, GoRouterState state) {
-              return const RegisterView();
-            },
-          ),
-          GoRoute(
-            path: 'email_verify',
-            builder: (BuildContext context, GoRouterState state) {
-              return const VerifyEmailView();
-            },
-          ),
-          GoRoute(
-            path: 'email_success',
-            builder: (BuildContext context, GoRouterState state) {
-              return const EmailSuccessView();
-            },
-          ),
-          StatefulShellRoute.indexedStack(
-            builder: (context, state, navigationShell) {
-              return ParentView(navigationShell: navigationShell);
-            },
-            branches: [
-              StatefulShellBranch(
-                navigatorKey: _homeKey,
-                routes: [
-                  GoRoute(
-                    path: 'home',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const HomeView();
-                    },
-                  ),
-                ],
+      ),
+      GoRoute(
+        path: OnboardingView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return OnboardingView();
+        },
+      ),
+      GoRoute(
+        path: WelcomeView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const WelcomeView();
+        },
+      ),
+      GoRoute(
+        path: LoginView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const LoginView();
+        },
+      ),
+      GoRoute(
+        path: RegisterView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const RegisterView();
+        },
+      ),
+      GoRoute(
+        path: VerifyEmailView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const VerifyEmailView();
+        },
+      ),
+      GoRoute(
+        path: EmailSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const EmailSuccessView();
+        },
+      ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return ParentView(navigationShell: navigationShell);
+        },
+        branches: [
+          StatefulShellBranch(
+            navigatorKey: _homeKey,
+            routes: [
+              GoRoute(
+                path: HomeView.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const HomeView();
+                },
               ),
-              StatefulShellBranch(
-                navigatorKey: _shopKey,
-                routes: [
-                  GoRoute(
-                    path: 'shop',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const ShopView();
-                    },
-                  ),
-                ],
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: _shopKey,
+            routes: [
+              GoRoute(
+                path: ShopView.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const ShopView();
+                },
               ),
-              StatefulShellBranch(
-                navigatorKey: _messageKey,
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: _messageKey,
+            routes: [
+              GoRoute(
+                path: MessageView.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const MessageView();
+                },
                 routes: [
                   GoRoute(
-                    path: 'message',
+                    path: ChatView.path,
                     builder: (BuildContext context, GoRouterState state) {
-                      return const MessageView();
-                    },
-                    routes: [
-                      GoRoute(
-                        path: 'chat',
-                        builder: (BuildContext context, GoRouterState state) {
-                          return const ChatView();
-                        },
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              StatefulShellBranch(
-                navigatorKey: _cartKey,
-                routes: [
-                  GoRoute(
-                    path: 'cart',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const CartView();
-                    },
-                  ),
-                ],
-              ),
-              StatefulShellBranch(
-                navigatorKey: _settingsKey,
-                routes: [
-                  GoRoute(
-                    path: 'settings',
-                    builder: (BuildContext context, GoRouterState state) {
-                      return const SettingsView();
+                      return const ChatView();
                     },
                   ),
                 ],
               ),
             ],
           ),
-          GoRoute(
-            path: 'category',
-            builder: (BuildContext context, GoRouterState state) {
-              return const CategoryView();
-            },
+          StatefulShellBranch(
+            navigatorKey: _cartKey,
+            routes: [
+              GoRoute(
+                path: CartView.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const CartView();
+                },
+              ),
+            ],
           ),
-          GoRoute(
-            path: 'recommended_tutors',
-            builder: (BuildContext context, GoRouterState state) {
-              return const RecommendedTutorsView();
-            },
+          StatefulShellBranch(
+            navigatorKey: _settingsKey,
+            routes: [
+              GoRoute(
+                path: SettingsView.path,
+                builder: (BuildContext context, GoRouterState state) {
+                  return const SettingsView();
+                },
+              ),
+            ],
           ),
         ],
+      ),
+      GoRoute(
+        path: '/category',
+        builder: (BuildContext context, GoRouterState state) {
+          return const CategoryView();
+        },
+      ),
+      GoRoute(
+        path: '/recommended_tutors',
+        builder: (BuildContext context, GoRouterState state) {
+          return const RecommendedTutorsView();
+        },
       ),
     ];

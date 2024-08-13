@@ -6,6 +6,7 @@ import '../../../custom_widgets/header/header.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
+   static const path = '/settingsView';
 
   @override
   Widget build(BuildContext context) {

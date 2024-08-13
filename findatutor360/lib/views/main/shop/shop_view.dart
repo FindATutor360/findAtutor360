@@ -9,6 +9,7 @@ import '../../../custom_widgets/slider/custom_carousel_view.dart';
 
 class ShopView extends StatelessWidget {
   const ShopView({super.key});
+  static const path = '/shopView';
 
   @override
   Widget build(BuildContext context) {

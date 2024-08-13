@@ -13,6 +13,7 @@ import 'package:iconsax/iconsax.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({super.key});
+  static const path = '/homeView';
 
   @override
   Widget build(BuildContext context) {

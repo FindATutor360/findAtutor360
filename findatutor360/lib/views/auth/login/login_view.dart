@@ -9,6 +9,9 @@ import 'package:findatutor360/custom_widgets/header/custom_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
+import 'package:findatutor360/views/auth/signup/register_view.dart';
+import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +21,7 @@ import 'package:provider/provider.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
+  static const path = '/loginView';
 
   @override
   State<LoginView> createState() => _LoginViewState();
@@ -128,7 +132,6 @@ class _LoginViewState extends State<LoginView> {
                                   password: _passwordController.text,
                                 );
                               }
-                              ;
                             });
                   },
                 ),
@@ -164,7 +167,7 @@ class _LoginViewState extends State<LoginView> {
                         fontWeight: FontWeight.w400)),
                 TextButton(
                   onPressed: () {
-                    context.go('/register');
+                    context.go(RegisterView.path);
                   },
                   child: Text('Sign up',
                       style: GoogleFonts.manrope(
@@ -190,8 +193,8 @@ class _LoginViewState extends State<LoginView> {
       password: _passwordController.text,
     );
 
-    if (user != null) {
-      context.pushReplacement('/home');
+    if (user != null && user.emailVerified) {
+      context.pushReplacement(HomeView.path);
     } else {
       log("User not created", name: 'debug');
     }
@@ -203,8 +206,9 @@ class _LoginViewState extends State<LoginView> {
     );
 
     if (user != null) {
-      context.pushReplacement('/email_verify');
-    } else {
+      context.pushReplacement(HomeView.path);
+    } else if (!user!.emailVerified) {
+      context.pushReplacement(VerifyEmailView.path);
       log("User not created", name: 'debug');
     }
   }

@@ -1,11 +1,16 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingView extends StatelessWidget {
   OnboardingView({super.key});
+  static const path = '/onboarding';
 
   final PageController _pageController = PageController();
 
@@ -36,8 +41,11 @@ class OnboardingView extends StatelessWidget {
         ),
         //Skip button
         skipButton: TextButton(
-          onPressed: () {
-            context.pushReplacement('/welcome');
+          onPressed: () async {
+            SharedPreferences preferences =
+                await SharedPreferences.getInstance();
+            await preferences.setBool('userToken', true);
+            context.pushReplacement(WelcomeView.path);
           },
           child: Text(
             "Skip",
@@ -77,14 +85,16 @@ class OnboardingView extends StatelessWidget {
     );
   }
 
-  void _onNextTap(OnBoardState onBoardState, BuildContext context) {
+  void _onNextTap(OnBoardState onBoardState, BuildContext context) async {
     if (!onBoardState.isLastPage) {
       _pageController.animateToPage(onBoardState.page + 1,
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeInOutSine);
     } else {
       //print("nextButton pressed");
-      context.pushReplacement('/welcome');
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setBool('userToken', true);
+      context.pushReplacement(WelcomeView.path);
     }
   }
 }

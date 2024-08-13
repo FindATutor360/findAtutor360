@@ -3,7 +3,9 @@ import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/drawer/drawer_element.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -146,9 +148,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       spaceBetweenIconAndText: 20,
                       isIconPresent: true,
                       onPressed: () async {
-                        await _authController.logout(context);
-
-                        await router.pushReplacement('/login');
+                        await _authController.logout().then(
+                              (value) =>
+                                  context.pushReplacement(LoginView.path),
+                            );
                       },
                       iconName: Iconsax.logout,
                       buttonColor: customTheme['badgeColor'],

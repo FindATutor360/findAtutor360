@@ -1,3 +1,8 @@
+import 'package:findatutor360/views/main/cart/cart_view.dart';
+import 'package:findatutor360/views/main/home/home_view.dart';
+import 'package:findatutor360/views/main/message/message_view.dart';
+import 'package:findatutor360/views/main/settings/settings_view.dart';
+import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -72,10 +77,16 @@ class _ParentViewState extends State<ParentView> {
     int page,
     BuildContext context,
   ) {
-    final routes = ['/home', '/shop', '/message', '/cart', '/settings'];
+    final routes = [
+      HomeView.path,
+      ShopView.path,
+      MessageView.path,
+      CartView.path,
+      SettingsView.path,
+    ];
 
     final currentRoute = routes[page];
 
-    GoRouter.of(context).push(currentRoute);
+    GoRouter.of(context).go(currentRoute);
   }
 }
