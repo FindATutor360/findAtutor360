@@ -16,8 +16,8 @@ class WelcomeView extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Scaffold(
-          body: SingleChildScrollView(
-        child: SafeArea(
+        body: SingleChildScrollView(
+            child: SafeArea(
           child: Column(
             children: [
               Container(
@@ -34,7 +34,7 @@ class WelcomeView extends StatelessWidget {
                   isIconPresent: false,
                   text: 'Create an account',
                   onPressed: () {
-                    router.push(LoginView.path);
+                    router.go(LoginView.path);
                   }),
               const SizedBox(height: 20),
               PrimaryButton(
@@ -45,12 +45,12 @@ class WelcomeView extends StatelessWidget {
                   iconColor: customTheme['primaryColor'],
                   iconName: Iconsax.people,
                   onPressed: () {
-                    router.push(HomeView.path);
+                    router.go(HomeView.path);
                   })
             ],
           ),
-        ),
-      )),
+        )),
+      ),
     );
   }
 }
