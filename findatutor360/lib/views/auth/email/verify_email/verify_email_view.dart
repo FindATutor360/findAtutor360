@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:developer';
 
@@ -5,6 +7,8 @@ import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
+import 'package:findatutor360/views/auth/signup/register_view.dart';
+import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +19,7 @@ import 'package:provider/provider.dart';
 
 class VerifyEmailView extends StatefulWidget {
   const VerifyEmailView({super.key});
+  static const path = '/verifyEmail';
 
   @override
   State<VerifyEmailView> createState() => _VerifyEmailViewState();
@@ -24,50 +29,57 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   late AuthController authController;
   User? user;
   Timer? emailVerificationTimer;
-  final int verificationTimeout = 8;
   final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
+  final ValueNotifier<int> countdown = ValueNotifier<int>(60);
 
   @override
   void initState() {
     super.initState();
     authController = context.read<AuthController>();
     user = FirebaseAuth.instance.currentUser;
+    startCountdown();
     navigateUser();
+  }
+
+  void startCountdown() {
+    countdown.value = 60;
+    isLoading.value = true;
+
+    emailVerificationTimer =
+        Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (countdown.value > 0) {
+        countdown.value -= 1;
+      } else {
+        isLoading.value = false;
+        timer.cancel();
+      }
+    });
   }
 
   Future<void> navigateUser() async {
     if (user != null) {
-      emailVerificationTimer =
-          Timer.periodic(const Duration(seconds: 3), (timer) async {
+      Timer.periodic(const Duration(seconds: 3), (timer) async {
         await user!.reload();
         user = FirebaseAuth.instance.currentUser;
 
         if (user!.emailVerified) {
           timer.cancel();
           emailVerificationTimer?.cancel();
-          context.pushReplacement('/home');
+          context.pushReplacement(HomeView.path);
 
           log("User Email verified", name: 'debug');
         }
       });
-
-      await Future.delayed(Duration(seconds: verificationTimeout));
-      if (!user!.emailVerified) {
-        emailVerificationTimer?.cancel();
-        context.pushReplacement('/register');
-      }
     } else {
       log("No user found", name: 'debug');
-
-      context.pushReplacement('/register');
+      context.pushReplacement(RegisterView.path);
     }
   }
 
-  @override
-  void dispose() {
-    isLoading.dispose();
-    emailVerificationTimer?.cancel();
-    super.dispose();
+  void resendVerificationEmail() {
+    user?.sendEmailVerification();
+    startCountdown();
+    showSnackMessage(context, 'Verification email resent.', isError: false);
   }
 
   @override
@@ -84,7 +96,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
                   margin: const EdgeInsets.only(top: 20, left: 15),
                   child: IconButton(
                       onPressed: () {
-                        context.go('/register');
+                        context.go(RegisterView.path);
                       },
                       icon: Icon(
                           defaultTargetPlatform == TargetPlatform.android
@@ -134,33 +146,68 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
               valueListenable: isLoading,
               builder: (context, isLoading, child) {
                 return isLoading
-                    ? const CircularProgressIndicator() // Show the loader
+                    ? Column(
+                        children: [
+                          const CircularProgressIndicator(), // Show the loader
+                          const SizedBox(height: 10),
+                          ValueListenableBuilder<int>(
+                            valueListenable: countdown,
+                            builder: (context, countdownValue, child) {
+                              return Text(
+                                'Retry available in $countdownValue seconds',
+                                style: GoogleFonts.manrope(
+                                  color: customTheme['secondaryTextColor'],
+                                  fontSize: 14,
+                                ),
+                              );
+                            },
+                          ),
+                        ],
+                      )
                     : const SizedBox.shrink(); // Hide the loader
               },
             ),
             const SizedBox(height: 10),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text('Didn\'t receive the code?',
-                  style: GoogleFonts.manrope(
-                      color: customTheme['mainTextColor'],
-                      fontSize: 15,
-                      fontWeight: FontWeight.w400)),
-              TextButton(
-                onPressed: () {
-                  user?.sendEmailVerification(); // Resend verification email
-                  showSnackMessage(context, 'Verification email resent.',
-                      isError: false);
-                },
-                child: Text('Resend',
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Didn\'t receive the code?',
                     style: GoogleFonts.manrope(
-                        color: customTheme['primaryColor'],
+                        color: customTheme['mainTextColor'],
                         fontSize: 15,
                         fontWeight: FontWeight.w400)),
-              ),
-            ]),
+                ValueListenableBuilder<int>(
+                  valueListenable: countdown,
+                  builder: (context, countdownValue, child) {
+                    return TextButton(
+                      onPressed: countdownValue == 0
+                          ? () async {
+                              resendVerificationEmail();
+                            }
+                          : null,
+                      child: Text('Resend',
+                          style: GoogleFonts.manrope(
+                              color: countdownValue == 0
+                                  ? customTheme['primaryColor']
+                                  : Colors.grey,
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400)),
+                    );
+                  },
+                ),
+              ],
+            ),
           ],
         ),
       ),
     ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    isLoading.dispose();
+    countdown.dispose();
+    emailVerificationTimer?.cancel();
   }
 }

@@ -18,6 +18,8 @@ import 'package:uuid/uuid.dart';
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
 
+  static const path = 'chat_view';
+
   @override
   State<ChatView> createState() => _ChatViewState();
 }

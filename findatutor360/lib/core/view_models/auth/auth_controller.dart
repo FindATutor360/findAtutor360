@@ -35,14 +35,8 @@ class AuthController extends BaseProvider {
     _isLoadings.value = false;
 
     if (user != null) {
-      await _authServiceImpl.sendEmailVerification(user);
-
-      await addUserInfo(
-        user,
-        user.displayName,
-        user.email,
-        user.photoURL,
-      ); // Send verification email
+      await sendEmailVerification(user,
+          name: user.displayName, email: user.email);
 
       String? userToken = await user.getIdToken();
       if (userToken != null) {
@@ -73,14 +67,7 @@ class AuthController extends BaseProvider {
     _isLoadings.value = false;
 
     if (user != null) {
-      await _authServiceImpl.sendEmailVerification(user);
-
-      await addUserInfo(
-        user,
-        fullName,
-        email,
-        user.photoURL,
-      );
+      sendEmailVerification(user, name: fullName, email: email);
 
       String? userToken = await user.getIdToken();
       if (userToken != null) {
@@ -130,8 +117,8 @@ class AuthController extends BaseProvider {
     _isLoadings.value = false;
 
     if (user != null) {
-      await _authServiceImpl
-          .sendEmailVerification(user); // Send verification email
+      sendEmailVerification(user, name: user.displayName!, email: user.email!);
+      // Send verification email
 
       String? userToken = await user.getIdToken();
       if (userToken != null) {
@@ -146,13 +133,30 @@ class AuthController extends BaseProvider {
   }
 
   Future<void> logout(
-    BuildContext context,
-  ) async {
-    _isLoadings.value = true;
+      // BuildContext context,
+      ) async {
+    await appPreferences.remove('userToken');
+    await _authServiceImpl.logout();
+  }
 
-    await appPreferences.remove('Users');
-    await _authServiceImpl.logout(context);
-    _isLoadings.value = false;
+  Future<void> sendEmailVerification(
+    User user, {
+    required String? name,
+    required String? email,
+  }) async {
+    if (!user.emailVerified) {
+      await user.sendEmailVerification();
+      log('Verification email sent', name: 'debug');
+    } else if (user.emailVerified) {
+      await addUserInfo(
+        user,
+        name,
+        email,
+        user.photoURL,
+      );
+    }
+
+    return;
   }
 
   Future<void> addUserInfo(
@@ -168,7 +172,7 @@ class AuthController extends BaseProvider {
       final data = newUser.toJson();
       data['createdAt'] = FieldValue.serverTimestamp();
       await _firestore.collection('Users').doc(user.uid).set(
-            newUser.toJson(),
+            data,
           );
       log("User added to DB successfully!", name: 'debug');
     } catch (e) {

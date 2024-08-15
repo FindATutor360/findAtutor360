@@ -2,6 +2,7 @@ import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/message/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'message_tile.dart';
 
@@ -19,7 +20,7 @@ class MessageView extends StatelessWidget {
     this.time,
     this.messageNumber,
   });
-
+  static const path = '/messageView';
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -30,7 +31,8 @@ class MessageView extends StatelessWidget {
           body: ListView.separated(
               itemBuilder: (context, index) {
                 return MessageTile(
-                  onTap: () => router.push('/message/chat'),
+                  onTap: () =>
+                      router.push('${MessageView.path}/${ChatView.path}'),
                   imageUrl: imageUrl,
                   userName: 'Asante Junior',
                   message: 'We meeting tonight?',

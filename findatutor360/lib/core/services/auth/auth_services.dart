@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class AuthService {
   Future<User?> continueWithGoogle(BuildContext context);
@@ -24,10 +25,7 @@ abstract class AuthService {
   Future<User?> continueWithFacebook(
     BuildContext context,
   );
-  Future<void> logout(
-    BuildContext context,
-  );
-  Future<User?> sendEmailVerification(User user);
+  Future<void> logout();
 }
 
 class AuthServiceImpl implements AuthService {
@@ -41,21 +39,17 @@ class AuthServiceImpl implements AuthService {
       final googleUser = await GoogleSignIn().signIn();
       final googleAuth = await googleUser?.authentication;
 
-      if (googleAuth == null) {
-        return null;
+      if (googleAuth != null) {
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        await GoogleSignIn().signOut();
+        final response = await _auth.signInWithCredential(credential);
+
+        return response.user;
       }
-
-      final credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      UserCredential userCredential =
-          await _auth.signInWithCredential(credential);
-      await GoogleSignIn().signOut();
-
-      User? user = userCredential.user;
-
-      return user;
     } on FirebaseAuthException catch (e) {
       log("$e", name: 'debug');
       showSnackMessage(context, "$e", isError: true);
@@ -95,11 +89,26 @@ class AuthServiceImpl implements AuthService {
           email: email, password: password);
       log('User log in successful', name: 'debug');
       User? user = credential.user;
-
-      return user;
+      if (user != null && user.emailVerified) {
+        return user;
+      } else {
+        await _auth.signOut();
+        showSnackMessage(context, "Please verify your email before logging in",
+            isError: true);
+      }
     } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        showSnackMessage(context, "The password is incorrect.", isError: true);
+      } else if (e.code == 'user-not-found') {
+        showSnackMessage(context, "No user found with this email.",
+            isError: true);
+      } else if (e.code == 'invalid-credential') {
+        showSnackMessage(context, "Invalid credential or expired session.",
+            isError: true);
+      } else {
+        showSnackMessage(context, "$e", isError: true);
+      }
       log("$e", name: 'debug');
-      showSnackMessage(context, "$e", isError: true);
     }
     return null;
   }
@@ -126,26 +135,10 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<void> logout(
-    BuildContext context,
-  ) async {
-    try {
-      await _auth.signOut();
-      log('Log out successfully', name: 'debug');
-    } on FirebaseAuthException catch (e) {
-      log("$e", name: 'debug');
-      showSnackMessage(context, "$e", isError: true);
-    }
-  }
-
-  @override
-  Future<User?> sendEmailVerification(User user) async {
-    if (!user.emailVerified) {
-      await user.sendEmailVerification();
-      log('Verification email sent', name: 'debug');
-    } else {
-      log('Email is already verified', name: 'debug');
-    }
-    return user;
+  Future<void> logout() async {
+    final sharedPref = await SharedPreferences.getInstance();
+    await sharedPref.remove('userToken');
+    await _auth.signOut();
+    log('Log out successfully', name: 'debug');
   }
 }
