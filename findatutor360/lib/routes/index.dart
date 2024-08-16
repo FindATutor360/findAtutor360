@@ -74,6 +74,7 @@ List<RouteBase> get routes => [
         branches: [
           StatefulShellBranch(
             navigatorKey: _homeKey,
+            initialLocation: HomeView.path,
             routes: [
               GoRoute(
                 path: HomeView.path,
@@ -85,6 +86,7 @@ List<RouteBase> get routes => [
           ),
           StatefulShellBranch(
             navigatorKey: _shopKey,
+            initialLocation: ShopView.path,
             routes: [
               GoRoute(
                 path: ShopView.path,
@@ -96,6 +98,7 @@ List<RouteBase> get routes => [
           ),
           StatefulShellBranch(
             navigatorKey: _messageKey,
+            initialLocation: MessageView.path,
             routes: [
               GoRoute(
                 path: MessageView.path,
@@ -115,6 +118,7 @@ List<RouteBase> get routes => [
           ),
           StatefulShellBranch(
             navigatorKey: _cartKey,
+            initialLocation: CartView.path,
             routes: [
               GoRoute(
                 path: CartView.path,
@@ -126,6 +130,7 @@ List<RouteBase> get routes => [
           ),
           StatefulShellBranch(
             navigatorKey: _settingsKey,
+            initialLocation: SettingsView.path,
             routes: [
               GoRoute(
                 path: SettingsView.path,
@@ -138,13 +143,13 @@ List<RouteBase> get routes => [
         ],
       ),
       GoRoute(
-        path: '/category',
+        path: CategoryView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const CategoryView();
         },
       ),
       GoRoute(
-        path: '/recommended_tutors',
+        path: RecommendedTutorsView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const RecommendedTutorsView();
         },

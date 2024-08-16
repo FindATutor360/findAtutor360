@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="facebook_app_id">868568571788294</string>
+    <string name="facebook_client_token">5bd94bb9859edc9e96ceb99c3c17cf7b</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb868568571788294</string>
+    <string name="app_name">findatutor</string>
+    <string name="default_notification_channel_id" translatable="false">Findatutor</string>
+</resources>
