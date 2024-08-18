@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class RecommendedTutorsView extends StatelessWidget {
   const RecommendedTutorsView({super.key});
+  static const path = '/recommendedTutors';
 
   @override
   Widget build(BuildContext context) {

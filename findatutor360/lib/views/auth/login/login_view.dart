@@ -14,6 +14,7 @@ import 'package:findatutor360/views/auth/signup/register_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
@@ -152,9 +153,11 @@ class _LoginViewState extends State<LoginView> {
                       onPressed: null,
                       buttonColor: Colors.transparent),
                   const SizedBox(width: 20),
-                  const SecondaryButton(
+                  SecondaryButton(
                       imageSrc: 'assets/images/facebook.png',
-                      onPressed: null,
+                      onPressed: () async {
+                        await continueWithFacebook();
+                      },
                       buttonColor: Colors.transparent),
                 ],
               ),
@@ -194,6 +197,14 @@ class _LoginViewState extends State<LoginView> {
     );
 
     if (user != null && user.emailVerified) {
+      Fluttertoast.showToast(
+        msg: "Login successful",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['primaryColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
       context.pushReplacement(HomeView.path);
     } else {
       log("User not created", name: 'debug');
@@ -206,9 +217,55 @@ class _LoginViewState extends State<LoginView> {
     );
 
     if (user != null) {
+      Fluttertoast.showToast(
+        msg: "Login successful",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['primaryColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
       context.pushReplacement(HomeView.path);
     } else if (!user!.emailVerified) {
-      context.pushReplacement(VerifyEmailView.path);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: ((context) => VerifyEmailView(
+                userEmail: user.email,
+                userName: user.displayName,
+              )),
+        ),
+      );
+      log("User not created", name: 'debug');
+    }
+  }
+
+  Future<void> continueWithFacebook() async {
+    User? user = await _authController.continueWithFacebook(
+      context,
+    );
+
+    if (user != null) {
+      Fluttertoast.showToast(
+        msg: "Login successful",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['primaryColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
+      context.pushReplacement(HomeView.path);
+    } else if (!user!.emailVerified) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: ((context) => VerifyEmailView(
+                userEmail: user.email,
+                userName: user.displayName,
+              )),
+        ),
+      );
+
       log("User not created", name: 'debug');
     }
   }

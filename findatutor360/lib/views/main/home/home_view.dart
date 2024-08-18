@@ -7,6 +7,8 @@ import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
+import 'package:findatutor360/views/main/home/category/category_view.dart';
+import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -35,7 +37,7 @@ class HomeView extends StatelessWidget {
                   TextOption(
                     mainText: 'Category',
                     onPressed: () {
-                      router.push('/category');
+                      router.push(CategoryView.path);
                     },
                   ),
                   const SingleChildScrollView(
@@ -75,7 +77,7 @@ class HomeView extends StatelessWidget {
               TextOption(
                 mainText: 'Recommended Tutors',
                 onPressed: () {
-                  router.push('/recommended_tutors');
+                  router.push(RecommendedTutorsView.path);
                 },
               ),
               const SizedBox(
@@ -104,7 +106,7 @@ class HomeView extends StatelessWidget {
                   TextOption(
                     mainText: 'Active Courses',
                     onPressed: () {
-                      router.push('/recommended_tutors');
+                      router.push(RecommendedTutorsView.path);
                     },
                   ),
                   const SizedBox(
@@ -137,7 +139,7 @@ class HomeView extends StatelessWidget {
               TextOption(
                 mainText: 'Trending Books',
                 onPressed: () {
-                  router.push('/recommended_tutors');
+                  router.push(RecommendedTutorsView.path);
                 },
               ),
               const SizedBox(

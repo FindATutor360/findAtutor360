@@ -7,6 +7,7 @@ import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/services/auth/auth_services.dart';
 import 'package:findatutor360/utils/base_provider.dart';
 import 'package:findatutor360/utils/injection_container.dart';
+import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,26 +29,31 @@ class AuthController extends BaseProvider {
 
   Future<User?> continueWithGoogle(BuildContext context) async {
     _isLoadings.value = true;
+    try {
+      User? user = await _authServiceImpl.continueWithGoogle(
+        context,
+      );
+      _isLoadings.value = false;
 
-    User? user = await _authServiceImpl.continueWithGoogle(
-      context,
-    );
-    _isLoadings.value = false;
+      if (user != null) {
+        await sendEmailVerification(user,
+            name: user.displayName, email: user.email);
 
-    if (user != null) {
-      await sendEmailVerification(user,
-          name: user.displayName, email: user.email);
-
-      String? userToken = await user.getIdToken();
-      if (userToken != null) {
-        await appPreferences.setString('userToken', userToken);
-        log('User token: $userToken', name: 'debug');
-      } else {
-        log('Failed to get user token.', name: 'debug');
+        String? userToken = await user.getIdToken();
+        if (userToken != null) {
+          await appPreferences.setString('userToken', userToken);
+          log('User token: $userToken', name: 'debug');
+        } else {
+          log('Failed to get user token.', name: 'debug');
+        }
       }
-    }
 
-    return user;
+      return user;
+    } on FirebaseAuthException catch (e) {
+      log("$e", name: 'debug');
+      showSnackMessage(context, "$e", isError: true);
+    }
+    return null;
   }
 
   Future<User?> signUp(
@@ -58,27 +64,34 @@ class AuthController extends BaseProvider {
   }) async {
     _isLoadings.value = true;
 
-    User? user = await _authServiceImpl.signUp(
-      context,
-      fullName: fullName,
-      email: email,
-      password: password,
-    );
-    _isLoadings.value = false;
+    try {
+      User? user = await _authServiceImpl.signUp(
+        context,
+        fullName: fullName,
+        email: email,
+        password: password,
+      );
 
-    if (user != null) {
-      sendEmailVerification(user, name: fullName, email: email);
+      if (user != null) {
+        await sendEmailVerification(user, name: fullName, email: email);
 
-      String? userToken = await user.getIdToken();
-      if (userToken != null) {
-        await appPreferences.setString('userToken', userToken);
-        log('User token: $userToken', name: 'debug');
-      } else {
-        log('Failed to get user token.', name: 'debug');
+        String? userToken = await user.getIdToken();
+        if (userToken != null) {
+          await appPreferences.setString('userToken', userToken);
+          log('User token: $userToken', name: 'debug');
+        } else {
+          log('Failed to get user token.', name: 'debug');
+        }
       }
-    }
 
-    return user;
+      return user;
+    } on FirebaseAuthException catch (e) {
+      log("$e", name: 'debug');
+      showSnackMessage(context, "$e", isError: true);
+      return null;
+    } finally {
+      _isLoadings.value = false;
+    }
   }
 
   Future<User?> logIn(
@@ -87,49 +100,65 @@ class AuthController extends BaseProvider {
     required String password,
   }) async {
     _isLoadings.value = true;
+    try {
+      User? user = await _authServiceImpl.logIn(
+        context,
+        email: email,
+        password: password,
+      );
+      _isLoadings.value = false;
 
-    User? user = await _authServiceImpl.logIn(
-      context,
-      email: email,
-      password: password,
-    );
-    _isLoadings.value = false;
-
-    if (user != null) {
-      String? userToken = await user.getIdToken();
-      if (userToken != null) {
-        await appPreferences.setString('userToken', userToken);
-        log('User token: $userToken', name: 'debug');
-      } else {
-        log('Failed to get user token.', name: 'debug');
+      if (user != null) {
+        String? userToken = await user.getIdToken();
+        if (userToken != null) {
+          await appPreferences.setString('userToken', userToken);
+          log('User token: $userToken', name: 'debug');
+        } else {
+          log('Failed to get user token.', name: 'debug');
+        }
       }
-    }
 
-    return user;
+      return user;
+    } on FirebaseAuthException catch (e) {
+      showSnackMessage(context, "$e", isError: true);
+
+      return null;
+    } finally {
+      _isLoadings.value = false;
+    }
   }
 
   Future<User?> continueWithFacebook(BuildContext context) async {
     _isLoadings.value = true;
 
-    User? user = await _authServiceImpl.continueWithFacebook(
-      context,
-    );
-    _isLoadings.value = false;
+    try {
+      User? user = await _authServiceImpl.continueWithFacebook(context);
 
-    if (user != null) {
-      sendEmailVerification(user, name: user.displayName!, email: user.email!);
-      // Send verification email
+      if (user != null) {
+        await sendEmailVerification(
+          user,
+          name: user.displayName!,
+          email: user.email!,
+        );
 
-      String? userToken = await user.getIdToken();
-      if (userToken != null) {
-        await appPreferences.setString('userToken', userToken);
-        log('User token: $userToken', name: 'debug');
-      } else {
-        log('Failed to get user token.', name: 'debug');
+        String? userToken = await user.getIdToken();
+        if (userToken != null) {
+          await appPreferences.setString('userToken', userToken);
+          log('User token: $userToken', name: 'debug');
+        } else {
+          log('Failed to get user token.', name: 'debug');
+        }
       }
-    }
 
-    return user;
+      return user;
+    } on FirebaseAuthException catch (e) {
+      log("$e", name: 'debug');
+      showSnackMessage(context, "$e", isError: true);
+
+      return null;
+    } finally {
+      _isLoadings.value = false; // Ensure the loading state is reset
+    }
   }
 
   Future<void> logout(
