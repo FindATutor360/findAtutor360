@@ -81,6 +81,14 @@ List<RouteBase> get routes => [
                 builder: (BuildContext context, GoRouterState state) {
                   return const HomeView();
                 },
+                routes: [
+                  GoRoute(
+                    path: RecommendedTutorsView.path,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const RecommendedTutorsView();
+                    },
+                  ),
+                ],
               ),
             ],
           ),
@@ -146,12 +154,6 @@ List<RouteBase> get routes => [
         path: CategoryView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const CategoryView();
-        },
-      ),
-      GoRoute(
-        path: RecommendedTutorsView.path,
-        builder: (BuildContext context, GoRouterState state) {
-          return const RecommendedTutorsView();
         },
       ),
     ];

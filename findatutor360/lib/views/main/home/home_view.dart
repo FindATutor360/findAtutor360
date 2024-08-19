@@ -77,7 +77,7 @@ class HomeView extends StatelessWidget {
               TextOption(
                 mainText: 'Recommended Tutors',
                 onPressed: () {
-                  router.push(RecommendedTutorsView.path);
+                  router.push('${HomeView.path}/${RecommendedTutorsView.path}');
                 },
               ),
               const SizedBox(
