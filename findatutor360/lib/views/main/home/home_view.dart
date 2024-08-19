@@ -1,5 +1,6 @@
 import 'package:findatutor360/custom_widgets/card/category_widget.dart';
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
+import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
 import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
 import 'package:findatutor360/custom_widgets/slider/custom_carousel_view.dart';
@@ -106,7 +107,8 @@ class HomeView extends StatelessWidget {
                   TextOption(
                     mainText: 'Active Courses',
                     onPressed: () {
-                      router.push(RecommendedTutorsView.path);
+                      router.push(
+                          '${HomeView.path}/${RecommendedTutorsView.path}');
                     },
                   ),
                   const SizedBox(
@@ -139,7 +141,7 @@ class HomeView extends StatelessWidget {
               TextOption(
                 mainText: 'Trending Books',
                 onPressed: () {
-                  router.push(RecommendedTutorsView.path);
+                  router.push('${HomeView.path}/${TrendingBooksView.path}');
                 },
               ),
               const SizedBox(
