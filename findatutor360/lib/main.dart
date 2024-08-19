@@ -1,8 +1,30 @@
-import 'package:findatutor360/views/parent_view.dart';
+import 'package:findatutor360/firebase_options.dart';
+import 'package:findatutor360/providers/app_providers.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/utils/injection_container.dart';
+import 'package:findatutor360/utils/shared_pref.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  setupLocator();
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  initAppConfig();
+
+  runApp(
+    MultiProvider(
+      providers: AppProviders.providers,
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -11,21 +33,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'FindATutor360',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.blue,
+    return MaterialApp.router(
+      routerConfig: router,
+      title: 'FindATutor360',
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark().copyWith(
+        appBarTheme: const AppBarTheme(color: Color(0xFF253341)),
+        scaffoldBackgroundColor: const Color(0xFF15202B),
+        iconTheme: const IconThemeData(color: Colors.white),
+        colorScheme: const ColorScheme.dark().copyWith(
+          primary: customTheme['primaryColor'],
+          secondary: customTheme['secondaryColor'],
         ),
-        home: const ParentView());
+      ),
+      //Get the current theme value from the settings screen and set it here
+      // themeMode: isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+      //themeMode: ThemeMode.light,
+      debugShowCheckedModeBanner: false,
+    );
   }
+}
+
+Future<void> initAppConfig() async {
+  final prefs = AppPreferences();
+  await prefs.init();
 }

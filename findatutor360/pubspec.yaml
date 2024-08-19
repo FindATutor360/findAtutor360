@@ -3,7 +3,7 @@ description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -20,7 +20,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: ">=2.18.5 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -35,9 +35,44 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
-  google_fonts: ^3.0.1
-  flutter_svg: ^1.1.6
+  google_fonts: ^6.2.1
+  flutter_svg: ^2.0.10+1
+  badges: ^2.0.3
+  iconsax: ^0.0.8
+  go_router: ^13.2.2
+  flutter_onboard: ^2.0.0
+  flutter_animated_splash: ^0.0.10
+  cached_network_image: ^3.2.3
+  dashed_circle: ^0.0.2
+  carousel_slider: ^4.2.1
+  flutter_rating_bar: ^4.0.1
+  day_night_switcher: ^0.2.0+1
+  flutter_chat_ui: ^1.6.12
+  mime: ^1.0.4
+  open_filex: ^4.4.0
+  image_picker: ^1.0.7
+  file_picker: ^8.0.0+1
+  cloud_firestore: ^5.2.1
+  firebase_auth: ^5.1.4
+  firebase_core: ^3.3.0
+  provider: ^6.1.2
+  build_runner: ^2.4.4
+  json_serializable: ^6.8.0
+  flutter_screenutil: ^5.9.3
+  firebase_storage: ^12.1.3
+  shared_preferences: ^2.2.3
+  json_annotation: ^4.9.0
+  get_it: ^7.6.8
+  dio: ^5.4.2+1
+  google_sign_in: ^6.1.4
+  fpdart: ^1.0.0
+  flutter_facebook_auth: ^6.0.4
+  fluttertoast: ^8.2.8
 
+  flutter_chat_types: any
+  http: any
+  path_provider: any
+  uuid: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -47,7 +82,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -61,7 +96,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/svgIcons/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -72,10 +107,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: NavIcon
-  #     fonts:
-  #       - asset: assets/fonts/NavIcon.ttf
+  fonts:
+    - family: Manrope
+      fonts:
+        - asset: assets/fonts/Manrope.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
