@@ -1,86 +1,39 @@
-import 'package:findatutor360/custom_widgets/button/custom_like_button.dart';
-import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
-import 'package:findatutor360/custom_widgets/text/main_text.dart';
+import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
+import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
-class TrendingBookWidget extends StatelessWidget {
-  const TrendingBookWidget({
-    super.key,
-  });
+class TrendingBooksView extends StatelessWidget {
+  const TrendingBooksView({super.key});
+  static const path = 'trendingBooks';
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.17,
-      width: MediaQuery.of(context).size.width * 0.9,
-      child: Container(
-        decoration: BoxDecoration(
-          color: customTheme['whiteColor'],
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: customTheme['lightGrayColor']!, width: 1),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.38,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: customTheme['secondaryColor'],
-                borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(
-                    image: AssetImage('assets/images/activeImg.png'),
-                    fit: BoxFit.contain),
-              ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      backgroundColor: customTheme['whiteColor'],
+      appBar: const BackIconHeader(
+        header: 'Trending Books',
+      ),
+      body: Column(
+        children: [
+          const SizedBox(
+            height: 24,
+          ),
+          Expanded(
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              separatorBuilder: (context, i) {
+                return const SizedBox(height: 12);
+              },
+              itemCount: 10,
+              itemBuilder: (context, i) {
+                return const TrendingBookWidget();
+              },
             ),
-            const SizedBox(
-              width: 10,
-            ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const MainText(
-                      text: 'The Secret of love',
-                      fontSize: 16,
-                      overflow: TextOverflow.ellipsis),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  MainText(
-                    text: 'John Joanie Doe',
-                    fontSize: 12,
-                    color: customTheme['secondaryTextColor']!,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const CustomRatingBar(),
-                  // const SizedBox(
-                  //   height: 5,
-                  // ),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        MainText(
-                            text: 'GH₵ 50.0',
-                            fontSize: 16,
-                            color: customTheme['mainTextColor']),
-                        //Container(width: 30),
-                        const CustomLikeButton()
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

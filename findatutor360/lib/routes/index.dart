@@ -2,6 +2,7 @@ import 'package:findatutor360/views/auth/splash/splash_view.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
+import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:findatutor360/views/main/message/chat_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
@@ -86,6 +87,12 @@ List<RouteBase> get routes => [
                     path: RecommendedTutorsView.path,
                     builder: (BuildContext context, GoRouterState state) {
                       return const RecommendedTutorsView();
+                    },
+                  ),
+                  GoRoute(
+                    path: TrendingBooksView.path,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const TrendingBooksView();
                     },
                   ),
                 ],
