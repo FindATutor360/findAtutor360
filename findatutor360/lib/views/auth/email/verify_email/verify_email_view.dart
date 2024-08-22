@@ -12,14 +12,22 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
 class VerifyEmailView extends StatefulWidget {
-  const VerifyEmailView({super.key});
+  const VerifyEmailView({
+    this.userEmail,
+    this.userName,
+    super.key,
+  });
   static const path = '/verifyEmail';
+
+  final String? userName;
+  final String? userEmail;
 
   @override
   State<VerifyEmailView> createState() => _VerifyEmailViewState();
@@ -65,6 +73,20 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         if (user!.emailVerified) {
           timer.cancel();
           emailVerificationTimer?.cancel();
+          await authController.addUserInfo(
+            user!,
+            widget.userName,
+            widget.userEmail,
+            user!.photoURL,
+          );
+          Fluttertoast.showToast(
+            msg: "Sign in successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
           context.pushReplacement(HomeView.path);
 
           log("User Email verified", name: 'debug');

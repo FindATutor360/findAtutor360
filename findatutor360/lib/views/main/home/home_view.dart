@@ -1,5 +1,6 @@
 import 'package:findatutor360/custom_widgets/card/category_widget.dart';
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
+import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
 import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
 import 'package:findatutor360/custom_widgets/slider/custom_carousel_view.dart';
@@ -7,6 +8,8 @@ import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
+import 'package:findatutor360/views/main/home/category/category_view.dart';
+import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -35,7 +38,7 @@ class HomeView extends StatelessWidget {
                   TextOption(
                     mainText: 'Category',
                     onPressed: () {
-                      router.push('/category');
+                      router.push(CategoryView.path);
                     },
                   ),
                   const SingleChildScrollView(
@@ -75,7 +78,7 @@ class HomeView extends StatelessWidget {
               TextOption(
                 mainText: 'Recommended Tutors',
                 onPressed: () {
-                  router.push('/recommended_tutors');
+                  router.push('${HomeView.path}/${RecommendedTutorsView.path}');
                 },
               ),
               const SizedBox(
@@ -104,7 +107,8 @@ class HomeView extends StatelessWidget {
                   TextOption(
                     mainText: 'Active Courses',
                     onPressed: () {
-                      router.push('/recommended_tutors');
+                      router.push(
+                          '${HomeView.path}/${RecommendedTutorsView.path}');
                     },
                   ),
                   const SizedBox(
@@ -137,7 +141,7 @@ class HomeView extends StatelessWidget {
               TextOption(
                 mainText: 'Trending Books',
                 onPressed: () {
-                  router.push('/recommended_tutors');
+                  router.push('${HomeView.path}/${TrendingBooksView.path}');
                 },
               ),
               const SizedBox(

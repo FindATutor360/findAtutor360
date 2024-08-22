@@ -213,7 +213,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                     SecondaryButton(
                       imageSrc: 'assets/images/facebook.png',
                       onPressed: () async {
-                        // await continueWithFacebook();
+                        await continueWithFacebook();
                       },
                       buttonColor: Colors.transparent,
                     ),
@@ -266,8 +266,14 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     );
 
     if (user != null) {
-      log("Navigating to email verification", name: 'debug');
-      context.go(VerifyEmailView.path);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: ((context) => VerifyEmailView(
+                  userEmail: _emailController.text,
+                  userName: _fullNameController.text,
+                ))),
+      );
     } else {
       log("User not created", name: 'debug');
     }
@@ -286,7 +292,15 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     );
 
     if (user != null) {
-      context.pushReplacement(VerifyEmailView.path);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: ((context) => VerifyEmailView(
+                userEmail: user.email,
+                userName: user.displayName,
+              )),
+        ),
+      );
     } else {
       log("User not created", name: 'debug');
     }
@@ -298,7 +312,15 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     );
 
     if (user != null) {
-      context.go(VerifyEmailView.path);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: ((context) => VerifyEmailView(
+                userEmail: user.email,
+                userName: user.displayName,
+              )),
+        ),
+      );
     } else {
       log("User not created", name: 'debug');
     }
