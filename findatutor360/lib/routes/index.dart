@@ -4,6 +4,7 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:findatutor360/views/main/message/chat_view.dart';
+import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
 import 'package:findatutor360/views/main/cart/cart_view.dart';
@@ -152,6 +153,14 @@ List<RouteBase> get routes => [
                 builder: (BuildContext context, GoRouterState state) {
                   return const SettingsView();
                 },
+                routes: [
+                  GoRoute(
+                    path: SettingsNotification.path,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const SettingsNotification();
+                    },
+                  ),
+                ],
               ),
             ],
           ),

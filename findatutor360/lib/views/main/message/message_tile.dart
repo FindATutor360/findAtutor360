@@ -23,10 +23,13 @@ class MessageTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: Colors.white,
+        color: dynamicColor,
         child: ListTile(
             leading: Padding(
                 padding: const EdgeInsets.all(3.0),

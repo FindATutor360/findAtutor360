@@ -15,7 +15,6 @@ class ShopView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      backgroundColor: customTheme['whiteColor'],
       appBar: const AppHeader(),
       drawer: const CustomDrawer(),
       body: CustomScrollView(slivers: [

@@ -1,4 +1,3 @@
-import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -8,6 +7,7 @@ class MainText extends StatelessWidget {
   final FontWeight? fontWeight;
   final TextOverflow? overflow;
   final Color? color;
+
   const MainText({
     super.key,
     required this.text,
@@ -19,11 +19,19 @@ class MainText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text,
-        overflow: overflow,
-        style: GoogleFonts.manrope(
-            color: color ?? customTheme['mainTextColor'],
-            fontSize: fontSize,
-            fontWeight: fontWeight));
+    Color dynamicColor = color ??
+        (Theme.of(context).brightness == Brightness.dark
+            ? Colors.white
+            : Colors.black);
+
+    return Text(
+      text,
+      overflow: overflow,
+      style: GoogleFonts.manrope(
+        color: dynamicColor,
+        fontSize: fontSize,
+        fontWeight: fontWeight,
+      ),
+    );
   }
 }

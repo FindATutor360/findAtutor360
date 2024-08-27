@@ -18,4 +18,5 @@ const customTheme = {
   'successColor': Color.fromRGBO(0, 0, 0, 1),
   'errorColor': Color.fromRGBO(252, 57, 46, 1),
   'warningColor': Color.fromRGBO(0, 0, 0, 1),
+  'grayColor': Color.fromRGBO(195, 200, 204, 1),
 };

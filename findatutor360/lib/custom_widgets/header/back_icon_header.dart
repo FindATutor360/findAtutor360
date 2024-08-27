@@ -22,7 +22,6 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
             children: [
               IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: customTheme['buttonColor'],
                 onPressed: () => Navigator.pop(context),
               ),
               MainText(
@@ -36,11 +35,8 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-        Expanded(
-          child: Divider(
-            color: customTheme['dividerColor'],
-            thickness: 1,
-          ),
+        const Expanded(
+          child: Divider(),
         ),
       ],
     );

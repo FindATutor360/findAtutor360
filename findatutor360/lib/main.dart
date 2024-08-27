@@ -1,3 +1,4 @@
+import 'package:findatutor360/core/view_models/main/theme_controller.dart';
 import 'package:findatutor360/firebase_options.dart';
 import 'package:findatutor360/providers/app_providers.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
@@ -33,23 +34,55 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: router,
-      title: 'FindATutor360',
-      theme: ThemeData.light(),
-      darkTheme: ThemeData.dark().copyWith(
-        appBarTheme: const AppBarTheme(color: Color(0xFF253341)),
-        scaffoldBackgroundColor: const Color(0xFF15202B),
-        iconTheme: const IconThemeData(color: Colors.white),
-        colorScheme: const ColorScheme.dark().copyWith(
-          primary: customTheme['primaryColor'],
-          secondary: customTheme['secondaryColor'],
-        ),
-      ),
-      //Get the current theme value from the settings screen and set it here
-      // themeMode: isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-      //themeMode: ThemeMode.light,
-      debugShowCheckedModeBanner: false,
+    return Consumer<ThemeController>(
+      builder: (BuildContext context, themeController, Widget? child) {
+        return MaterialApp.router(
+          routerConfig: router,
+          title: 'FindATutor360',
+          theme: ThemeData.light().copyWith(
+            appBarTheme: AppBarTheme(color: customTheme['whiteColor']),
+            brightness: Brightness.light,
+            scaffoldBackgroundColor: customTheme['whiteColor'],
+            iconTheme: const IconThemeData(
+              color: Color.fromRGBO(0, 0, 0, 1),
+            ),
+            colorScheme: const ColorScheme.dark().copyWith(
+              primary: customTheme['primaryColor'],
+              secondary: customTheme['secondaryColor'],
+            ),
+            dividerTheme: DividerThemeData(
+              color: customTheme['dividerColor'],
+              thickness: 1,
+            ),
+            textTheme: const TextTheme().apply(
+              displayColor: customTheme['mainTextColor'],
+            ),
+          ),
+
+          darkTheme: ThemeData.dark().copyWith(
+            appBarTheme: const AppBarTheme(color: Color(0xFF253341)),
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: Colors.black,
+            iconTheme: const IconThemeData(color: Colors.white),
+            colorScheme: const ColorScheme.dark().copyWith(
+              primary: customTheme['primaryColor'],
+              secondary: customTheme['secondaryColor'],
+            ),
+            textTheme: const TextTheme().apply(
+              displayColor: customTheme['whiteColor'],
+            ),
+            dividerTheme: DividerThemeData(
+              color: customTheme['whiteColor'],
+              thickness: 1,
+            ),
+          ),
+          //Get the current theme value from the settings screen and set it here
+          // themeMode: isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
+          //themeMode: ThemeMode.light,
+          debugShowCheckedModeBanner: false,
+          themeMode: themeController.currentTheme,
+        );
+      },
     );
   }
 }

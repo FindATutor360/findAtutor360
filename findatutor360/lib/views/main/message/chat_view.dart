@@ -213,56 +213,62 @@ class _ChatViewState extends State<ChatView> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          backgroundColor: customTheme['primaryColor'],
-          elevation: 0.4,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            color: customTheme['whiteColor'],
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Row(
-            children: [
-              const UserImage(
-                  radius: 18,
-                  imageUrl:
-                      'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
-              const SizedBox(width: 8),
-              Column(
-                children: [
-                  const Text('Kwamie'),
-                  Text(
-                    'Programmer/Writer',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: customTheme['whiteColor'],
-                    ),
+  Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: customTheme['primaryColor'],
+        elevation: 0.4,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        ),
+        title: Row(
+          children: [
+            const UserImage(
+                radius: 18,
+                imageUrl:
+                    'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
+            const SizedBox(width: 8),
+            Column(
+              children: [
+                const Text('Kwamie'),
+                Text(
+                  'Programmer/Writer',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: customTheme['whiteColor'],
                   ),
-                ],
-              )
-            ],
-          ),
+                ),
+              ],
+            )
+          ],
         ),
-        body: Chat(
-          messages: _messages,
-          onAttachmentPressed: _handleAttachmentPressed,
-          onMessageTap: _handleMessageTap,
-          onPreviewDataFetched: _handlePreviewDataFetched,
-          onSendPressed: _handleSendPressed,
-          showUserAvatars: true,
-          showUserNames: true,
-          user: _user,
-          theme: DefaultChatTheme(
-            inputBackgroundColor: customTheme['primaryColor']!,
-            inputTextColor: customTheme['whiteColor']!,
-            inputContainerDecoration: const BoxDecoration(
-                color: Colors.transparent,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.elliptical(20, 15),
-                  topRight: Radius.elliptical(20, 15),
-                )),
-          ),
+      ),
+      body: Chat(
+        messages: _messages,
+        onAttachmentPressed: _handleAttachmentPressed,
+        onMessageTap: _handleMessageTap,
+        onPreviewDataFetched: _handlePreviewDataFetched,
+        onSendPressed: _handleSendPressed,
+        showUserAvatars: true,
+        showUserNames: true,
+        user: _user,
+        theme: DefaultChatTheme(
+          backgroundColor: dynamicColor,
+          inputBackgroundColor: customTheme['primaryColor']!,
+          inputTextColor: customTheme['whiteColor']!,
+          inputContainerDecoration: const BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.elliptical(20, 15),
+                topRight: Radius.elliptical(20, 15),
+              )),
         ),
-      );
+      ),
+    );
+  }
 }
