@@ -12,12 +12,15 @@ class ShopBookWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.27,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Container(
         decoration: BoxDecoration(
-          color: customTheme['whiteColor'],
+          color: dynamicColor,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: customTheme['lightGrayColor']!, width: 1),
         ),
@@ -67,10 +70,10 @@ class ShopBookWidget extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        MainText(
-                            text: 'GH₵ 50.0',
-                            fontSize: 16,
-                            color: customTheme['mainTextColor']),
+                        const MainText(
+                          text: 'GH₵ 50.0',
+                          fontSize: 16,
+                        ),
                         Container(width: 30),
                       ],
                     ),

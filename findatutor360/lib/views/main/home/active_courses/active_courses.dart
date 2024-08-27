@@ -10,6 +10,9 @@ class ActiveCourse extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return GestureDetector(
       onTap: () {
         // router.push('/tutor_profile');
@@ -18,7 +21,7 @@ class ActiveCourse extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.4,
           height: MediaQuery.of(context).size.height * 0.27,
           decoration: BoxDecoration(
-              color: customTheme['whiteColor'],
+              color: dynamicColor,
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: customTheme['lightGrayColor']!)),
           child: SingleChildScrollView(

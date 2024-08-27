@@ -9,9 +9,13 @@ class SettingUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return Container(
       width: 300,
       height: 100,
+      color: dynamicColor,
       padding: const EdgeInsets.all(10.0),
       child: Card(
         shape: RoundedRectangleBorder(

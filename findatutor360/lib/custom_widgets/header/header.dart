@@ -16,9 +16,13 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return Column(
       children: [
         Container(
+          color: dynamicColor,
           margin: const EdgeInsets.only(top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,6 +35,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
               ),
               Container(
                 margin: const EdgeInsets.only(right: 10),
+                color: dynamicColor,
                 child: const Row(
                   children: [
                     SizedBox(width: 5),

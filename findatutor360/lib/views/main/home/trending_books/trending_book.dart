@@ -11,7 +11,6 @@ class TrendingBooksView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: customTheme['whiteColor'],
       appBar: const BackIconHeader(
         header: 'Trending Books',
       ),

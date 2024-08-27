@@ -77,11 +77,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-        Expanded(
-          child: Divider(
-            color: customTheme['dividerColor'],
-            thickness: 1,
-          ),
+        const Expanded(
+          child: Divider(),
         ),
       ],
     );

@@ -1,10 +1,14 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
+import 'package:findatutor360/core/view_models/main/theme_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/setting_user_profile_card.dart';
+import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/settings/settings_user_logout_card.dart';
+import 'package:findatutor360/views/main/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class SettingsViewContent extends StatefulWidget {
   const SettingsViewContent({
@@ -20,9 +24,14 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
   bool isDarkModeEnabled = false;
   @override
   Widget build(BuildContext context) {
+    final themeNotifier = Provider.of<ThemeController>(context);
+    final isDarkModeEnabled = themeNotifier.isDarkMode;
+
     return SizedBox(
-      height: 610,
+      // height: double.infinity,
       child: ListView(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
         children: [
           ///User Profile Card
           const SettingUserCard(),
@@ -35,18 +44,16 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
                 title: "Language",
                 icon: Iconsax.language_circle,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              const Divider(),
+              _CustomListTile(
                 title: "Notification",
                 icon: Iconsax.notification,
+                onTap: () {
+                  router.push(
+                      '${SettingsView.path}/${SettingsNotification.path}');
+                },
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
+              const Divider(),
               _CustomListTile(
                 title: "Dark Mode",
                 icon: Iconsax.moon,
@@ -55,97 +62,68 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
                   height: 55,
                   child: DayNightSwitcher(
                     isDarkModeEnabled: isDarkModeEnabled,
-                    onStateChanged: onStateChanged,
+                    onStateChanged: (bool isDark) {
+                      themeNotifier.toggleTheme(); // Update theme state
+                    },
                   ),
                 ),
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
+              const Divider(),
               const SizedBox(
                 height: 5,
               )
             ],
           ),
-          _SingleSection(
+          const _SingleSection(
             title: "Account & Security",
             children: [
-              const _CustomListTile(
+              _CustomListTile(
                 title: "Security",
                 icon: Iconsax.lock,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              Divider(),
+              _CustomListTile(
                 title: "Payment Methods",
                 icon: Iconsax.card,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              Divider(),
+              _CustomListTile(
                 title: "Payment history",
                 icon: Iconsax.money,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
+              Divider(),
             ],
           ),
-          _SingleSection(
+          const _SingleSection(
             title: "About & Help",
             children: [
-              const _CustomListTile(
+              _CustomListTile(
                 title: "Frequently Asked Questions",
                 icon: Iconsax.message,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              Divider(),
+              _CustomListTile(
                 title: "Contact Support",
                 icon: Iconsax.headphone,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              Divider(),
+              _CustomListTile(
                 title: "Privacy Policy",
                 icon: Iconsax.shield_security2,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
-                  title: "Terms of Service", icon: Iconsax.book),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              Divider(),
+              _CustomListTile(title: "Terms of Service", icon: Iconsax.book),
+              Divider(),
+              _CustomListTile(
                 title: "Community Guidleines",
                 icon: Iconsax.flag,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
-              const _CustomListTile(
+              Divider(),
+              _CustomListTile(
                 title: "About the App",
                 icon: Iconsax.information,
               ),
-              Divider(
-                color: customTheme['dividerColor'],
-                thickness: 1,
-              ),
+              Divider(),
             ],
           ),
           //Setting List End
@@ -172,19 +150,38 @@ class _CustomListTile extends StatelessWidget {
   final String title;
   final IconData icon;
   final Widget? trailing;
+  final VoidCallback? onTap;
   const _CustomListTile({
     required this.title,
     required this.icon,
     this.trailing,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black);
     return ListTile(
-        title: Text(title),
-        leading: Icon(icon),
-        onTap: () {},
-        trailing: trailing ?? const Icon(Iconsax.arrow_right_3));
+      tileColor: dynamicColor,
+      title: Text(
+        title,
+        style: TextStyle(
+          color: dynamicColor,
+        ),
+      ),
+      leading: Icon(
+        icon,
+        color: dynamicColor,
+      ),
+      onTap: onTap,
+      trailing: trailing ??
+          Icon(
+            Iconsax.arrow_right_3,
+            color: dynamicColor,
+          ),
+    );
   }
 }
 
@@ -198,6 +195,9 @@ class _SingleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -212,7 +212,7 @@ class _SingleSection extends StatelessWidget {
         ),
         Container(
           width: double.infinity,
-          color: Colors.white,
+          color: dynamicColor,
           child: Column(
             children: children,
           ),

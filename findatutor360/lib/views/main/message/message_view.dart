@@ -41,10 +41,7 @@ class MessageView extends StatelessWidget {
                 );
               },
               separatorBuilder: (context, index) {
-                return Divider(
-                    color: customTheme['dividerColor'],
-                    thickness: 1,
-                    indent: 60);
+                return const Divider(indent: 60);
               },
               itemCount: 5)),
     );

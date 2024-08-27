@@ -6,7 +6,6 @@ import 'package:findatutor360/custom_widgets/header/app_header.dart';
 import 'package:findatutor360/custom_widgets/slider/custom_carousel_view.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
@@ -23,7 +22,6 @@ class HomeView extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: customTheme['whiteColor'],
         appBar: const AppHeader(),
         drawer: const CustomDrawer(),
         body: CustomScrollView(
@@ -67,40 +65,34 @@ class HomeView extends StatelessWidget {
                       ),
                     ]),
                   ),
-                ],
-              ),
-            ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              const SizedBox(
-                height: 40,
-              ),
-              TextOption(
-                mainText: 'Recommended Tutors',
-                onPressed: () {
-                  router.push('${HomeView.path}/${RecommendedTutorsView.path}');
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              //const RecommededTutorCard(),
-              GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: 4,
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      mainAxisSpacing: 15,
-                      crossAxisSpacing: 15),
-                  itemBuilder: ((BuildContext context, int index) {
-                    return const RecommededTutorCard();
-                  })),
-            ])),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  TextOption(
+                    mainText: 'Recommended Tutors',
+                    onPressed: () {
+                      router.push(
+                          '${HomeView.path}/${RecommendedTutorsView.path}');
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  //const RecommededTutorCard(),
+                  GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: 4,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.7,
+                              mainAxisSpacing: 15,
+                              crossAxisSpacing: 15),
+                      itemBuilder: ((BuildContext context, int index) {
+                        return const RecommededTutorCard();
+                      })),
                   const SizedBox(
                     height: 40,
                   ),
@@ -130,40 +122,52 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
+                  const SizedBox(
+                    height: 40,
+                  ),
+                  TextOption(
+                    mainText: 'Trending Books',
+                    onPressed: () {
+                      router.push('${HomeView.path}/${TrendingBooksView.path}');
+                    },
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  const SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        SizedBox(width: 20),
+                        TrendingBookWidget(),
+                        SizedBox(width: 20),
+                        TrendingBookWidget(),
+                        SizedBox(width: 20),
+                        TrendingBookWidget(),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                 ],
               ),
             ),
-            SliverList(
-                delegate: SliverChildListDelegate([
-              const SizedBox(
-                height: 40,
-              ),
-              TextOption(
-                mainText: 'Trending Books',
-                onPressed: () {
-                  router.push('${HomeView.path}/${TrendingBooksView.path}');
-                },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              const SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    SizedBox(width: 20),
-                    TrendingBookWidget(),
-                    SizedBox(width: 20),
-                    TrendingBookWidget(),
-                    SizedBox(width: 20),
-                    TrendingBookWidget(),
-                  ],
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-            ])),
+            // SliverList(
+            //     delegate: SliverChildListDelegate([
+
+            // ])),
+            // SliverList(
+            //   delegate: SliverChildListDelegate(
+            //     [
+
+            //     ],
+            //   ),
+            // ),
+            // SliverList(
+            //     delegate: SliverChildListDelegate([
+
+            // ])),
           ],
         ),
       ),
