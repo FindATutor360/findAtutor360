@@ -69,10 +69,7 @@ class _SettingsNotificationState extends State<SettingsNotification> {
             const SizedBox(
               height: 25,
             ),
-            Divider(
-              color: customTheme['dividerColor'],
-              thickness: 1,
-            ),
+            const Divider(),
             const SizedBox(
               height: 25,
             ),
