@@ -37,16 +37,18 @@ class MessageView extends StatelessWidget {
               return const EmptyMessageView();
             }
 
+            List<Messages> unreadMessages = snapshot.data!
+                .where((msg) =>
+                    msg.recipientEmail == currentUserEmail &&
+                    msg.readBy == false)
+                .toList();
+
             return ListView.separated(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
                 Messages message = snapshot.data![index];
-                int unreadCount = snapshot.data!
-                    .where((msg) =>
-                        msg.recipientEmail == currentUserEmail &&
-                        !msg.readBy!.contains(currentUserEmail))
-                    .length;
 
+                int unreadCount = unreadMessages.length;
                 return MessageTile(
                   onTap: () {
                     Navigator.push(

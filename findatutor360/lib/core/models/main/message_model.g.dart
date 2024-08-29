@@ -21,8 +21,7 @@ Messages _$MessagesFromJson(Map<String, dynamic> json) => Messages(
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
-      readBy:
-          (json['readBy'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      readBy: json['readBy'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$MessagesToJson(Messages instance) => <String, dynamic>{

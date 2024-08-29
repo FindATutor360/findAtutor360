@@ -193,9 +193,11 @@ class _ChatViewsState extends State<ChatViews> {
                                           Icons.check,
                                           size: 16,
                                           color: isCurrentUser
-                                              ? customTheme['whiteColor']
-                                              : const Color.fromRGBO(
-                                                  66, 73, 78, 1),
+                                              ? message.readBy == false
+                                                  ? customTheme['whiteColor']
+                                                  : const Color.fromRGBO(
+                                                      66, 73, 78, 1)
+                                              : customTheme['secondaryColor'],
                                         )
                                       : const SizedBox.shrink(),
                                   const SizedBox(width: 4),
