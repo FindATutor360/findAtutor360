@@ -7,6 +7,7 @@ class MainText extends StatelessWidget {
   final FontWeight? fontWeight;
   final TextOverflow? overflow;
   final Color? color;
+  final TextAlign? textAlign;
 
   const MainText({
     super.key,
@@ -15,6 +16,7 @@ class MainText extends StatelessWidget {
     this.fontWeight = FontWeight.w600,
     this.color,
     this.overflow,
+    this.textAlign,
   });
 
   @override
@@ -27,6 +29,7 @@ class MainText extends StatelessWidget {
     return Text(
       text,
       overflow: overflow,
+      textAlign: textAlign,
       style: GoogleFonts.manrope(
         color: dynamicColor,
         fontSize: fontSize,

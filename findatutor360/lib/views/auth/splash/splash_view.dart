@@ -4,6 +4,7 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:findatutor360/views/auth/onboarding/onboarding_view.dart';
+import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,7 @@ class _SplashViewState extends State<SplashView> {
         }
       }
     } catch (e) {
-      context.pushReplacement(LoginView.path);
+      context.pushReplacement(WelcomeView.path);
       showSnackMessage(context, "Network Error", isError: true);
     }
   }
