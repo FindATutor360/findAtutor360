@@ -12,7 +12,20 @@
           "package_name": "com.example.findatutor360"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "989449612573-emrhkrk8j9s2u3jok1p13e57d09bujdi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.findatutor360",
+            "certificate_hash": "f8195f3b2ea632637b34d3a90751e6f6bc992c84"
+          }
+        },
+        {
+          "client_id": "989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAQFfC_sEDjnD6XTmmhvR_POIXoKlD0FoE"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "989449612573-2revpi4h96uroivl09fc3et79i00igrr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.findatutor360"
+              }
+            }
+          ]
         }
       }
     }
