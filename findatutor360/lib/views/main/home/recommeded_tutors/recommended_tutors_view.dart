@@ -1,6 +1,5 @@
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
-import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
 class RecommendedTutorsView extends StatelessWidget {

@@ -67,6 +67,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '989449612573',
     projectId: 'findautor-app',
     storageBucket: 'findautor-app.appspot.com',
+    androidClientId: '989449612573-emrhkrk8j9s2u3jok1p13e57d09bujdi.apps.googleusercontent.com',
+    iosClientId: '989449612573-2revpi4h96uroivl09fc3et79i00igrr.apps.googleusercontent.com',
     iosBundleId: 'com.example.findatutor360',
   );
 

@@ -1,5 +1,4 @@
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
-import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/shop/shop_books.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';

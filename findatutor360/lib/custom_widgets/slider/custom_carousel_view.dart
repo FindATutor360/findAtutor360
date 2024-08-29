@@ -14,7 +14,7 @@ class CustomCarouselView extends StatefulWidget {
 }
 
 class _CustomCarouselViewState extends State<CustomCarouselView> {
-  final CarouselController _carouselController = CarouselController();
+  final CarouselSliderController _controller = CarouselSliderController();
   int _current = 0;
   final List<Widget> _carouselTextList = [
     MainText(
@@ -57,7 +57,7 @@ class _CustomCarouselViewState extends State<CustomCarouselView> {
               Container(
                 color: Colors.transparent,
                 child: CarouselSlider(
-                  carouselController: _carouselController,
+                  carouselController: _controller,
                   items: _carouselTextList,
                   options: CarouselOptions(
                       enlargeCenterPage: true,
