@@ -1,8 +1,11 @@
+import 'package:findatutor360/core/models/auth/user_model.dart';
+import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/views/auth/splash/splash_view.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
+import 'package:findatutor360/views/main/message/chat.dart';
 import 'package:findatutor360/views/main/message/chat_view.dart';
 import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
@@ -123,9 +126,13 @@ List<RouteBase> get routes => [
                 },
                 routes: [
                   GoRoute(
-                    path: ChatView.path,
+                    path: ChatViews.path,
                     builder: (BuildContext context, GoRouterState state) {
-                      return const ChatView();
+                      final message = state.extra as Messages;
+                      return ChatViews(
+                        key: state.pageKey,
+                        messages: message,
+                      );
                     },
                   ),
                 ],

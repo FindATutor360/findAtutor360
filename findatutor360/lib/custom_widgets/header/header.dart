@@ -36,19 +36,26 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
               Container(
                 margin: const EdgeInsets.only(right: 10),
                 color: dynamicColor,
-                child: const Row(
+                child: Row(
                   children: [
-                    SizedBox(width: 5),
+                    const SizedBox(width: 5),
                     CustomIconButton(
                         onPressed: null,
                         icon: Badge(
-                            label: Text('1',
+                            label: const Text('1',
                                 style: TextStyle(
                                     fontSize: 10, color: Colors.white)),
-                            backgroundColor: Color.fromRGBO(252, 57, 46, 1),
-                            child: Icon(Iconsax.notification))),
-                    SizedBox(width: 5),
-                    Center(
+                            backgroundColor:
+                                const Color.fromRGBO(252, 57, 46, 1),
+                            child: Icon(
+                              Iconsax.notification,
+                              color: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? Colors.white
+                                  : Colors.black,
+                            ))),
+                    const SizedBox(width: 5),
+                    const Center(
                       child: CircleAvatar(
                         backgroundColor: Color(0xFF0476AF),
                         radius: 20,
@@ -64,9 +71,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
             ],
           ),
         ),
-        Expanded(
+        const Expanded(
           child: Divider(
-            color: customTheme['dividerColor'],
             thickness: 1,
           ),
         ),

@@ -19,4 +19,6 @@ const customTheme = {
   'errorColor': Color.fromRGBO(252, 57, 46, 1),
   'warningColor': Color.fromRGBO(0, 0, 0, 1),
   'grayColor': Color.fromRGBO(195, 200, 204, 1),
+  'fieldColor': Color.fromRGBO(141, 150, 159, 1),
+  'chatTextColor': Color.fromRGBO(66, 73, 78, 1),
 };

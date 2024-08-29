@@ -8,16 +8,21 @@ import 'package:iconsax/iconsax.dart';
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? imageUrl;
   final String? badgeCount;
+  final bool showIcon;
   //final bool? isHome;
   const AppHeader({
     super.key,
     this.imageUrl,
     this.badgeCount,
+    this.showIcon = true,
     //required this.isHome,
   });
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black);
     return Column(
       children: [
         Container(
@@ -35,19 +40,29 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 margin: const EdgeInsets.only(right: 10),
                 child: Row(
                   children: [
-                    const CustomIconButton(
-                      onPressed: null,
-                      icon: Icon(Iconsax.search_normal_1),
-                    ),
-                    const SizedBox(width: 5),
-                    const CustomIconButton(
+                    if (showIcon) ...[
+                      CustomIconButton(
                         onPressed: null,
-                        icon: Badge(
-                            label: Text('1',
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.white)),
-                            backgroundColor: Color.fromRGBO(252, 57, 46, 1),
-                            child: Icon(Iconsax.notification))),
+                        icon: Icon(
+                          Iconsax.search_normal_1,
+                          color: dynamicColor,
+                        ),
+                      ),
+                    ],
+                    const SizedBox(width: 5),
+                    CustomIconButton(
+                      onPressed: null,
+                      icon: Badge(
+                        label: const Text('1',
+                            style:
+                                TextStyle(fontSize: 10, color: Colors.white)),
+                        backgroundColor: const Color.fromRGBO(252, 57, 46, 1),
+                        child: Icon(
+                          Iconsax.notification,
+                          color: dynamicColor,
+                        ),
+                      ),
+                    ),
                     const SizedBox(width: 5),
                     DashedCircle(
                       dashes: 20,
