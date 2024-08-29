@@ -44,8 +44,8 @@ class MessageServiceImpl implements MessageService {
         recipientPhotoUrl: recipientPhotoUrl,
         participants: participants, // Explicitly set participants list
         message: message!,
-        createdAt: DateTime.now(),
-        readBy: [], // Initialize as an empty list
+        createdAt: DateTime.now().toUtc(),
+        readBy: false, // Initialize as an empty list
       );
 
       DocumentReference docRef = await _fireStore.collection('Messages').add(
@@ -64,9 +64,7 @@ class MessageServiceImpl implements MessageService {
 
   @override
   Stream<List<Messages>> getMessages(
-    String currentUserEmail,
-    String recipientEmail,
-  ) {
+      String currentUserEmail, String recipientEmail) {
     return _fireStore
         .collection('Messages')
         .where('participants', arrayContains: currentUserEmail)
@@ -80,12 +78,12 @@ class MessageServiceImpl implements MessageService {
 
       for (var message in messages) {
         if (message.recipientEmail == currentUserEmail &&
-            !message.readBy!.contains(currentUserEmail)) {
-          message.readBy!.add(currentUserEmail);
+            message.readBy == false) {
           _fireStore
               .collection('Messages')
               .doc(message.id!)
-              .update({'readBy': message.readBy});
+              .update({'readBy': true});
+          message.readBy = true;
         }
       }
 
@@ -113,14 +111,14 @@ class MessageServiceImpl implements MessageService {
         }
 
         // Mark message as read if the current user is the recipient
-        if (message.recipientEmail == currentUserEmail &&
-            !message.readBy!.contains(currentUserEmail)) {
-          message.readBy!.add(currentUserEmail);
-          _fireStore
-              .collection('Messages')
-              .doc(message.id!)
-              .update({'readBy': message.readBy});
-        }
+        // if (message.recipientEmail == currentUserEmail &&
+        //     message.readBy == false) {
+        //   _fireStore
+        //       .collection('Messages')
+        //       .doc(message.id!)
+        //       .update({'readBy': true});
+        //   message.readBy = true;
+        // }
       }
 
       return latestMessages.values.toList();

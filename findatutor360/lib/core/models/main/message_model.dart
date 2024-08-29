@@ -14,7 +14,7 @@ class Messages {
   final List<String>? participants;
   final String? message;
   final DateTime? createdAt;
-  final List<String>? readBy; // New field to track who has read the message
+  late final bool? readBy;
 
   Messages({
     this.id,
@@ -27,7 +27,7 @@ class Messages {
     this.participants,
     this.message,
     this.createdAt,
-    this.readBy, // Initialize this field
+    this.readBy = false,
   });
 
   factory Messages.fromJson(Map<String, dynamic> json) =>
