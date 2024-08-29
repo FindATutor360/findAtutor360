@@ -2,7 +2,6 @@ import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
 import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/app_header.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/message/chat.dart';
 import 'package:findatutor360/views/main/message/empty_message_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
