@@ -73,6 +73,8 @@ class AuthController extends BaseProvider {
       );
 
       if (user != null) {
+        await user.updateProfile(displayName: fullName);
+        await user.reload();
         await sendEmailVerification(user, name: fullName, email: email);
 
         String? userToken = await user.getIdToken();

@@ -105,27 +105,73 @@ class MessageServiceImpl implements MessageService {
         .map((snapshot) {
       final messages =
           snapshot.docs.map((doc) => Messages.fromJson(doc.data())).toList();
+
       final Map<String, Map<String, dynamic>> latestMessages = {};
 
       for (var message in messages) {
+        // Determine the other user in the conversation
         final otherUser = message.participants!
             .firstWhere((email) => email != currentUserEmail);
 
-        // Check if the message is unread and count it
+        // Initialize latestMessages entry if not present
         if (!latestMessages.containsKey(otherUser)) {
           latestMessages[otherUser] = {
             'latestMessage': message,
-            'unreadCount': message.readBy == false ? 1 : 0,
+            'unreadCount': 0,
           };
-        } else {
-          if (message.readBy == false) {
+        }
+
+        // Update latestMessage and unreadCount if needed
+        if (message.senderEmail == otherUser) {
+          if (message.recipientEmail == currentUserEmail && !message.readBy!) {
             latestMessages[otherUser]!['unreadCount'] =
-                latestMessages[otherUser]!['unreadCount'] + 1;
+                (latestMessages[otherUser]!['unreadCount'] as int) + 1;
           }
+        }
+
+        // Update latest message entry
+        if (message.createdAt!.isAfter(
+            (latestMessages[otherUser]!['latestMessage'] as Messages)
+                .createdAt!)) {
+          latestMessages[otherUser]!['latestMessage'] = message;
         }
       }
 
       return latestMessages.values.toList();
     });
   }
+  // Stream<List<Map<String, dynamic>>> getLatestMessages(
+  //   String currentUserEmail,
+  // ) {
+  //   return _fireStore
+  //       .collection('Messages')
+  //       .where('participants', arrayContains: currentUserEmail)
+  //       .orderBy('createdAt', descending: true)
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     final messages =
+  //         snapshot.docs.map((doc) => Messages.fromJson(doc.data())).toList();
+  //     final Map<String, Map<String, dynamic>> latestMessages = {};
+
+  //     for (var message in messages) {
+  //       final otherUser = message.participants!
+  //           .firstWhere((email) => email != currentUserEmail);
+
+  //       // Check if the message is unread and count it
+  //       if (!latestMessages.containsKey(otherUser)) {
+  //         latestMessages[otherUser] = {
+  //           'latestMessage': message,
+  //           'unreadCount': message.readBy == false ? 1 : 0,
+  //         };
+  //       } else {
+  //         if (message.readBy == false) {
+  //           latestMessages[otherUser]!['unreadCount'] =
+  //               latestMessages[otherUser]!['unreadCount'] + 1;
+  //         }
+  //       }
+  //     }
+
+  //     return latestMessages.values.toList();
+  //   });
+  // }
 }
