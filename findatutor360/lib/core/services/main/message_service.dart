@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,7 +15,7 @@ abstract class MessageService {
     String currentUserEmail,
     String recipientEmail,
   );
-  Stream<List<Messages>> getLatestMessages(String currentUserEmail);
+  Stream<List<Map<String, dynamic>>> getLatestMessages(String currentUserEmail);
 }
 
 class MessageServiceImpl implements MessageService {
@@ -25,11 +24,12 @@ class MessageServiceImpl implements MessageService {
 
   @override
   Future<void> sendMessage(
-      String? senderEmail,
-      String? message,
-      String? recipientEmail,
-      String? recipientName,
-      String? recipientPhotoUrl) async {
+    String? senderEmail,
+    String? message,
+    String? recipientEmail,
+    String? recipientName,
+    String? recipientPhotoUrl,
+  ) async {
     try {
       // Ensure that both senderEmail and recipientEmail are included in participants
       List<String> participants = [senderEmail!, recipientEmail!];
@@ -45,7 +45,7 @@ class MessageServiceImpl implements MessageService {
         participants: participants, // Explicitly set participants list
         message: message!,
         createdAt: DateTime.now().toUtc(),
-        readBy: false, // Initialize as an empty list
+        readBy: false, // Initialize as false
       );
 
       DocumentReference docRef = await _fireStore.collection('Messages').add(
@@ -64,7 +64,9 @@ class MessageServiceImpl implements MessageService {
 
   @override
   Stream<List<Messages>> getMessages(
-      String currentUserEmail, String recipientEmail) {
+    String currentUserEmail,
+    String recipientEmail,
+  ) {
     return _fireStore
         .collection('Messages')
         .where('participants', arrayContains: currentUserEmail)
@@ -92,7 +94,9 @@ class MessageServiceImpl implements MessageService {
   }
 
   @override
-  Stream<List<Messages>> getLatestMessages(String currentUserEmail) {
+  Stream<List<Map<String, dynamic>>> getLatestMessages(
+    String currentUserEmail,
+  ) {
     return _fireStore
         .collection('Messages')
         .where('participants', arrayContains: currentUserEmail)
@@ -101,24 +105,24 @@ class MessageServiceImpl implements MessageService {
         .map((snapshot) {
       final messages =
           snapshot.docs.map((doc) => Messages.fromJson(doc.data())).toList();
-      final Map<String, Messages> latestMessages = {};
+      final Map<String, Map<String, dynamic>> latestMessages = {};
 
       for (var message in messages) {
         final otherUser = message.participants!
             .firstWhere((email) => email != currentUserEmail);
-        if (!latestMessages.containsKey(otherUser)) {
-          latestMessages[otherUser] = message;
-        }
 
-        // Mark message as read if the current user is the recipient
-        // if (message.recipientEmail == currentUserEmail &&
-        //     message.readBy == false) {
-        //   _fireStore
-        //       .collection('Messages')
-        //       .doc(message.id!)
-        //       .update({'readBy': true});
-        //   message.readBy = true;
-        // }
+        // Check if the message is unread and count it
+        if (!latestMessages.containsKey(otherUser)) {
+          latestMessages[otherUser] = {
+            'latestMessage': message,
+            'unreadCount': message.readBy == false ? 1 : 0,
+          };
+        } else {
+          if (message.readBy == false) {
+            latestMessages[otherUser]!['unreadCount'] =
+                latestMessages[otherUser]!['unreadCount'] + 1;
+          }
+        }
       }
 
       return latestMessages.values.toList();
