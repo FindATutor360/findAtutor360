@@ -31,7 +31,8 @@ class MessageController extends BaseProvider {
     );
   }
 
-  Stream<List<Messages>> getLatestMessages(String currentUserEmail) {
+  Stream<List<Map<String, dynamic>>> getLatestMessages(
+      String currentUserEmail) {
     return _messageServiceImpl.getLatestMessages(currentUserEmail);
   }
 }

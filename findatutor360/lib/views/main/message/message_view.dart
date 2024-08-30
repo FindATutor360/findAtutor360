@@ -15,6 +15,7 @@ class MessageView extends StatelessWidget {
     this.imageUrl,
   });
   static const path = '/messageView';
+
   @override
   Widget build(BuildContext context) {
     final String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
@@ -25,7 +26,7 @@ class MessageView extends StatelessWidget {
           showIcon: false,
         ),
         drawer: const CustomDrawer(),
-        body: StreamBuilder<List<Messages>>(
+        body: StreamBuilder<List<Map<String, dynamic>>>(
           stream: MessageController().getLatestMessages(currentUserEmail!),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -37,43 +38,36 @@ class MessageView extends StatelessWidget {
               return const EmptyMessageView();
             }
 
-            List<Messages> unreadMessages = snapshot.data!
-                .where((msg) =>
-                    msg.recipientEmail == currentUserEmail &&
-                    msg.readBy == false)
-                .toList();
-
-            return ListView.separated(
+            return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
-                Messages message = snapshot.data![index];
+                var data = snapshot.data![index];
+                Messages latestMessage = data['latestMessage'];
+                int unreadCount = data['unreadCount'];
 
-                int unreadCount = unreadMessages.length;
                 return MessageTile(
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: ((context) => ChatViews(messages: message)),
+                        builder: ((context) =>
+                            ChatViews(messages: latestMessage)),
                       ),
                     );
                   },
-                  imageUrl: message.recipientEmail != currentUserEmail
-                      ? message.recipientPhotoUrl ?? imageUrl
-                      : message.senderPhotoUrl ?? imageUrl,
-                  userName: message.recipientEmail != currentUserEmail
-                      ? message.recipientName ?? 'Unknown'
-                      : message.senderName ?? '',
-                  message: message.message ?? '',
-                  time: message.createdAt != null
-                      ? TimeOfDay.fromDateTime(message.createdAt!)
+                  imageUrl: latestMessage.recipientEmail != currentUserEmail
+                      ? latestMessage.recipientPhotoUrl ?? imageUrl
+                      : latestMessage.senderPhotoUrl ?? imageUrl,
+                  userName: latestMessage.recipientEmail != currentUserEmail
+                      ? latestMessage.recipientName ?? 'Unknown'
+                      : latestMessage.senderName ?? '',
+                  message: latestMessage.message ?? '',
+                  time: latestMessage.createdAt != null
+                      ? TimeOfDay.fromDateTime(latestMessage.createdAt!)
                           .format(context)
                       : '',
-                  messageNumber: unreadCount.toString(),
+                  messageNumber: unreadCount > 0 ? unreadCount.toString() : '0',
                 );
-              },
-              separatorBuilder: (context, index) {
-                return const Divider(indent: 60);
               },
             );
           },

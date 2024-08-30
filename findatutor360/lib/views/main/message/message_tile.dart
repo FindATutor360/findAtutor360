@@ -49,20 +49,21 @@ class MessageTile extends StatelessWidget {
                     color: customTheme['mainTextSecondaryColor'],
                     fontWeight: FontWeight.w600),
                 const SizedBox(height: 8),
-                Container(
-                  height: 25,
-                  width: 25,
-                  decoration: BoxDecoration(
-                      color: customTheme['primaryColor'],
-                      borderRadius: BorderRadius.circular(50)),
-                  child: Center(
-                    child: MainText(
-                        text: messageNumber!,
-                        fontSize: 15,
-                        color: customTheme['whiteColor'],
-                        fontWeight: FontWeight.w600),
-                  ),
-                )
+                if (messageNumber != null && messageNumber != '0')
+                  Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                        color: customTheme['primaryColor'],
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Center(
+                      child: MainText(
+                          text: messageNumber!,
+                          fontSize: 15,
+                          color: customTheme['whiteColor'],
+                          fontWeight: FontWeight.w600),
+                    ),
+                  )
               ],
             )),
       ),
