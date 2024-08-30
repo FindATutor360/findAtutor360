@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
@@ -343,13 +344,14 @@ class _ChatViewsState extends State<ChatViews> {
 
   Future<void> sendMessage() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
+    final Users users = Users();
     if (formKey.currentState != null &&
         formKey.currentState!.validate() &&
         auth.currentUser != null) {
       // Ensure correct assignment: sender is the current user, recipient is the other party.
-      final senderEmail = auth.currentUser!.email;
-      final senderPhotoUrl = auth.currentUser!.photoURL;
-      final senderName = auth.currentUser!.displayName;
+      final senderEmail = auth.currentUser!.email ?? users.email;
+      final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
+      final senderName = auth.currentUser!.displayName ?? users.fullName;
       final recipientEmail = widget.messages.senderEmail == senderEmail
           ? widget.messages.recipientEmail
           : widget.messages.senderEmail;
