@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class CustomRatingBar extends StatefulWidget {
-  const CustomRatingBar({super.key});
+  const CustomRatingBar({
+    this.itemSize = 15.0,
+    super.key,
+  });
+  final double itemSize;
 
   @override
   State<CustomRatingBar> createState() => _CustomRatingBarState();
@@ -29,7 +33,7 @@ class _CustomRatingBarState extends State<CustomRatingBar> {
       allowHalfRating: true,
       unratedColor: const Color.fromARGB(255, 96, 95, 93).withAlpha(50),
       itemCount: 5,
-      itemSize: 15.0,
+      itemSize: widget.itemSize,
       // itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
       itemBuilder: (context, _) => Icon(
         Icons.star,

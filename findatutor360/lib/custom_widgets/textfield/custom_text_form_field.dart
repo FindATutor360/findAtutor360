@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class CustomTextFormField extends StatelessWidget {
   final Widget? label;
   final Widget? suffixIcon;
+  final Widget? prefixIcon;
   final String? hint;
   final bool? autofocus;
   final bool obscureText;
@@ -15,6 +16,7 @@ class CustomTextFormField extends StatelessWidget {
     super.key,
     this.label,
     this.suffixIcon,
+    this.prefixIcon,
     this.hint,
     this.autofocus = false,
     this.obscureText = false,
@@ -42,6 +44,7 @@ class CustomTextFormField extends StatelessWidget {
                 const TextStyle(color: Color.fromRGBO(121, 132, 142, 1)),
             hintText: hint,
             suffixIcon: suffixIcon,
+            prefixIcon: prefixIcon,
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),

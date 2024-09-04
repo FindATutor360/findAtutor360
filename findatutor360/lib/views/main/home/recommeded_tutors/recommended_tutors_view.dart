@@ -8,32 +8,33 @@ class RecommendedTutorsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: const BackIconHeader(
-        header: 'Recommended Tutors',
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 24,
-          ),
-          Expanded(
-            child: GridView.builder(
-              shrinkWrap: true,
-              itemCount: 10,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.7,
-                  mainAxisSpacing: 15,
-                  crossAxisSpacing: 15),
-              itemBuilder: ((BuildContext context, int index) {
-                return const RecommededTutorCard();
-              }),
+    return SafeArea(
+      child: Scaffold(
+        appBar: const BackIconHeader(
+          header: 'Recommended Tutors',
+        ),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 24,
             ),
-          ),
-        ],
+            Expanded(
+              child: GridView.builder(
+                shrinkWrap: true,
+                itemCount: 10,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 0.7,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15),
+                itemBuilder: ((BuildContext context, int index) {
+                  return const RecommededTutorCard();
+                }),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
