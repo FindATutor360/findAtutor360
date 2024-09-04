@@ -3,10 +3,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
-import 'package:findatutor360/core/view_models/main/message_controller.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/message/user_image_view.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
@@ -16,7 +14,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mime/mime.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class ChatView extends StatefulWidget {
@@ -33,11 +30,6 @@ class ChatView extends StatefulWidget {
 }
 
 class _ChatViewState extends State<ChatView> {
-  late MessageController _message;
-  final TextEditingController _messageController = TextEditingController();
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  String? text;
-
   List<types.Message> _messages = [];
   final _user = const types.User(
     id: '82091008-a484-4a89-ae75-a22bf8d6f3ac',
@@ -46,15 +38,8 @@ class _ChatViewState extends State<ChatView> {
   @override
   void initState() {
     super.initState();
-    _message = context.read<MessageController>();
-    _loadMessages();
-  }
 
-  Future<void> _refreshMessages() async {
-    setState(() {
-      _message.getMessages(FirebaseAuth.instance.currentUser!.email ?? '',
-          widget.messages.recipientEmail ?? '');
-    });
+    _loadMessages();
   }
 
   void _addMessage(types.Message message) {

@@ -1,5 +1,4 @@
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
-import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 

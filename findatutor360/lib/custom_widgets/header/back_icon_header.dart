@@ -5,9 +5,17 @@ import 'package:iconsax/iconsax.dart';
 
 class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
   final String header;
+  final IconData icon;
+  final Color iconColor;
+  final bool showIcon;
+  final IconData closeIcon;
   const BackIconHeader({
     super.key,
     required this.header,
+    this.icon = Iconsax.search_normal_1,
+    this.iconColor = const Color.fromRGBO(121, 132, 142, 1),
+    this.showIcon = true,
+    this.closeIcon = Icons.arrow_back,
   });
 
   @override
@@ -15,22 +23,29 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 25, left: 24, right: 24),
+          margin: const EdgeInsets.only(top: 10),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                icon: const Icon(Icons.arrow_back),
+                icon: Icon(closeIcon),
                 onPressed: () => Navigator.pop(context),
               ),
+              const Spacer(),
               MainText(
                 text: header,
                 fontSize: 18,
               ),
-              const CustomIconButton(
-                onPressed: null,
-                icon: Icon(Iconsax.search_normal_1),
-              ),
+              const Spacer(),
+              if (showIcon) ...[
+                CustomIconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    icon,
+                    color: iconColor,
+                  ),
+                ),
+              ],
             ],
           ),
         ),

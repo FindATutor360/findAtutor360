@@ -8,30 +8,31 @@ class TrendingBooksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: const BackIconHeader(
-        header: 'Trending Books',
-      ),
-      body: Column(
-        children: [
-          const SizedBox(
-            height: 24,
-          ),
-          Expanded(
-            child: ListView.separated(
-              shrinkWrap: true,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              separatorBuilder: (context, i) {
-                return const SizedBox(height: 12);
-              },
-              itemCount: 10,
-              itemBuilder: (context, i) {
-                return const TrendingBookWidget();
-              },
+    return SafeArea(
+      child: Scaffold(
+        appBar: const BackIconHeader(
+          header: 'Trending Books',
+        ),
+        body: Column(
+          children: [
+            const SizedBox(
+              height: 24,
             ),
-          ),
-        ],
+            Expanded(
+              child: ListView.separated(
+                shrinkWrap: true,
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                separatorBuilder: (context, i) {
+                  return const SizedBox(height: 12);
+                },
+                itemCount: 10,
+                itemBuilder: (context, i) {
+                  return const TrendingBookWidget();
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
