@@ -17,7 +17,7 @@ class CourseDetails extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
-          header: 'Book Details',
+          header: 'Course Details',
           icon: Iconsax.heart,
           iconColor: Color(0XFF79848E),
         ),
@@ -87,18 +87,52 @@ class CourseDetails extends StatelessWidget {
                     ),
                     TextExpansionTile(
                       title: 'Reviews',
-                      description: InkWell(
-                        onTap: () {
-                          router.push(
-                            Reviews.path,
-                          );
-                        },
-                        child: MainText(
-                          text: 'This is the description for Title 1.',
-                          color: customTheme['secondaryTextColor'],
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
+                      description: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, i) {
+                              return const SizedBox(
+                                height: 16,
+                              );
+                            },
+                            itemCount: 2,
+                            itemBuilder: (context, i) {
+                              return const ReviewData(
+                                userImage: 'A',
+                                userName: 'Anthony Rudiger',
+                                review:
+                                    'The most interesting read I’ve had so far on this app. Pure passion from the writer. He makes this look like an explanation to a 12-year-old. I really like his style',
+                                date: '15.11.2022',
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 19,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              router.push(
+                                Reviews.path,
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                MainText(
+                                  text: 'More Reviews',
+                                  fontSize: 15,
+                                  color: customTheme['primaryColor'],
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right_outlined,
+                                  color: customTheme['primaryColor'],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],

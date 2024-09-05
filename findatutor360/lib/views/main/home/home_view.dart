@@ -62,7 +62,7 @@ class _HomeViewState extends State<HomeView> {
                   //const RecommededTutorCard(),
                   GridView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: 4,
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       gridDelegate:

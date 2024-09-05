@@ -1,8 +1,12 @@
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
+import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
+import 'package:findatutor360/custom_widgets/text/text_option.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/shop/reviews_view.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -29,6 +33,7 @@ class BookDetails extends StatelessWidget {
               ),
               Expanded(
                 child: ListView(
+                  padding: EdgeInsets.zero,
                   children: [
                     RepaintBoundary(
                       child: Row(
@@ -135,12 +140,43 @@ class BookDetails extends StatelessWidget {
                     ),
                     TextExpansionTile(
                       title: 'More Photos',
-                      description: MainText(
-                        text: 'This is the description for Title 1.',
-                        color: customTheme['secondaryTextColor'],
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                      description: Column(
+                        children: [
+                          GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: 4,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16,
+                            ),
+                            itemBuilder: ((BuildContext context, int index) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width * 0.38,
+                                height: MediaQuery.of(context).size.height,
+                                decoration: BoxDecoration(
+                                  color: customTheme['secondaryColor'],
+                                  borderRadius: BorderRadius.circular(10),
+                                  image: const DecorationImage(
+                                      image: AssetImage(
+                                          'assets/images/activeImg.png'),
+                                      fit: BoxFit.contain),
+                                ),
+                              );
+                            }),
+                          ),
+                        ],
                       ),
+
+                      // MainText(
+                      //   text: 'This is the description for Title 1.',
+                      //   color: customTheme['secondaryTextColor'],
+                      //   fontSize: 12,
+                      //   fontWeight: FontWeight.w400,
+                      // ),
                     ),
                     const SizedBox(
                       height: 16,
@@ -148,7 +184,8 @@ class BookDetails extends StatelessWidget {
                     TextExpansionTile(
                       title: 'About the Seller',
                       description: MainText(
-                        text: 'This is the description for Title 1.',
+                        text:
+                            'King Gboza Aletsa is a medical scientist who graduated with honors in Xincology in China. \n He has a distinct style of writing that has over time been called the Xinting Mintin Simpin.',
                         color: customTheme['secondaryTextColor'],
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
@@ -171,11 +208,81 @@ class BookDetails extends StatelessWidget {
                     ),
                     TextExpansionTile(
                       title: 'Reviews',
-                      description: MainText(
-                        text: 'This is the description for Title 1.',
-                        color: customTheme['secondaryTextColor'],
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
+                      description: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ListView.separated(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            separatorBuilder: (context, i) {
+                              return const SizedBox(
+                                height: 16,
+                              );
+                            },
+                            itemCount: 2,
+                            itemBuilder: (context, i) {
+                              return const ReviewData(
+                                userImage: 'A',
+                                userName: 'Anthony Rudiger',
+                                review:
+                                    'The most interesting read I’ve had so far on this app. Pure passion from the writer. He makes this look like an explanation to a 12-year-old. I really like his style',
+                                date: '15.11.2022',
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                            height: 19,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              router.push(
+                                Reviews.path,
+                              );
+                            },
+                            child: Row(
+                              children: [
+                                MainText(
+                                  text: 'More Reviews',
+                                  fontSize: 15,
+                                  color: customTheme['primaryColor'],
+                                ),
+                                Icon(
+                                  Icons.keyboard_arrow_right_outlined,
+                                  color: customTheme['primaryColor'],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 19,
+                    ),
+                    TextOption(
+                      mainText: 'Books you might like',
+                      onPressed: () {},
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.17,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: ((context, index) {
+                          return const SizedBox(
+                            width: 8,
+                          );
+                        }),
+                        itemCount: 3,
+                        itemBuilder: (context, i) {
+                          return InkWell(
+                            onTap: () {
+                              router.push(
+                                BookDetails.path,
+                              );
+                            },
+                            child: const TrendingBookWidget(),
+                          );
+                        },
                       ),
                     ),
                   ],

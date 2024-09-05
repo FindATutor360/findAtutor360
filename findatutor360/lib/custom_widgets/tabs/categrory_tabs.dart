@@ -1,7 +1,4 @@
 import 'package:findatutor360/custom_widgets/card/category_widget.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/views/main/shop/book_shop_course.dart';
-import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -34,12 +31,7 @@ class _CategoryScrollviewState extends State<CategoryScrollview> {
                 icon: Iconsax.music_play,
                 text: 'Music',
                 isSelected: index == 1,
-                onTap: () {
-                  selectedIndex.value = 1;
-                  router.push(
-                    '${ShopView.path}/${BookShopView.path}',
-                  );
-                },
+                onTap: () => selectedIndex.value = 1,
               ),
               CategoryWidget(
                 icon: Iconsax.graph,
