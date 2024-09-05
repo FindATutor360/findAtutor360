@@ -6,11 +6,13 @@ import 'package:findatutor360/theme/index.dart';
 class TextExpansionTile extends StatelessWidget {
   final String title;
   final Widget description;
+  final bool initiallyExpanded;
 
   const TextExpansionTile({
     super.key,
     required this.title,
     required this.description,
+    this.initiallyExpanded = false,
   });
 
   @override
@@ -24,6 +26,7 @@ class TextExpansionTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: ExpansionTile(
+        initiallyExpanded: initiallyExpanded,
         shape: const Border(),
         collapsedShape: const Border(),
         dense: true,
@@ -33,11 +36,13 @@ class TextExpansionTile extends StatelessWidget {
           text: title,
           fontSize: 18,
         ),
-        childrenPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        childrenPadding: const EdgeInsets.symmetric(horizontal: 16),
         expandedAlignment: Alignment.centerLeft,
         children: [
           description,
+          const SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );
