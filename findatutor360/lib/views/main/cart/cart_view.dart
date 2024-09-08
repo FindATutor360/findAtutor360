@@ -1,11 +1,14 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
+import 'package:findatutor360/custom_widgets/card/carts_card.dart';
+import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
+import 'package:findatutor360/custom_widgets/dialogs/delete_dialog.dart';
 import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
 import 'package:findatutor360/custom_widgets/header/header.dart';
+import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
-import 'package:findatutor360/views/main/shop/shop_view.dart';
+import 'package:findatutor360/views/main/cart/check_out_view.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CartView extends StatelessWidget {
   const CartView({super.key});
@@ -14,56 +17,147 @@ class CartView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-            backgroundColor: customTheme['whiteColor'],
-            appBar: const Header(),
-            drawer: const CustomDrawer(),
-            body: SingleChildScrollView(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                  Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Text(
-                      'Cart Items',
-                      style: GoogleFonts.manrope(
-                          fontSize: 18, fontWeight: FontWeight.w600),
+      child: Scaffold(
+        appBar: const Header(),
+        drawer: const CustomDrawer(),
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const MainText(
+                text: 'Cart Items',
+                fontSize: 18,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                separatorBuilder: (context, i) {
+                  return const SizedBox(
+                    height: 16,
+                  );
+                },
+                itemCount: 2,
+                itemBuilder: (context, i) {
+                  return CartsCard(
+                    itemImage: 'assets/images/activeImg.png',
+                    itemName: 'The science of leadership',
+                    authorName: 'Marcelos Ramequin',
+                    itemPrice: '\$100.00',
+                    deleteTap: () {
+                      Navigator.of(context).push(
+                        DeleteDialog(
+                          removeTap: () {},
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 40,
+              ),
+              const Divider(),
+              const SizedBox(
+                height: 40,
+              ),
+              TextExpansionTile(
+                initiallyExpanded: true,
+                iconColor: customTheme['primaryColor'],
+                title: Row(
+                  children: [
+                    const MainText(
+                      text: 'Subtotal',
+                      fontSize: 18,
                     ),
-                  ),
-                  //background image
-                  Image.asset('assets/images/cart.png',
-                      height: MediaQuery.of(context).size.height * 0.5,
-                      width: MediaQuery.of(context).size.width),
-                  const SizedBox(height: 15),
-                  const Center(
-                    child: Padding(
-                        padding: EdgeInsets.all(20.0),
-                        child: Text(
-                          'Ooops!',
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.w600),
-                        )),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    margin: const EdgeInsets.symmetric(horizontal: 24),
-                    child: const Text(
-                        "There’s nothing in your cart. Add a new item  from the shop to find it here.",
-                        style: TextStyle(
-                            fontFamily: 'Manrope',
-                            color: Color(0xFF79848E),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400)),
-                  ),
-                  //button
-                  Center(
-                    child: PrimaryButton(
-                        isIconPresent: false,
-                        text: 'Go to shop',
-                        onPressed: () {
-                          router.go(ShopView.path);
-                        }),
-                  )
-                ]))));
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    MainText(
+                      text: '(2 Items)',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w400,
+                      color: customTheme['secondaryTextColor'],
+                    ),
+                  ],
+                ),
+                description: Column(
+                  children: [
+                    ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, i) {
+                        return const SizedBox(
+                          height: 12,
+                        );
+                      },
+                      itemCount: 2,
+                      itemBuilder: (context, i) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            MainText(
+                              text: '2x The Science of le...',
+                              fontSize: 16,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.w400,
+                              color: customTheme['secondaryTextColor'],
+                            ),
+                            MainText(
+                              text: 'Ghc200.00',
+                              fontSize: 16,
+                              overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.w400,
+                              color: customTheme['secondaryTextColor'],
+                            ),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const Divider(),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    const Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        MainText(
+                          text: 'Total',
+                          fontSize: 16,
+                        ),
+                        MainText(
+                          text: 'GHc400.00',
+                          fontSize: 16,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    PrimaryButton(
+                      text: 'Checkout',
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      isIconPresent: false,
+                      onPressed: () {
+                        router.push(
+                          CheckOutView.path,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

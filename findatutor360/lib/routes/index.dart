@@ -1,5 +1,9 @@
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/views/auth/splash/splash_view.dart';
+import 'package:findatutor360/views/main/cart/check_out_view.dart';
+import 'package:findatutor360/views/main/cart/edit_address_view.dart';
+import 'package:findatutor360/views/main/cart/payment_success_view.dart';
+import 'package:findatutor360/views/main/cart/payment_view.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
@@ -205,6 +209,30 @@ List<RouteBase> get routes => [
         path: Reviews.path,
         builder: (BuildContext context, GoRouterState state) {
           return const Reviews();
+        },
+      ),
+      GoRoute(
+        path: CheckOutView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const CheckOutView();
+        },
+      ),
+      GoRoute(
+        path: PaymentView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PaymentView();
+        },
+      ),
+      GoRoute(
+        path: PaymentSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PaymentSuccessView();
+        },
+      ),
+      GoRoute(
+        path: EditAddressView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const EditAddressView();
         },
       ),
     ];

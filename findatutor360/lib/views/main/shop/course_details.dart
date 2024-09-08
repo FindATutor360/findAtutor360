@@ -74,7 +74,10 @@ class CourseDetails extends StatelessWidget {
                       height: 40,
                     ),
                     TextExpansionTile(
-                      title: 'About the Tutor',
+                      title: const MainText(
+                        text: 'About the Tutor',
+                        fontSize: 18,
+                      ),
                       description: MainText(
                         text: 'This is the description for Title 1.',
                         color: customTheme['secondaryTextColor'],
@@ -86,7 +89,10 @@ class CourseDetails extends StatelessWidget {
                       height: 16,
                     ),
                     TextExpansionTile(
-                      title: 'Reviews',
+                      title: const MainText(
+                        text: 'Reviews',
+                        fontSize: 18,
+                      ),
                       description: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -143,7 +149,7 @@ class CourseDetails extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 60,
+                      height: MediaQuery.of(context).size.height / 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
@@ -164,7 +170,7 @@ class CourseDetails extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      height: 60,
+                      height: MediaQuery.of(context).size.height / 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: const Color(0XFF0476AF),
