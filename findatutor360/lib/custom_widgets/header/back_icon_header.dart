@@ -46,6 +46,7 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ),
               ],
+              showIcon == false ? const Spacer() : const SizedBox.shrink(),
             ],
           ),
         ),

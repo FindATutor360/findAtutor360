@@ -139,7 +139,10 @@ class BookDetails extends StatelessWidget {
                       height: 40,
                     ),
                     TextExpansionTile(
-                      title: 'More Photos',
+                      title: const MainText(
+                        text: 'More Photos',
+                        fontSize: 18,
+                      ),
                       description: Column(
                         children: [
                           GridView.builder(
@@ -170,19 +173,15 @@ class BookDetails extends StatelessWidget {
                           ),
                         ],
                       ),
-
-                      // MainText(
-                      //   text: 'This is the description for Title 1.',
-                      //   color: customTheme['secondaryTextColor'],
-                      //   fontSize: 12,
-                      //   fontWeight: FontWeight.w400,
-                      // ),
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     TextExpansionTile(
-                      title: 'About the Seller',
+                      title: const MainText(
+                        text: 'About the Seller',
+                        fontSize: 18,
+                      ),
                       description: MainText(
                         text:
                             'King Gboza Aletsa is a medical scientist who graduated with honors in Xincology in China. \n He has a distinct style of writing that has over time been called the Xinting Mintin Simpin.',
@@ -195,7 +194,10 @@ class BookDetails extends StatelessWidget {
                       height: 16,
                     ),
                     TextExpansionTile(
-                      title: 'Book Details',
+                      title: const MainText(
+                        text: 'Book Details',
+                        fontSize: 18,
+                      ),
                       description: MainText(
                         text: 'This is the description for Title 1.',
                         color: customTheme['secondaryTextColor'],
@@ -207,7 +209,10 @@ class BookDetails extends StatelessWidget {
                       height: 16,
                     ),
                     TextExpansionTile(
-                      title: 'Reviews',
+                      title: const MainText(
+                        text: 'Reviews',
+                        fontSize: 18,
+                      ),
                       description: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -296,7 +301,7 @@ class BookDetails extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Container(
-                      height: 60,
+                      height: MediaQuery.of(context).size.height / 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
@@ -317,7 +322,7 @@ class BookDetails extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                      height: 60,
+                      height: MediaQuery.of(context).size.height / 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(8),
                         color: const Color(0XFF0476AF),

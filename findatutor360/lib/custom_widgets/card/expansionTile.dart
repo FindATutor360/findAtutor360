@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
-import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 
 class TextExpansionTile extends StatelessWidget {
-  final String title;
+  final Widget title;
   final Widget description;
   final bool initiallyExpanded;
+  final Color? iconColor;
 
-  const TextExpansionTile({
-    super.key,
-    required this.title,
-    required this.description,
-    this.initiallyExpanded = false,
-  });
+  const TextExpansionTile(
+      {super.key,
+      required this.title,
+      required this.description,
+      this.initiallyExpanded = false,
+      this.iconColor});
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +31,9 @@ class TextExpansionTile extends StatelessWidget {
         collapsedShape: const Border(),
         dense: true,
         collapsedIconColor: customTheme['mainTextColor'],
+        iconColor: iconColor ?? customTheme['mainTextColor'],
         tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        title: MainText(
-          text: title,
-          fontSize: 18,
-        ),
+        title: title,
         childrenPadding: const EdgeInsets.symmetric(horizontal: 16),
         expandedAlignment: Alignment.centerLeft,
         children: [
