@@ -6,17 +6,21 @@ import 'main_text.dart';
 class TextOption extends StatelessWidget {
   final void Function()? onPressed;
   final String? mainText;
+  final String subText;
+  final double horizPad;
 
   const TextOption({
     super.key,
     required this.onPressed,
     required this.mainText,
+    this.subText = 'See All',
+    this.horizPad = 20,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      padding: EdgeInsets.symmetric(horizontal: horizPad),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -24,7 +28,7 @@ class TextOption extends StatelessWidget {
           TextButton(
               onPressed: onPressed,
               child: MainText(
-                  text: 'See All',
+                  text: subText,
                   fontSize: 12,
                   color: customTheme['secondaryTextColor']))
         ],

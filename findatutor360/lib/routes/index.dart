@@ -9,6 +9,11 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:findatutor360/views/main/message/chat.dart';
+import 'package:findatutor360/views/main/settings/notification_empty.dart';
+import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
+import 'package:findatutor360/views/main/settings/notification_view.dart';
+import 'package:findatutor360/views/main/settings/payment_card_view.dart';
+import 'package:findatutor360/views/main/settings/payment_history_view.dart';
 import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/book_shop_course.dart';
@@ -29,11 +34,11 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 final _homeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
-final _shopKey = GlobalKey<NavigatorState>(debugLabel: 'shellCart');
+final _shopKey = GlobalKey<NavigatorState>(debugLabel: 'shellShop');
 final rootKey = GlobalKey<NavigatorState>(debugLabel: 'shellRoot');
-final _messageKey = GlobalKey<NavigatorState>(debugLabel: 'shellReels');
+final _messageKey = GlobalKey<NavigatorState>(debugLabel: 'shellMessage');
 final _settingsKey = GlobalKey<NavigatorState>(debugLabel: 'shellSettings');
-final _cartKey = GlobalKey<NavigatorState>(debugLabel: 'shellNotification');
+final _cartKey = GlobalKey<NavigatorState>(debugLabel: 'shellCarts');
 
 List<RouteBase> get routes => [
       GoRoute(
@@ -233,6 +238,36 @@ List<RouteBase> get routes => [
         path: EditAddressView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const EditAddressView();
+        },
+      ),
+      GoRoute(
+        path: PaymentHistoryView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PaymentHistoryView();
+        },
+      ),
+      GoRoute(
+        path: PaymentCardView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PaymentCardView();
+        },
+      ),
+      GoRoute(
+        path: NotificationNotSetup.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const NotificationNotSetup();
+        },
+      ),
+      GoRoute(
+        path: NotificationView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const NotificationView();
+        },
+      ),
+      GoRoute(
+        path: NotificationEmpty.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const NotificationEmpty();
         },
       ),
     ];
