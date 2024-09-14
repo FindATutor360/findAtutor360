@@ -6,8 +6,11 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/cart/cart_view.dart';
 import 'package:findatutor360/views/main/shop/reviews_view.dart';
+import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class BookDetails extends StatelessWidget {
@@ -266,7 +269,9 @@ class BookDetails extends StatelessWidget {
                     ),
                     TextOption(
                       mainText: 'Books you might like',
-                      onPressed: () {},
+                      onPressed: () {
+                        context.go(ShopView.path, extra: 1);
+                      },
                     ),
                     SizedBox(
                       height: MediaQuery.of(context).size.height * 0.17,
@@ -321,17 +326,22 @@ class BookDetails extends StatelessWidget {
                     width: 16,
                   ),
                   Expanded(
-                    child: Container(
-                      height: MediaQuery.of(context).size.height / 15,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: const Color(0XFF0476AF),
-                      ),
-                      child: Align(
-                        child: MainText(
-                          text: 'Buy Now',
-                          fontSize: 18,
-                          color: customTheme['whiteColor'],
+                    child: InkWell(
+                      onTap: () {
+                        context.go(CartView.path, extra: 3);
+                      },
+                      child: Container(
+                        height: MediaQuery.of(context).size.height / 15,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0XFF0476AF),
+                        ),
+                        child: Align(
+                          child: MainText(
+                            text: 'Buy Now',
+                            fontSize: 18,
+                            color: customTheme['whiteColor'],
+                          ),
                         ),
                       ),
                     ),

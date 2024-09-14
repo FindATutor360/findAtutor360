@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
+import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -26,26 +27,14 @@ class EditAddressView extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const MainText(
-                    text: 'Payment Methods',
-                    fontSize: 16,
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: MainText(
-                      text: 'Add new',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: customTheme['secondaryTextColor'],
-                    ),
-                  ),
-                ],
+              TextOption(
+                onPressed: () {},
+                mainText: 'Payment Methods',
+                subText: 'Add new',
+                horizPad: 0,
               ),
               const SizedBox(
-                height: 24,
+                height: 20,
               ),
               Row(
                 children: [

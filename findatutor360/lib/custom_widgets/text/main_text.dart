@@ -8,6 +8,7 @@ class MainText extends StatelessWidget {
   final TextOverflow? overflow;
   final Color? color;
   final TextAlign? textAlign;
+  final bool softWrap;
 
   const MainText({
     super.key,
@@ -17,6 +18,7 @@ class MainText extends StatelessWidget {
     this.color,
     this.overflow,
     this.textAlign,
+    this.softWrap = false,
   });
 
   @override
@@ -27,6 +29,7 @@ class MainText extends StatelessWidget {
             : Colors.black);
 
     return Text(
+      softWrap: softWrap,
       text,
       overflow: overflow,
       textAlign: textAlign,

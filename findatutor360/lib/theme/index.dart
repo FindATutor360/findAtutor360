@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 const customTheme = {
-  'primaryColor': Color.fromARGB(255, 4, 118, 175),
+  'primaryColor': Color.fromRGBO(4, 118, 175, 1),
   'secondaryColor': Color.fromRGBO(154, 202, 229, 1),
   'buttonColor': Color.fromRGBO(0, 0, 0, 1),
   'drawerColor': Color.fromRGBO(1, 50, 76, 1),
@@ -21,4 +21,5 @@ const customTheme = {
   'grayColor': Color.fromRGBO(195, 200, 204, 1),
   'fieldColor': Color.fromRGBO(141, 150, 159, 1),
   'chatTextColor': Color.fromRGBO(66, 73, 78, 1),
+  'successTextColor': Color.fromRGBO(42, 187, 109, 1),
 };

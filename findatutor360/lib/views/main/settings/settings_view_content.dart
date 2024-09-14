@@ -1,7 +1,10 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:findatutor360/core/view_models/main/theme_controller.dart';
+import 'package:findatutor360/custom_widgets/dialogs/language_dialog.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/settings/payment_card_view.dart';
+import 'package:findatutor360/views/main/settings/payment_history_view.dart';
 import 'package:findatutor360/views/main/settings/setting_user_profile_card.dart';
 import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/settings/settings_user_logout_card.dart';
@@ -40,9 +43,14 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
           _SingleSection(
             title: "General",
             children: [
-              const _CustomListTile(
+              _CustomListTile(
                 title: "Language",
                 icon: Iconsax.language_circle,
+                onTap: () {
+                  Navigator.of(context).push(
+                    LanguageDialog(),
+                  );
+                },
               ),
               const Divider(),
               _CustomListTile(
@@ -74,24 +82,34 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
               )
             ],
           ),
-          const _SingleSection(
+          _SingleSection(
             title: "Account & Security",
             children: [
-              _CustomListTile(
+              const _CustomListTile(
                 title: "Security",
                 icon: Iconsax.lock,
               ),
-              Divider(),
+              const Divider(),
               _CustomListTile(
                 title: "Payment Methods",
                 icon: Iconsax.card,
+                onTap: () {
+                  router.push(
+                    PaymentCardView.path,
+                  );
+                },
               ),
-              Divider(),
+              const Divider(),
               _CustomListTile(
                 title: "Payment history",
                 icon: Iconsax.money,
+                onTap: () {
+                  router.push(
+                    PaymentHistoryView.path,
+                  );
+                },
               ),
-              Divider(),
+              const Divider(),
             ],
           ),
           const _SingleSection(

@@ -1,4 +1,6 @@
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -39,7 +41,11 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                   children: [
                     const SizedBox(width: 5),
                     CustomIconButton(
-                        onPressed: null,
+                        onPressed: () {
+                          router.push(
+                            NotificationNotSetup.path,
+                          );
+                        },
                         icon: Badge(
                             label: const Text('1',
                                 style: TextStyle(
