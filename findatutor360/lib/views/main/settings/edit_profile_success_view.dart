@@ -1,46 +1,48 @@
+import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/views/main/shop/shop_view.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
-class PaymentSuccessView extends StatelessWidget {
-  const PaymentSuccessView({super.key});
-  static const path = '/paymentSuccess';
+class EditProfileSuccessView extends StatelessWidget {
+  const EditProfileSuccessView({super.key});
+  static const path = '/edit_profile_success';
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: const BackIconHeader(
           header: 'Complete',
           showIcon: false,
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 24,
               ),
               const ProgressBar(
-                firstText: 'Checkout',
-                secondText: 'Payment',
-                thirdText: 'Done',
+                firstText: 'Personal',
+                secondText: 'Contact',
+                thirdText: 'Education',
                 isFirstDone: true,
                 isSecondActive: true,
                 isSecondDone: true,
                 isThirdActive: true,
+                isThirdDone: true,
               ),
               const SizedBox(
-                height: 30,
+                height: 40,
               ),
-              //background image
               Align(
                 child: Image.asset('assets/images/cart.png',
-                    height: MediaQuery.of(context).size.height * 0.5,
+                    height: MediaQuery.of(context).size.height * 0.4,
                     width: MediaQuery.of(context).size.width),
               ),
               const SizedBox(height: 15),
@@ -48,14 +50,14 @@ class PaymentSuccessView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: MainText(
-                    text: 'Congratulations',
+                    text: 'Success',
                   ),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: const Text(
-                    "Your purchase was successful. Your Item will be delivered to you  shortly",
+                    "You have successfully added additional details to your profile.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Manrope',
@@ -64,14 +66,29 @@ class PaymentSuccessView extends StatelessWidget {
                         fontWeight: FontWeight.w400)),
               ),
               //button
-              Center(
-                child: PrimaryButton(
-                  isIconPresent: false,
-                  text: 'Continue',
-                  onPressed: () {
-                    router.go(ShopView.path);
-                  },
-                ),
+              PrimaryButton(
+                isIconPresent: false,
+                text: 'Continue',
+                onPressed: () {
+                  // router.go(ShopView.path);
+                },
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              OutlineButton(
+                text: 'Undo All Edit',
+                textColor: customTheme['badgeColor'],
+                fontWeight: FontWeight.w600,
+                borderRadius: BorderRadius.circular(8),
+                buttonColor: customTheme['whiteColor'],
+                borderSideColor: customTheme['badgeColor'],
+                isIconPresent: false,
+                fontSize: 16,
+                onPressed: () {},
+              ),
+              const SizedBox(
+                height: 20,
               ),
             ],
           ),

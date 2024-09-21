@@ -41,6 +41,9 @@ class _PaymentViewState extends State<PaymentView> {
                 height: 24,
               ),
               const ProgressBar(
+                firstText: 'Checkout',
+                secondText: 'Payment',
+                thirdText: 'Done',
                 isFirstDone: true,
                 isSecondActive: true,
               ),

@@ -9,11 +9,16 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:findatutor360/views/main/message/chat.dart';
+import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dart';
+import 'package:findatutor360/views/main/settings/edit_profile_contact_view.dart';
+import 'package:findatutor360/views/main/settings/edit_profile_education_view.dart';
+import 'package:findatutor360/views/main/settings/edit_profile_success_view.dart';
 import 'package:findatutor360/views/main/settings/notification_empty.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
 import 'package:findatutor360/views/main/settings/notification_view.dart';
 import 'package:findatutor360/views/main/settings/payment_card_view.dart';
 import 'package:findatutor360/views/main/settings/payment_history_view.dart';
+import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/book_shop_course.dart';
@@ -268,6 +273,36 @@ List<RouteBase> get routes => [
         path: NotificationEmpty.path,
         builder: (BuildContext context, GoRouterState state) {
           return const NotificationEmpty();
+        },
+      ),
+      GoRoute(
+        path: PersonalProfileView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PersonalProfileView();
+        },
+      ),
+      GoRoute(
+        path: EditPersonalProfileView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const EditPersonalProfileView();
+        },
+      ),
+      GoRoute(
+        path: EditProfileContactView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const EditProfileContactView();
+        },
+      ),
+      GoRoute(
+        path: EditProfileEducationView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const EditProfileEducationView();
+        },
+      ),
+      GoRoute(
+        path: EditProfileSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const EditProfileSuccessView();
         },
       ),
     ];

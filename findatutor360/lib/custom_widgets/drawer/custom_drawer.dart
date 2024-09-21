@@ -4,6 +4,7 @@ import 'package:findatutor360/custom_widgets/drawer/drawer_element.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
+import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -53,7 +54,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'My Profile',
                 icon: Iconsax.profile_circle,
                 onPressed: () {
-                  router.push('/profile');
+                  context.pop();
+                  router.push(
+                    PersonalProfileView.path,
+                  );
                 },
               ),
               const SizedBox(

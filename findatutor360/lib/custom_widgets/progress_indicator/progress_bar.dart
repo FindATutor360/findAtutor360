@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 
 class ProgressBar extends StatelessWidget {
   const ProgressBar({
+    required this.firstText,
+    required this.secondText,
+    required this.thirdText,
     this.isFirstActive = true,
     this.isSecondActive = false,
     this.isThirdActive = false,
     this.isFirstDone = false,
     this.isSecondDone = false,
+    this.isThirdDone = false,
     super.key,
   });
 
@@ -17,6 +21,10 @@ class ProgressBar extends StatelessWidget {
   final bool isThirdActive;
   final bool isFirstDone;
   final bool isSecondDone;
+  final bool isThirdDone;
+  final String firstText;
+  final String secondText;
+  final String thirdText;
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +66,7 @@ class ProgressBar extends StatelessWidget {
                 height: 7,
               ),
               MainText(
-                text: 'Checkout',
+                text: firstText,
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
                 color: !isFirstDone
@@ -128,7 +136,7 @@ class ProgressBar extends StatelessWidget {
                 height: 7,
               ),
               MainText(
-                text: 'Payment',
+                text: secondText,
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
                 color: !isSecondDone
@@ -163,6 +171,9 @@ class ProgressBar extends StatelessWidget {
                 height: 28,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
+                  color: !isThirdDone
+                      ? Colors.transparent
+                      : const Color(0XFF0476AF),
                   border: !isThirdActive
                       ? Border.all(
                           color: const Color(0XFFC3C8CC),
@@ -180,17 +191,22 @@ class ProgressBar extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         color: customTheme['grayColor'],
                       )
-                    : Icon(
-                        Icons.circle,
-                        size: 12,
-                        color: customTheme['primaryColor'],
-                      ),
+                    : !isThirdDone
+                        ? Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: customTheme['primaryColor'],
+                          )
+                        : Icon(
+                            Icons.check_outlined,
+                            color: customTheme['whiteColor'],
+                          ),
               ),
               const SizedBox(
                 height: 7,
               ),
               MainText(
-                text: 'Done',
+                text: thirdText,
                 fontSize: 10,
                 fontWeight: FontWeight.w400,
                 color: customTheme['secondaryTextColor'],

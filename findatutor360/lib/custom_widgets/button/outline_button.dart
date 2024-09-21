@@ -55,6 +55,7 @@ class OutlineButton extends StatelessWidget {
                 ),
                 onPressed: onPressed,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
                       iconName,

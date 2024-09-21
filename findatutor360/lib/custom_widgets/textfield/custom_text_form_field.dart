@@ -32,9 +32,10 @@ class CustomTextFormField extends StatelessWidget {
         child: TextFormField(
           controller: controller,
           style: GoogleFonts.manrope(
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-              color: const Color.fromRGBO(4, 118, 175, 1)),
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            color: const Color.fromRGBO(4, 118, 175, 1),
+          ),
           keyboardType: keyboardType,
           obscureText: obscureText,
           validator: validator,

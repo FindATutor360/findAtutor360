@@ -16,21 +16,24 @@ class PrimaryButton extends StatelessWidget {
   final double? fontSize;
   final double? spaceBetweenIconAndText;
   final GestureTapCallback? onPressed;
-  const PrimaryButton(
-      {super.key,
-      this.buttonColor,
-      this.textColor,
-      this.iconColor,
-      this.iconName,
-      this.fontWeight,
-      this.spaceBetweenIconAndText,
-      this.borderRadius = BorderRadius.zero,
-      required this.text,
-      required this.isIconPresent,
-      this.height,
-      this.width,
-      this.fontSize,
-      required this.onPressed});
+  final bool isForwardIconPresent;
+  const PrimaryButton({
+    super.key,
+    this.buttonColor,
+    this.textColor,
+    this.iconColor,
+    this.iconName,
+    this.fontWeight,
+    this.spaceBetweenIconAndText,
+    this.borderRadius = BorderRadius.zero,
+    required this.text,
+    required this.isIconPresent,
+    this.height,
+    this.width,
+    this.fontSize,
+    required this.onPressed,
+    this.isForwardIconPresent = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +64,14 @@ class PrimaryButton extends StatelessWidget {
                       color: iconColor ?? customTheme['whiteColor']!,
                     ),
                     SizedBox(width: spaceBetweenIconAndText ?? 60),
-                    Text(text,
-                        style: GoogleFonts.manrope(
-                            fontSize: fontSize ?? 18,
-                            fontWeight: fontWeight ?? FontWeight.w400,
-                            color: textColor ?? customTheme['whiteColor']!)),
+                    Text(
+                      text,
+                      style: GoogleFonts.manrope(
+                        fontSize: fontSize ?? 18,
+                        fontWeight: fontWeight ?? FontWeight.w400,
+                        color: textColor ?? customTheme['whiteColor']!,
+                      ),
+                    ),
                   ],
                 ))
             : ElevatedButton(
@@ -79,11 +85,29 @@ class PrimaryButton extends StatelessWidget {
                   ),
                 ),
                 onPressed: onPressed,
-                child: Text(text,
-                    style: GoogleFonts.manrope(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      text,
+                      style: GoogleFonts.manrope(
                         fontSize: fontSize ?? 20,
                         fontWeight: fontWeight ?? FontWeight.w400,
-                        color: textColor ?? customTheme['whiteColor']!))),
+                        color: textColor ?? customTheme['whiteColor']!,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    if (isForwardIconPresent) ...[
+                      Icon(
+                        iconName,
+                        color: iconColor ?? customTheme['whiteColor']!,
+                      ),
+                    ],
+                  ],
+                ),
+              ),
       ),
     );
   }
