@@ -34,7 +34,11 @@ class CheckOutView extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              const ProgressBar(),
+              const ProgressBar(
+                firstText: 'Checkout',
+                secondText: 'Payment',
+                thirdText: 'Done',
+              ),
               const SizedBox(
                 height: 40,
               ),

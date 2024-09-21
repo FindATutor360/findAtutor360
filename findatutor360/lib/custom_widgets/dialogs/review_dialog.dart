@@ -1,5 +1,6 @@
 import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
+import 'package:findatutor360/custom_widgets/textfield/expand_text_form_field.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
@@ -68,39 +69,8 @@ class RatingDialog extends PopupRoute<void> {
                       const SizedBox(
                         height: 8,
                       ),
-                      TextFormField(
-                        maxLines: 4,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: customTheme['mainTextColor'],
-                        ),
-                        decoration: InputDecoration(
-                          isDense: true,
-                          hintText: 'Type to add a note',
-                          hintStyle: TextStyle(
-                            color: customTheme['secondaryTextColor'],
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color(0XFF8D969F),
-                            ),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color(0XFF8D969F),
-                            ),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(
-                              color: Color(0XFF8D969F),
-                            ),
-                          ),
-                        ),
+                      const ExpandTextFormField(
+                        hint: 'Type to add a note',
                       ),
                       const SizedBox(
                         height: 16,
