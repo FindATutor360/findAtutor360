@@ -3,9 +3,7 @@ import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
-import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileSuccessView extends StatelessWidget {
@@ -72,7 +70,10 @@ class EditProfileSuccessView extends StatelessWidget {
                 isIconPresent: false,
                 text: 'Continue',
                 onPressed: () {
-                  router.push(PersonalProfileView.path);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 },
               ),
               const SizedBox(
