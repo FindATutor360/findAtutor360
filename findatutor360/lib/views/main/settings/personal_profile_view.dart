@@ -1,19 +1,27 @@
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
+import 'package:findatutor360/custom_widgets/dialogs/pop_up_dialog.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/settings/add_book_basic.dart';
 import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
-class PersonalProfileView extends StatelessWidget {
+class PersonalProfileView extends StatefulWidget {
   const PersonalProfileView({super.key});
   static const path = '/personal_profile';
 
+  @override
+  State<PersonalProfileView> createState() => _PersonalProfileViewState();
+}
+
+class _PersonalProfileViewState extends State<PersonalProfileView> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -90,7 +98,20 @@ class PersonalProfileView extends StatelessWidget {
                       iconName: Iconsax.shop_add,
                       spaceBetweenIconAndText: 6,
                       fontSize: 16,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          PopUpDialog(
+                            firstText: 'Book',
+                            secondText: 'Course',
+                            firstTextTap: () {
+                              context.pop();
+                              router.push(
+                                AddBookBasicView.path,
+                              );
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),

@@ -9,6 +9,10 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:findatutor360/views/main/message/chat.dart';
+import 'package:findatutor360/views/main/settings/add_book_basic.dart';
+import 'package:findatutor360/views/main/settings/add_book_condition.dart';
+import 'package:findatutor360/views/main/settings/add_book_publish.dart';
+import 'package:findatutor360/views/main/settings/add_book_success.dart';
 import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_contact_view.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_education_view.dart';
@@ -303,6 +307,30 @@ List<RouteBase> get routes => [
         path: EditProfileSuccessView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const EditProfileSuccessView();
+        },
+      ),
+      GoRoute(
+        path: AddBookBasicView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddBookBasicView();
+        },
+      ),
+      GoRoute(
+        path: AddBookPublishView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddBookPublishView();
+        },
+      ),
+      GoRoute(
+        path: AddBookConditionView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddBookConditionView();
+        },
+      ),
+      GoRoute(
+        path: AddBookSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddBookSuccessView();
         },
       ),
     ];

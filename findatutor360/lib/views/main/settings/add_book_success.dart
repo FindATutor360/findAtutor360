@@ -8,9 +8,9 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:flutter/material.dart';
 
-class EditProfileSuccessView extends StatelessWidget {
-  const EditProfileSuccessView({super.key});
-  static const path = '/edit_profile_success';
+class AddBookSuccessView extends StatelessWidget {
+  const AddBookSuccessView({super.key});
+  static const path = '/add_book_success';
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +30,9 @@ class EditProfileSuccessView extends StatelessWidget {
                 height: 24,
               ),
               const ProgressBar(
-                firstText: 'Personal',
-                secondText: 'Contact',
-                thirdText: 'Education',
+                firstText: 'Basic',
+                secondText: 'Publishing',
+                thirdText: 'Condition',
                 isFirstDone: true,
                 isSecondActive: true,
                 isSecondDone: true,
@@ -59,7 +59,7 @@ class EditProfileSuccessView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: const Text(
-                    "You have successfully added additional details to your profile.",
+                    "Your book has been successfully added and is pending review",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Manrope',

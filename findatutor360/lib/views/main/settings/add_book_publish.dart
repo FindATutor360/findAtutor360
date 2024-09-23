@@ -4,31 +4,29 @@ import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
-import 'package:findatutor360/custom_widgets/textfield/expand_text_form_field.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
-import 'package:findatutor360/views/main/settings/edit_profile_contact_view.dart';
+import 'package:findatutor360/views/main/settings/add_book_condition.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
 
-class EditPersonalProfileView extends StatefulWidget {
-  const EditPersonalProfileView({super.key});
-  static const path = '/edit_personal_profile';
+class AddBookPublishView extends StatefulWidget {
+  const AddBookPublishView({super.key});
+  static const path = '/add_book_publish';
 
   @override
-  State<EditPersonalProfileView> createState() =>
-      _EditPersonalProfileViewState();
+  State<AddBookPublishView> createState() => _AddBookPublishViewState();
 }
 
-class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
+class _AddBookPublishViewState extends State<AddBookPublishView> {
   String typeDropdown = '';
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
-          header: 'Edit Profile info',
+          header: 'Add New book',
           showIcon: false,
         ),
         body: SingleChildScrollView(
@@ -42,22 +40,17 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                 height: 24,
               ),
               const ProgressBar(
-                firstText: 'Personal',
-                secondText: 'Contact',
-                thirdText: 'Education',
+                firstText: 'Basic',
+                secondText: 'Publishing',
+                thirdText: 'Condition',
+                isFirstDone: true,
+                isSecondActive: true,
               ),
               const SizedBox(
                 height: 40,
               ),
-              const MainText(
-                text: 'Personal Details',
-                fontSize: 16,
-              ),
-              const SizedBox(
-                height: 24,
-              ),
               MainText(
-                text: 'Name',
+                text: 'ISBN',
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: customTheme['secondaryTextColor'],
@@ -66,47 +59,13 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                 height: 8,
               ),
               const CustomTextFormField(
-                hint: 'Enter Your Name',
+                hint: 'Enter Book ISBN',
               ),
               const SizedBox(
                 height: 12,
               ),
               MainText(
-                text: 'Tutor Background',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: customTheme['secondaryTextColor'],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              const ExpandTextFormField(
-                hint: 'Describe yoursself',
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              MainText(
-                text: 'Date of Birth',
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: customTheme['secondaryTextColor'],
-              ),
-              const SizedBox(
-                height: 8,
-              ),
-              CustomTextFormField(
-                prefixIcon: Icon(
-                  Iconsax.calendar_1,
-                  color: customTheme['secondaryTextColor'],
-                ),
-                hint: 'DD / MM / YY',
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              MainText(
-                text: 'Sex',
+                text: 'Language',
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
                 color: customTheme['secondaryTextColor'],
@@ -134,7 +93,7 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                     focusedErrorBorder: const OutlineInputBorder(
                         borderSide: BorderSide(
                             width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
-                    hintText: 'How do you identify yourself?',
+                    hintText: 'Select Format',
                     hintStyle: TextStyle(
                       color: customTheme['secondaryTextColor'],
                       fontSize: 14,
@@ -143,25 +102,25 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                   ),
                   items: [
                     DropdownMenuItem(
-                      value: "Male",
+                      value: "Option 1",
                       child: MainText(
-                        text: 'Male',
+                        text: 'Option 1',
                         color: customTheme['secondaryTextColor'],
                         fontSize: 16,
                       ),
                     ),
                     DropdownMenuItem(
-                      value: "Female",
+                      value: "Option 2",
                       child: MainText(
-                        text: 'Female',
+                        text: 'Option 2',
                         color: customTheme['secondaryTextColor'],
                         fontSize: 16,
                       ),
                     ),
                     DropdownMenuItem(
-                      value: "Other",
+                      value: "Option 3",
                       child: MainText(
-                        text: 'Other',
+                        text: 'Option 3',
                         color: customTheme['secondaryTextColor'],
                         fontSize: 16,
                       ),
@@ -181,7 +140,130 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                 ),
               ),
               const SizedBox(
-                height: 40,
+                height: 12,
+              ),
+              MainText(
+                text: 'Book Length',
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: customTheme['secondaryTextColor'],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const CustomTextFormField(
+                hint: 'Enter Book Length',
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              MainText(
+                text: 'Book Weight',
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: customTheme['secondaryTextColor'],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const CustomTextFormField(
+                hint: 'Enter Book Weight',
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              MainText(
+                text: 'Publisher',
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: customTheme['secondaryTextColor'],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              const CustomTextFormField(
+                hint: 'Enter Book Publisher',
+              ),
+              const SizedBox(
+                height: 12,
+              ),
+              MainText(
+                text: 'Category',
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: customTheme['secondaryTextColor'],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.85,
+                child: DropdownButtonFormField(
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
+                  dropdownColor: Colors.white,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                            color: Color.fromRGBO(141, 150, 159, 1), width: 1)),
+                    focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
+                    errorBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        borderSide: const BorderSide(
+                            color: Color.fromRGBO(241, 4, 4, 1), width: 1)),
+                    focusedErrorBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(
+                            width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
+                    hintText: 'Select Format',
+                    hintStyle: TextStyle(
+                      color: customTheme['secondaryTextColor'],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  items: [
+                    DropdownMenuItem(
+                      value: "Option 1",
+                      child: MainText(
+                        text: 'Option 1',
+                        color: customTheme['secondaryTextColor'],
+                        fontSize: 16,
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: "Option 2",
+                      child: MainText(
+                        text: 'Option 2',
+                        color: customTheme['secondaryTextColor'],
+                        fontSize: 16,
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: "Option 3",
+                      child: MainText(
+                        text: 'Option 3',
+                        color: customTheme['secondaryTextColor'],
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      typeDropdown = value.toString();
+                    });
+                  },
+                  validator: (value) {
+                    if (typeDropdown.isEmpty) {
+                      return "Please select identify Type";
+                    }
+                    return null;
+                  },
+                ),
+              ),
+              const SizedBox(
+                height: 20,
               ),
               PrimaryButton(
                 text: 'Save and Continue',
@@ -190,7 +272,7 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                 borderRadius: BorderRadius.circular(8),
                 onPressed: () {
                   router.push(
-                    EditProfileContactView.path,
+                    AddBookConditionView.path,
                   );
                 },
               ),
