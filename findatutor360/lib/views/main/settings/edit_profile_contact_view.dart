@@ -21,14 +21,13 @@ class EditProfileContactView extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: const BackIconHeader(
           header: 'Edit Profile info',
           showIcon: false,
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
-           reverse: true,
+          reverse: true,
           physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,22 +133,23 @@ class EditProfileContactView extends StatelessWidget {
                         ),
                         RichText(
                           text: TextSpan(
-                              text: 'Click to ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: customTheme['mainTextColor'],
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: 'Upload Photos',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: customTheme['primaryColor'],
-                                  ),
-                                )
-                              ]),
+                            text: 'Click to ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: customTheme['mainTextColor'],
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'Upload Photos',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: customTheme['primaryColor'],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 4,

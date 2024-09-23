@@ -29,7 +29,6 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         appBar: const BackIconHeader(
           header: 'Edit Profile info',
           showIcon: false,
@@ -75,6 +74,7 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: DropdownButtonFormField(
+                  icon: const Icon(Icons.keyboard_arrow_down_outlined),
                   dropdownColor: Colors.white,
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -247,22 +247,23 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                         ),
                         RichText(
                           text: TextSpan(
-                              text: 'Click to ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: customTheme['mainTextColor'],
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: 'Upload file',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: customTheme['primaryColor'],
-                                  ),
-                                )
-                              ]),
+                            text: 'Click to ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: customTheme['mainTextColor'],
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'Upload file',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: customTheme['primaryColor'],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 4,
@@ -335,22 +336,23 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                         ),
                         RichText(
                           text: TextSpan(
-                              text: 'Click to ',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: customTheme['mainTextColor'],
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: 'Upload file',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                    color: customTheme['primaryColor'],
-                                  ),
-                                )
-                              ]),
+                            text: 'Click to ',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: customTheme['mainTextColor'],
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'Upload file',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  color: customTheme['primaryColor'],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                         const SizedBox(
                           height: 4,

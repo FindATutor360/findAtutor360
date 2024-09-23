@@ -1,6 +1,6 @@
 import 'package:day_night_switcher/day_night_switcher.dart';
 import 'package:findatutor360/core/view_models/main/theme_controller.dart';
-import 'package:findatutor360/custom_widgets/dialogs/language_dialog.dart';
+import 'package:findatutor360/custom_widgets/dialogs/pop_up_dialog.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/payment_card_view.dart';
@@ -48,7 +48,10 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
                 icon: Iconsax.language_circle,
                 onTap: () {
                   Navigator.of(context).push(
-                    LanguageDialog(),
+                    PopUpDialog(
+                      firstText: 'English',
+                      secondText: ' French',
+                    ),
                   );
                 },
               ),
