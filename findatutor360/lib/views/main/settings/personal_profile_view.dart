@@ -8,6 +8,7 @@ import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/add_book_basic.dart';
+import 'package:findatutor360/views/main/settings/add_course_general.dart';
 import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -107,6 +108,12 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                               context.pop();
                               router.push(
                                 AddBookBasicView.path,
+                              );
+                            },
+                            secondTextTap: () {
+                              context.pop();
+                              router.push(
+                                AddCourseGeneralView.path,
                               );
                             },
                           ),
