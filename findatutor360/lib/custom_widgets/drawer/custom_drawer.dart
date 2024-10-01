@@ -4,7 +4,14 @@ import 'package:findatutor360/custom_widgets/drawer/drawer_element.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
+import 'package:findatutor360/views/main/cart/wishlist_view.dart';
+import 'package:findatutor360/views/main/settings/feed_back_view.dart';
+import 'package:findatutor360/views/main/settings/invite_friend_view.dart';
+import 'package:findatutor360/views/main/settings/my_books_view.dart';
+import 'package:findatutor360/views/main/settings/my_courses_view.dart';
 import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
+import 'package:findatutor360/views/main/settings/purchase_view.dart';
+import 'package:findatutor360/views/main/settings/schedules_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -67,7 +74,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'My Books',
                 icon: Iconsax.book_1,
                 onPressed: () {
-                  router.push('/my_courses');
+                  context.pop();
+                  router.push(
+                    MyBooksView.path,
+                  );
                 },
               ),
               const SizedBox(
@@ -77,7 +87,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'My Courses',
                 icon: Iconsax.play_circle,
                 onPressed: () {
-                  router.push('/my_courses');
+                  context.pop();
+                  router.push(
+                    MyCoursesView.path,
+                  );
                 },
               ),
               const SizedBox(
@@ -87,7 +100,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'Wishlist',
                 icon: Iconsax.heart,
                 onPressed: () {
-                  router.push('/my_wallet');
+                  context.pop();
+                  router.push(
+                    WishlistView.path,
+                  );
                 },
               ),
               const SizedBox(
@@ -97,7 +113,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'Purchases',
                 icon: Iconsax.bag_tick_2,
                 onPressed: () {
-                  router.push('/my_wallet');
+                  context.pop();
+                  router.push(
+                    PurchaseView.path,
+                  );
                 },
               ),
               const SizedBox(
@@ -107,7 +126,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'Shedules',
                 icon: Iconsax.calendar_2,
                 onPressed: () {
-                  router.push('/my_wallet');
+                  context.pop();
+                  router.push(
+                    SchedulesView.path,
+                  );
                 },
               ),
               const SizedBox(
@@ -126,7 +148,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'Feedback',
                 icon: Iconsax.message_question,
                 onPressed: () {
-                  router.push('/my_wallet');
+                  context.pop();
+                  router.push(
+                    FeedBackView.path,
+                  );
                 },
               ),
               const SizedBox(
@@ -136,7 +161,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 text: 'Invite a friend',
                 icon: Iconsax.directbox_send,
                 onPressed: () {
-                  router.push('/my_wallet');
+                  context.pop();
+                  router.push(
+                    InviteFriendView.path,
+                  );
                 },
               ),
               const SizedBox(height: 25),

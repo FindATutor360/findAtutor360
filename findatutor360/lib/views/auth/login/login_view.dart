@@ -8,7 +8,9 @@ import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
 import 'package:findatutor360/custom_widgets/header/custom_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/auth/change_password/change_password.dart';
 import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
 import 'package:findatutor360/views/auth/signup/register_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
@@ -104,17 +106,22 @@ class _LoginViewState extends State<LoginView> {
                 ),
               ),
               const SizedBox(height: 15),
-              Container(
-                  alignment: Alignment.centerRight,
-                  margin: const EdgeInsets.only(right: 30),
-                  child: TextButton(
-                    onPressed: null,
-                    child: Text('Forgot password?',
-                        style: GoogleFonts.manrope(
-                            color: customTheme['primaryColor'],
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400)),
-                  )),
+              InkWell(
+                onTap: () {
+                  router.push(ChangePasswordView.path);
+                },
+                child: Container(
+                    alignment: Alignment.centerRight,
+                    margin: const EdgeInsets.only(right: 30),
+                    child: TextButton(
+                      onPressed: null,
+                      child: Text('Forgot password?',
+                          style: GoogleFonts.manrope(
+                              color: customTheme['primaryColor'],
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400)),
+                    )),
+              ),
               const SizedBox(height: 20),
               Align(
                 child: ValueListenableBuilder<bool>(

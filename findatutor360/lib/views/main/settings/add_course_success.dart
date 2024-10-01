@@ -1,14 +1,13 @@
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
-import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
-class EditProfileSuccessView extends StatelessWidget {
-  const EditProfileSuccessView({super.key});
-  static const path = '/edit_profile_success';
+class AddCourseSuccessView extends StatelessWidget {
+  const AddCourseSuccessView({super.key});
+  static const path = '/add_course_success';
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +26,74 @@ class EditProfileSuccessView extends StatelessWidget {
               const SizedBox(
                 height: 24,
               ),
-              const ProgressBar(
-                firstText: 'Personal',
-                secondText: 'Contact',
-                thirdText: 'Education',
-                isFirstDone: true,
-                isSecondActive: true,
-                isSecondDone: true,
-                isThirdActive: true,
-                isThirdDone: true,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 28,
+                        height: 28,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Color(0XFF0476AF)),
+                        child: Icon(
+                          Icons.check,
+                          size: 12,
+                          color: customTheme['whiteColor'],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      MainText(
+                          text: 'General Information',
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                          color: customTheme['secondaryTextColor']),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 5, right: 20),
+                      child: Divider(
+                        thickness: 2,
+                        color: customTheme['grayColor'],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        width: 28,
+                        height: 28,
+                        decoration: const BoxDecoration(
+                            shape: BoxShape.circle, color: Color(0XFF0476AF)),
+                        child: Icon(
+                          Icons.check,
+                          size: 12,
+                          color: customTheme['whiteColor'],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 7,
+                      ),
+                      MainText(
+                          text: 'Pricing',
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
+                          color: customTheme['secondaryTextColor']),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(
                 height: 40,
@@ -57,7 +115,7 @@ class EditProfileSuccessView extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: const Text(
-                    "You have successfully added additional details to your profile.",
+                    "Your Course has been successfully added and is pending review",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Manrope',
@@ -70,7 +128,6 @@ class EditProfileSuccessView extends StatelessWidget {
                 isIconPresent: false,
                 text: 'Continue',
                 onPressed: () {
-                  Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);
                   Navigator.pop(context);

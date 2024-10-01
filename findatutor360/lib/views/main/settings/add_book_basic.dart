@@ -108,6 +108,15 @@ class _AddBookBasicViewState extends State<AddBookBasicView> {
               const SizedBox(
                 height: 12,
               ),
+              MainText(
+                text: 'Format',
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+                color: customTheme['secondaryTextColor'],
+              ),
+              const SizedBox(
+                height: 8,
+              ),
               SizedBox(
                 width: MediaQuery.of(context).size.width * 0.85,
                 child: DropdownButtonFormField(

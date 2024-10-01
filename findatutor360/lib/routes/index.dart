@@ -15,6 +15,9 @@ import 'package:findatutor360/views/main/settings/add_book_basic.dart';
 import 'package:findatutor360/views/main/settings/add_book_condition.dart';
 import 'package:findatutor360/views/main/settings/add_book_publish.dart';
 import 'package:findatutor360/views/main/settings/add_book_success.dart';
+import 'package:findatutor360/views/main/settings/add_course_general.dart';
+import 'package:findatutor360/views/main/settings/add_course_pricing.dart';
+import 'package:findatutor360/views/main/settings/add_course_success.dart';
 import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_contact_view.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_education_view.dart';
@@ -401,6 +404,24 @@ List<RouteBase> get routes => [
         path: InviteFriendView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const InviteFriendView();
+        },
+      ),
+      GoRoute(
+        path: AddCourseGeneralView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddCourseGeneralView();
+        },
+      ),
+      GoRoute(
+        path: AddCoursePricingView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddCoursePricingView();
+        },
+      ),
+      GoRoute(
+        path: AddCourseSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const AddCourseSuccessView();
         },
       ),
     ];

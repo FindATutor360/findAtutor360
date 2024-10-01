@@ -1,42 +1,31 @@
-import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
-import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/settings/feed_back_view.dart';
 import 'package:flutter/material.dart';
 
-class EditProfileSuccessView extends StatelessWidget {
-  const EditProfileSuccessView({super.key});
-  static const path = '/edit_profile_success';
+class FeedBackSuccessView extends StatelessWidget {
+  const FeedBackSuccessView({super.key});
+  static const path = '/feed_back_success';
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: const BackIconHeader(
-          header: 'Complete',
+        appBar: BackIconHeader(
+          header: 'Feedback',
           showIcon: false,
+          backTap: () {
+            router.pushReplacement(FeedBackView.path);
+          },
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(
-                height: 24,
-              ),
-              const ProgressBar(
-                firstText: 'Personal',
-                secondText: 'Contact',
-                thirdText: 'Education',
-                isFirstDone: true,
-                isSecondActive: true,
-                isSecondDone: true,
-                isThirdActive: true,
-                isThirdDone: true,
-              ),
               const SizedBox(
                 height: 40,
               ),
@@ -50,14 +39,14 @@ class EditProfileSuccessView extends StatelessWidget {
                 child: Padding(
                   padding: EdgeInsets.all(20.0),
                   child: MainText(
-                    text: 'Success',
+                    text: 'Successful',
                   ),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: const Text(
-                    "You have successfully added additional details to your profile.",
+                    "We have received your feedback and are committed to making you have a better experience.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontFamily: 'Manrope',
@@ -70,28 +59,8 @@ class EditProfileSuccessView extends StatelessWidget {
                 isIconPresent: false,
                 text: 'Continue',
                 onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+                  router.pushReplacement(FeedBackView.path);
                 },
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              OutlineButton(
-                text: 'Undo All Edit',
-                textColor: customTheme['badgeColor'],
-                fontWeight: FontWeight.w600,
-                borderRadius: BorderRadius.circular(8),
-                buttonColor: customTheme['whiteColor'],
-                borderSideColor: customTheme['badgeColor'],
-                isIconPresent: false,
-                fontSize: 16,
-                onPressed: () {},
-              ),
-              const SizedBox(
-                height: 20,
               ),
             ],
           ),
