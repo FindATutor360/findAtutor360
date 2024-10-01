@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 
 class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
@@ -29,7 +30,7 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
             children: [
               IconButton(
                 icon: Icon(closeIcon),
-                onPressed: () => Navigator.pop(context),
+                onPressed: () => context.pop(context),
               ),
               const Spacer(),
               MainText(
