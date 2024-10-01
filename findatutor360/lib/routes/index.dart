@@ -1,9 +1,11 @@
 import 'package:findatutor360/core/models/main/message_model.dart';
+import 'package:findatutor360/views/auth/change_password/change_password.dart';
 import 'package:findatutor360/views/auth/splash/splash_view.dart';
 import 'package:findatutor360/views/main/cart/check_out_view.dart';
 import 'package:findatutor360/views/main/cart/edit_address_view.dart';
 import 'package:findatutor360/views/main/cart/payment_success_view.dart';
 import 'package:findatutor360/views/main/cart/payment_view.dart';
+import 'package:findatutor360/views/main/cart/wishlist_view.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
@@ -17,12 +19,20 @@ import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dar
 import 'package:findatutor360/views/main/settings/edit_profile_contact_view.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_education_view.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_success_view.dart';
+import 'package:findatutor360/views/main/settings/feed_back_success_view.dart';
+import 'package:findatutor360/views/main/settings/feed_back_view.dart';
+import 'package:findatutor360/views/main/settings/invite_friend_view.dart';
+import 'package:findatutor360/views/main/settings/my_books_view.dart';
+import 'package:findatutor360/views/main/settings/my_courses_view.dart';
 import 'package:findatutor360/views/main/settings/notification_empty.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
 import 'package:findatutor360/views/main/settings/notification_view.dart';
 import 'package:findatutor360/views/main/settings/payment_card_view.dart';
 import 'package:findatutor360/views/main/settings/payment_history_view.dart';
 import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
+import 'package:findatutor360/views/main/settings/purchase_tracking.dart';
+import 'package:findatutor360/views/main/settings/purchase_view.dart';
+import 'package:findatutor360/views/main/settings/schedules_view.dart';
 import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/book_shop_course.dart';
@@ -90,6 +100,12 @@ List<RouteBase> get routes => [
         path: EmailSuccessView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const EmailSuccessView();
+        },
+      ),
+      GoRoute(
+        path: ChangePasswordView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ChangePasswordView();
         },
       ),
       StatefulShellRoute.indexedStack(
@@ -331,6 +347,60 @@ List<RouteBase> get routes => [
         path: AddBookSuccessView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const AddBookSuccessView();
+        },
+      ),
+      GoRoute(
+        path: WishlistView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const WishlistView();
+        },
+      ),
+      GoRoute(
+        path: MyBooksView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const MyBooksView();
+        },
+      ),
+      GoRoute(
+        path: MyCoursesView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const MyCoursesView();
+        },
+      ),
+      GoRoute(
+        path: PurchaseView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PurchaseView();
+        },
+      ),
+      GoRoute(
+        path: PurchaseTracking.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const PurchaseTracking();
+        },
+      ),
+      GoRoute(
+        path: SchedulesView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const SchedulesView();
+        },
+      ),
+      GoRoute(
+        path: FeedBackView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const FeedBackView();
+        },
+      ),
+      GoRoute(
+        path: FeedBackSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const FeedBackSuccessView();
+        },
+      ),
+      GoRoute(
+        path: InviteFriendView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const InviteFriendView();
         },
       ),
     ];

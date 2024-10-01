@@ -9,6 +9,7 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
   final Color iconColor;
   final bool showIcon;
   final IconData closeIcon;
+  final VoidCallback? backTap;
   const BackIconHeader({
     super.key,
     required this.header,
@@ -16,6 +17,7 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
     this.iconColor = const Color.fromRGBO(121, 132, 142, 1),
     this.showIcon = true,
     this.closeIcon = Icons.arrow_back,
+    this.backTap,
   });
 
   @override
@@ -29,7 +31,7 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
             children: [
               IconButton(
                 icon: Icon(closeIcon),
-                onPressed: () => Navigator.pop(context),
+                onPressed: backTap ?? () => Navigator.pop(context),
               ),
               const Spacer(),
               MainText(
