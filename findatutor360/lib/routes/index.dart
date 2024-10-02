@@ -35,6 +35,8 @@ import 'package:findatutor360/views/main/settings/payment_history_view.dart';
 import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:findatutor360/views/main/settings/purchase_tracking.dart';
 import 'package:findatutor360/views/main/settings/purchase_view.dart';
+import 'package:findatutor360/views/main/settings/report_dispute_success_view.dart';
+import 'package:findatutor360/views/main/settings/report_dispute_view.dart';
 import 'package:findatutor360/views/main/settings/schedules_view.dart';
 import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
@@ -398,6 +400,18 @@ List<RouteBase> get routes => [
         path: FeedBackSuccessView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const FeedBackSuccessView();
+        },
+      ),
+      GoRoute(
+        path: ReportDisputeView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ReportDisputeView();
+        },
+      ),
+      GoRoute(
+        path: ReportDisputeSuccessView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ReportDisputeSuccessView();
         },
       ),
       GoRoute(
