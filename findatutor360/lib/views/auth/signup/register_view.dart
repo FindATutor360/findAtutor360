@@ -6,6 +6,7 @@ import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,7 +44,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    _authController = context.watch<AuthController>();
+    _authController = context.read<AuthController>();
 
     return PopScope(
       canPop: false,
@@ -250,32 +251,46 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     required String email,
     required String password,
   }) async {
-    if (!checkPasswords(
-      password: _passwordController.text,
-      confirmPassword: _confirmPasswordController.text,
-    )) {
-      showSnackMessage(context, 'Passwords do not match', isError: true);
-      return;
-    }
+    try {
+      _authController.isLoading.value = true;
+      if (!checkPasswords(
+        password: _passwordController.text,
+        confirmPassword: _confirmPasswordController.text,
+      )) {
+        showSnackMessage(context, 'Passwords do not match', isError: true);
+        return;
+      }
 
-    User? user = await _authController.signUp(
-      context,
-      fullName: _fullNameController.text,
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-
-    if (user != null) {
-      Navigator.push(
+      User? user = await _authController.signUp(
         context,
-        MaterialPageRoute(
-            builder: ((context) => VerifyEmailView(
-                  userEmail: _emailController.text,
-                  userName: _fullNameController.text,
-                ))),
+        fullName: _fullNameController.text,
+        email: _emailController.text,
+        password: _passwordController.text,
       );
-    } else {
-      log("User not created", name: 'debug');
+      _authController.isLoading.value = false;
+      if (user != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: ((context) => VerifyEmailView(
+                    userEmail: _emailController.text,
+                    userName: _fullNameController.text,
+                  ))),
+        );
+      } else {
+        _authController.isLoading.value = false;
+        log("User not created", name: 'debug');
+      }
+    } catch (e) {
+      _authController.isLoading.value = false;
+      Fluttertoast.showToast(
+        msg: "Failed to create account",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['badgeColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
     }
   }
 
@@ -287,42 +302,70 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
   }
 
   Future<void> continueWithGoogle() async {
-    User? user = await _authController.continueWithGoogle(
-      context,
-    );
-
-    if (user != null) {
-      Navigator.push(
+    try {
+      _authController.isLoading.value = true;
+      User? user = await _authController.continueWithGoogle(
         context,
-        MaterialPageRoute(
-          builder: ((context) => VerifyEmailView(
-                userEmail: user.email,
-                userName: user.displayName,
-              )),
-        ),
       );
-    } else {
-      log("User not created", name: 'debug');
+      _authController.isLoading.value = false;
+      if (user != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => VerifyEmailView(
+                  userEmail: user.email,
+                  userName: user.displayName,
+                )),
+          ),
+        );
+        _authController.isLoading.value = false;
+      } else {
+        log("User not created", name: 'debug');
+      }
+    } catch (e) {
+      _authController.isLoading.value = false;
+      Fluttertoast.showToast(
+        msg: "Failed to create account",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['badgeColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
     }
   }
 
   Future<void> continueWithFacebook() async {
-    User? user = await _authController.continueWithFacebook(
-      context,
-    );
-
-    if (user != null) {
-      Navigator.push(
+    try {
+      _authController.isLoading.value = true;
+      User? user = await _authController.continueWithFacebook(
         context,
-        MaterialPageRoute(
-          builder: ((context) => VerifyEmailView(
-                userEmail: user.email,
-                userName: user.displayName,
-              )),
-        ),
       );
-    } else {
-      log("User not created", name: 'debug');
+      _authController.isLoading.value = false;
+      if (user != null) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => VerifyEmailView(
+                  userEmail: user.email,
+                  userName: user.displayName,
+                )),
+          ),
+        );
+      } else {
+        _authController.isLoading.value = false;
+        log("User not created", name: 'debug');
+      }
+    } catch (e) {
+      _authController.isLoading.value = false;
+      Fluttertoast.showToast(
+        msg: "Failed to create account",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['badgeColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
     }
   }
 }

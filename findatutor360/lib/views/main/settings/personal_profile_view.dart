@@ -227,24 +227,26 @@ class StatisticsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CircleAvatar(
-                radius: 12,
-                backgroundColor: customTheme['primaryColor'],
-                child: Icon(
-                  Iconsax.award,
-                  color: customTheme['whiteColor'],
-                  size: 18,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CircleAvatar(
+                  radius: 12,
+                  backgroundColor: customTheme['primaryColor'],
+                  child: Icon(
+                    Iconsax.award,
+                    color: customTheme['whiteColor'],
+                    size: 18,
+                  ),
                 ),
-              ),
-              MainText(
-                text: value,
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-              ),
-            ],
+                MainText(
+                  text: value,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w700,
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 6,

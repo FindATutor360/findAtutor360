@@ -37,7 +37,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   late AuthController authController;
   User? user;
   Timer? emailVerificationTimer;
-  final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
+  // final ValueNotifier<bool> isLoading = ValueNotifier<bool>(true);
   final ValueNotifier<int> countdown = ValueNotifier<int>(60);
 
   @override
@@ -51,14 +51,14 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
 
   void startCountdown() {
     countdown.value = 60;
-    isLoading.value = true;
+    authController.isLoading.value = true;
 
     emailVerificationTimer =
         Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown.value > 0) {
         countdown.value -= 1;
       } else {
-        isLoading.value = false;
+        authController.isLoading.value = false;
         timer.cancel();
       }
     });
@@ -80,7 +80,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             user!.photoURL,
           );
           Fluttertoast.showToast(
-            msg: "Sign in successful",
+            msg: "Account created successful",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             backgroundColor: customTheme['primaryColor'],
@@ -165,7 +165,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             ),
             const SizedBox(height: 40),
             ValueListenableBuilder<bool>(
-              valueListenable: isLoading,
+              valueListenable: authController.isLoading,
               builder: (context, isLoading, child) {
                 return isLoading
                     ? Column(
@@ -228,7 +228,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   @override
   void dispose() {
     super.dispose();
-    isLoading.dispose();
+
     countdown.dispose();
     emailVerificationTimer?.cancel();
   }
