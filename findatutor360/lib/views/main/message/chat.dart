@@ -8,6 +8,7 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/message/user_image_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_material_design_icons/flutter_material_design_icons.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -193,10 +194,12 @@ class _ChatViewsState extends State<ChatViews> {
                                   children: [
                                     isCurrentUser
                                         ? Icon(
-                                            Icons.check,
+                                            message.readBy == true
+                                                ? MdiIcons.checkAll
+                                                : Icons.check,
                                             size: 16,
                                             color: isCurrentUser
-                                                ? message.readBy == false
+                                                ? message.readBy == true
                                                     ? customTheme['whiteColor']
                                                     : const Color.fromRGBO(
                                                         66, 73, 78, 1)

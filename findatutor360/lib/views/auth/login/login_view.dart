@@ -42,7 +42,7 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    _authController = context.watch<AuthController>();
+    _authController = context.read<AuthController>();
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -197,83 +197,126 @@ class _LoginViewState extends State<LoginView> {
     required String email,
     required String password,
   }) async {
-    User? user = await _authController.logIn(
-      context,
-      email: _emailController.text,
-      password: _passwordController.text,
-    );
-
-    if (user != null && user.emailVerified) {
+    try {
+      _authController.isLoading.value = true;
+      User? user = await _authController.logIn(
+        context,
+        email: _emailController.text,
+        password: _passwordController.text,
+      );
+      _authController.isLoading.value = false;
+      if (user != null && user.emailVerified) {
+        Fluttertoast.showToast(
+          msg: "Login successful",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: customTheme['primaryColor'],
+          textColor: customTheme['whiteColor'],
+          fontSize: 16.0,
+        );
+        context.pushReplacement(HomeView.path);
+      } else {
+        _authController.isLoading.value = false;
+        log("User not created", name: 'debug');
+      }
+    } catch (e) {
+      _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Login successful",
+        msg: "Login fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: customTheme['primaryColor'],
+        backgroundColor: customTheme['badgeColor'],
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
-      context.pushReplacement(HomeView.path);
-    } else {
-      log("User not created", name: 'debug');
     }
   }
 
   Future<void> continueWithGoogle() async {
-    User? user = await _authController.continueWithGoogle(
-      context,
-    );
-
-    if (user != null) {
+    try {
+      _authController.isLoading.value = true;
+      User? user = await _authController.continueWithGoogle(
+        context,
+      );
+      _authController.isLoading.value = false;
+      if (user != null) {
+        Fluttertoast.showToast(
+          msg: "Login successful",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: customTheme['primaryColor'],
+          textColor: customTheme['whiteColor'],
+          fontSize: 16.0,
+        );
+        context.pushReplacement(HomeView.path);
+      } else if (!user!.emailVerified) {
+        _authController.isLoading.value = false;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => VerifyEmailView(
+                  userEmail: user.email,
+                  userName: user.displayName,
+                )),
+          ),
+        );
+        log("User not created", name: 'debug');
+      }
+    } catch (e) {
+      _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Login successful",
+        msg: "Login fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: customTheme['primaryColor'],
+        backgroundColor: customTheme['badgeColor'],
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
-      context.pushReplacement(HomeView.path);
-    } else if (!user!.emailVerified) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: ((context) => VerifyEmailView(
-                userEmail: user.email,
-                userName: user.displayName,
-              )),
-        ),
-      );
-      log("User not created", name: 'debug');
     }
   }
 
   Future<void> continueWithFacebook() async {
-    User? user = await _authController.continueWithFacebook(
-      context,
-    );
+    try {
+      _authController.isLoading.value = true;
+      User? user = await _authController.continueWithFacebook(
+        context,
+      );
+      _authController.isLoading.value = false;
 
-    if (user != null) {
+      if (user != null) {
+        Fluttertoast.showToast(
+          msg: "Login successful",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          backgroundColor: customTheme['primaryColor'],
+          textColor: customTheme['whiteColor'],
+          fontSize: 16.0,
+        );
+        context.pushReplacement(HomeView.path);
+      } else if (!user!.emailVerified) {
+        _authController.isLoading.value = false;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: ((context) => VerifyEmailView(
+                  userEmail: user.email,
+                  userName: user.displayName,
+                )),
+          ),
+        );
+
+        log("User not created", name: 'debug');
+      }
+    } catch (e) {
+      _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Login successful",
+        msg: "Login fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
-        backgroundColor: customTheme['primaryColor'],
+        backgroundColor: customTheme['badgeColor'],
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
-      context.pushReplacement(HomeView.path);
-    } else if (!user!.emailVerified) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: ((context) => VerifyEmailView(
-                userEmail: user.email,
-                userName: user.displayName,
-              )),
-        ),
-      );
-
-      log("User not created", name: 'debug');
     }
   }
 }

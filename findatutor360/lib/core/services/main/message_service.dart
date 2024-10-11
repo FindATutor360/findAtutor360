@@ -44,7 +44,7 @@ class MessageServiceImpl implements MessageService {
         recipientPhotoUrl: recipientPhotoUrl,
         participants: participants, // Explicitly set participants list
         message: message!,
-        createdAt: DateTime.now().toUtc(),
+        createdAt: DateTime.timestamp().toUtc(),
         readBy: false, // Initialize as false
       );
 
@@ -73,11 +73,13 @@ class MessageServiceImpl implements MessageService {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) {
+      // Fetch messages between the current user and recipient
       List<Messages> messages = snapshot.docs
           .map((doc) => Messages.fromJson(doc.data()))
           .where((message) => message.participants!.contains(recipientEmail))
           .toList();
 
+      // Iterate through each message and update the readBy flag if necessary
       for (var message in messages) {
         if (message.recipientEmail == currentUserEmail &&
             message.readBy == false) {
@@ -92,6 +94,37 @@ class MessageServiceImpl implements MessageService {
       return messages;
     });
   }
+
+  // @override
+  // Stream<List<Messages>> getMessages(
+  //   String currentUserEmail,
+  //   String recipientEmail,
+  // ) {
+  //   return _fireStore
+  //       .collection('Messages')
+  //       .where('participants', arrayContains: currentUserEmail)
+  //       .orderBy('createdAt', descending: true)
+  //       .snapshots()
+  //       .map((snapshot) {
+  //     List<Messages> messages = snapshot.docs
+  //         .map((doc) => Messages.fromJson(doc.data()))
+  //         .where((message) => message.participants!.contains(recipientEmail))
+  //         .toList();
+
+  //     for (var message in messages) {
+  //       if (message.recipientEmail == currentUserEmail &&
+  //           message.readBy == false) {
+  //         _fireStore
+  //             .collection('Messages')
+  //             .doc(message.id!)
+  //             .update({'readBy': true});
+  //         message.readBy = true;
+  //       }
+  //     }
+
+  //     return messages;
+  //   });
+  // }
 
   @override
   Stream<List<Map<String, dynamic>>> getLatestMessages(
