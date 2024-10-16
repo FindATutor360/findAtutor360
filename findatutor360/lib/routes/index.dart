@@ -1,3 +1,4 @@
+import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/views/auth/change_password/change_password.dart';
 import 'package:findatutor360/views/auth/splash/splash_view.dart';
@@ -135,9 +136,16 @@ List<RouteBase> get routes => [
                     },
                   ),
                   GoRoute(
-                    path: TrendingBooksView.path,
+                    path: 'booksCategory/:header/:bookQuery',
                     builder: (BuildContext context, GoRouterState state) {
-                      return const TrendingBooksView();
+                      final String header =
+                          state.pathParameters['header'] ?? '';
+                      final String bookQuery =
+                          state.pathParameters['bookQuery'] ?? '';
+                      return BooksCategorView(
+                        header: header,
+                        bookQuery: bookQuery,
+                      );
                     },
                   ),
                 ],
@@ -231,7 +239,14 @@ List<RouteBase> get routes => [
       GoRoute(
         path: BookDetails.path,
         builder: (BuildContext context, GoRouterState state) {
-          return const BookDetails();
+          final book = state.extra! as Book;
+          // final bookData = {
+          //   'title': book.title,
+          //   'author': book.author,
+          // };
+          return BookDetails(
+            books: book,
+          );
         },
       ),
       GoRoute(

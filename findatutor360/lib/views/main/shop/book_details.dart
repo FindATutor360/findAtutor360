@@ -1,3 +1,5 @@
+import 'package:findatutor360/core/models/main/books_model.dart';
+import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
 import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -12,10 +14,40 @@ import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
-class BookDetails extends StatelessWidget {
-  const BookDetails({super.key});
+class BookDetails extends StatefulWidget {
+  const BookDetails({
+    required this.books,
+    super.key,
+  });
   static const path = '/bookDetailsView';
+  final Book books;
+
+  @override
+  State<BookDetails> createState() => _BookDetailsState();
+}
+
+class _BookDetailsState extends State<BookDetails> {
+  Future<List<Book>>? fetchBooks;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final booksController =
+          Provider.of<BooksController>(context, listen: false);
+      booksController.fetchBooks('astronaut'); // Trigger fetching books
+    });
+
+    fetchBooks = BooksController().fetchBooks('astronaut');
+  }
+
+  Future<void> _refreshBooks() async {
+    setState(() {
+      fetchBooks = BooksController().fetchBooks('astronaut');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +83,11 @@ class BookDetails extends StatelessWidget {
                                 topLeft: Radius.circular(10.0),
                                 topRight: Radius.circular(10.0),
                               ),
-                              image: const DecorationImage(
-                                  image:
-                                      AssetImage('assets/images/activeImg.png'),
-                                  fit: BoxFit.contain),
+                              image: DecorationImage(
+                                image: NetworkImage(widget.books.thumbnail ??
+                                    'https://via.placeholder.com/150'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
                           const SizedBox(
@@ -67,16 +100,17 @@ class BookDetails extends StatelessWidget {
                                 const SizedBox(
                                   height: 16,
                                 ),
-                                const MainText(
-                                  text:
-                                      'The science of leadership: Leadership in the Millenia',
+                                MainText(
+                                  text: widget.books.title,
                                   fontSize: 18,
+                                  softWrap: true,
                                 ),
                                 MainText(
-                                  text: 'Marcelos Ramequin',
+                                  text: widget.books.author ?? 'Unknown',
                                   fontSize: 14,
                                   fontWeight: FontWeight.w400,
                                   color: customTheme['secondaryTextColor'],
+                                  softWrap: true,
                                 ),
                                 const SizedBox(
                                   height: 8,
@@ -102,11 +136,11 @@ class BookDetails extends StatelessWidget {
                       height: 24,
                     ),
                     MainText(
-                      text:
-                          'This is the book! If you’ve ever thought of becoming a leder in this messed up lillenia, grab a copy of this book',
-                      fontSize: 16,
+                      text: widget.books.textSnippet ?? '',
+                      fontSize: 13,
                       fontWeight: FontWeight.w400,
                       color: customTheme['secondaryTextColor'],
+                      softWrap: true,
                     ),
                     const SizedBox(
                       height: 24,
@@ -160,16 +194,21 @@ class BookDetails extends StatelessWidget {
                               crossAxisSpacing: 16,
                             ),
                             itemBuilder: ((BuildContext context, int index) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width * 0.38,
-                                height: MediaQuery.of(context).size.height,
-                                decoration: BoxDecoration(
-                                  color: customTheme['secondaryColor'],
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/activeImg.png'),
-                                      fit: BoxFit.contain),
+                              return RepaintBoundary(
+                                child: Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.38,
+                                  height: MediaQuery.of(context).size.height,
+                                  decoration: BoxDecoration(
+                                    color: customTheme['secondaryColor'],
+                                    borderRadius: BorderRadius.circular(10),
+                                    image: DecorationImage(
+                                      image: NetworkImage(widget
+                                              .books.smallThumbnail ??
+                                          'https://via.placeholder.com/150'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
                                 ),
                               );
                             }),
@@ -202,10 +241,11 @@ class BookDetails extends StatelessWidget {
                         fontSize: 18,
                       ),
                       description: MainText(
-                        text: 'This is the description for Title 1.',
+                        text: widget.books.description ?? '',
                         color: customTheme['secondaryTextColor'],
                         fontSize: 12,
                         fontWeight: FontWeight.w400,
+                        softWrap: true,
                       ),
                     ),
                     const SizedBox(
@@ -273,27 +313,62 @@ class BookDetails extends StatelessWidget {
                         context.go(ShopView.path, extra: 1);
                       },
                     ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.17,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: ((context, index) {
-                          return const SizedBox(
-                            width: 8,
+                    FutureBuilder<List<Book>>(
+                      future: fetchBooks,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: MainText(
+                              text: 'Error: ${snapshot.error}',
+                              fontSize: 12,
+                            ),
                           );
-                        }),
-                        itemCount: 3,
-                        itemBuilder: (context, i) {
-                          return InkWell(
-                            onTap: () {
-                              router.push(
-                                BookDetails.path,
-                              );
-                            },
-                            child: const TrendingBookWidget(),
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: MainText(
+                              text: 'No books found',
+                              fontSize: 12,
+                            ),
                           );
-                        },
-                      ),
+                        } else {
+                          final books = snapshot.data!;
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.17,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(width: 20);
+                              },
+                              shrinkWrap: true,
+                              itemCount: 4,
+                              itemBuilder: (context, index) {
+                                final Book book = books[index];
+                                return InkWell(
+                                  onTap: () {
+                                    router.push(
+                                      BookDetails.path,
+                                      extra: book,
+                                    );
+                                  },
+                                  child: TrendingBookWidget(
+                                    image: book.thumbnail ??
+                                        'https://via.placeholder.com/150',
+                                    title: book.title,
+                                    author: book.author ?? 'Unknown Author',
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),

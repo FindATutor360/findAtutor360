@@ -7,8 +7,14 @@ import 'package:iconsax/iconsax.dart';
 
 class ShopBookWidget extends StatelessWidget {
   const ShopBookWidget({
+    required this.image,
+    required this.title,
+    required this.author,
     super.key,
   });
+  final String? image;
+  final String? title;
+  final String? author;
 
   @override
   Widget build(BuildContext context) {
@@ -35,33 +41,36 @@ class ShopBookWidget extends StatelessWidget {
                   topLeft: Radius.circular(10.0),
                   bottomLeft: Radius.circular(10.0),
                 ),
-                image: const DecorationImage(
-                    image: AssetImage('assets/images/activeImg.png'),
-                    fit: BoxFit.contain),
+                image: DecorationImage(
+                  image: NetworkImage(image ?? ''),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             const SizedBox(
               width: 10,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5),
+            Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
                     height: 16,
                   ),
-                  const MainText(
-                      text: 'The Science of Leader',
-                      fontSize: 16,
-                      overflow: TextOverflow.visible),
+                  MainText(
+                    text: title ?? '',
+                    fontSize: 16,
+                    softWrap: true,
+                    // overflow: TextOverflow.clip,
+                  ),
                   const SizedBox(
                     height: 5,
                   ),
                   MainText(
-                    text: 'John Joanie Doe',
-                    fontSize: 12,
+                    text: author ?? '',
+                    fontSize: 10,
                     color: customTheme['secondaryTextColor']!,
+                    softWrap: true,
                   ),
                   const SizedBox(
                     height: 15,
@@ -95,24 +104,21 @@ class ShopBookWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               TextButton.icon(
-                                  onPressed: (() {}),
-                                  // style: ButtonStyle(
-                                  //   // backgroundColor: MaterialStateProperty.all(
-                                  //   //     customTheme['primaryColor']),
-                                  //   maximumSize: MaterialStateProperty.all(
-                                  //       const Size(100, 40)),
-                                  // ),
-                                  icon: Icon(
-                                    Iconsax.buy_crypto,
+                                onPressed: (() {}),
+                                icon: Icon(
+                                  Iconsax.buy_crypto,
+                                  color: customTheme['whiteColor'],
+                                  size: 18,
+                                ),
+                                label: Text(
+                                  "GH6 Buy",
+                                  style: TextStyle(
                                     color: customTheme['whiteColor'],
-                                    size: 18,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
                                   ),
-                                  label: Text("GH6 Buy",
-                                      style: TextStyle(
-                                        color: customTheme['whiteColor'],
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ))),
+                                ),
+                              ),
                             ],
                           )),
                       const CustomLikeButton(),

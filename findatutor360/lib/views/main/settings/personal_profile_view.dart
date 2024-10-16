@@ -216,7 +216,7 @@ class StatisticsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.sizeOf(context).width / 2.2,
-      height: MediaQuery.sizeOf(context).height / 8.8,
+      // height: MediaQuery.sizeOf(context).height / 8.8,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -227,38 +227,34 @@ class StatisticsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                CircleAvatar(
-                  radius: 12,
-                  backgroundColor: customTheme['primaryColor'],
-                  child: Icon(
-                    Iconsax.award,
-                    color: customTheme['whiteColor'],
-                    size: 18,
-                  ),
+          Row( 
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CircleAvatar(
+                radius: 12,
+                backgroundColor: customTheme['primaryColor'],
+                child: Icon(
+                  Iconsax.award,
+                  color: customTheme['whiteColor'],
+                  size: 18,
                 ),
-                MainText(
-                  text: value,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                ),
-              ],
-            ),
+              ),
+              MainText(
+                text: value,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ],
           ),
           const SizedBox(
             height: 6,
           ),
-          Expanded(
-            child: MainText(
-              text: achievement,
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              softWrap: true,
-              overflow: TextOverflow.visible,
-            ),
+          MainText(
+            text: achievement,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            softWrap: true,
+            overflow: TextOverflow.visible,
           ),
         ],
       ),

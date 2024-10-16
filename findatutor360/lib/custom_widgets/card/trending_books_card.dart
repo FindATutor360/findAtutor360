@@ -3,11 +3,18 @@ import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class TrendingBookWidget extends StatelessWidget {
   const TrendingBookWidget({
+    required this.image,
+    required this.title,
+    required this.author,
     super.key,
   });
+  final String? image;
+  final String? title;
+  final String? author;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +22,9 @@ class TrendingBookWidget extends StatelessWidget {
         ? Colors.black
         : Colors.white);
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.17,
+      height: title!.length > 120
+          ? MediaQuery.of(context).size.height * 0.17
+          : MediaQuery.of(context).size.height * 0.20,
       width: MediaQuery.of(context).size.width * 0.9,
       child: Container(
         decoration: BoxDecoration(
@@ -25,61 +34,66 @@ class TrendingBookWidget extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.38,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(
-                color: customTheme['secondaryColor'],
-                borderRadius: BorderRadius.circular(10),
-                image: const DecorationImage(
-                    image: AssetImage('assets/images/activeImg.png'),
-                    fit: BoxFit.contain),
+            RepaintBoundary(
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.34,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  color: customTheme['secondaryColor'],
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(image ?? ''),
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
             ),
             const SizedBox(
               width: 10,
             ),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  const MainText(
-                      text: 'The Secret of love',
-                      fontSize: 16,
-                      overflow: TextOverflow.ellipsis),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  MainText(
-                    text: 'John Joanie Doe',
-                    fontSize: 12,
-                    color: customTheme['secondaryTextColor']!,
-                  ),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  const CustomRatingBar(),
-                  // const SizedBox(
-                  //   height: 5,
-                  // ),
-                  const Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        MainText(
-                          text: 'GH₵ 50.0',
-                          fontSize: 16,
-                        ),
-                        //Container(width: 30),
-                        CustomLikeButton()
-                      ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                ],
+                    MainText(
+                      text: title ?? '',
+                      fontSize: 16,
+                      softWrap: true,
+                      // overflow: TextOverflow.clip,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    MainText(
+                      text: author ?? '',
+                      fontSize: 10,
+                      color: customTheme['secondaryTextColor']!,
+                      softWrap: true,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const CustomRatingBar(),
+                    const Flexible(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MainText(
+                            text: 'GH₵ 50.0',
+                            fontSize: 16,
+                          ),
+                          //Container(width: 30),
+                          CustomLikeButton()
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
