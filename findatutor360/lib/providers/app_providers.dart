@@ -1,5 +1,6 @@
 import 'package:findatutor360/core/services/main/theme.service.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
+import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
 import 'package:findatutor360/core/view_models/main/theme_controller.dart';
 import 'package:provider/provider.dart';
@@ -15,6 +16,9 @@ class AppProviders {
     ),
     ChangeNotifierProvider<MessageController>(
       create: (_) => MessageController(),
+    ),
+    ChangeNotifierProvider<BooksController>(
+      create: (_) => BooksController(),
     ),
   ];
 }

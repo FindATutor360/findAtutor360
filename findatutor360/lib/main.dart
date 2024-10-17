@@ -7,12 +7,14 @@ import 'package:findatutor360/utils/injection_container.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
-  setupLocator();
-
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+
+  setupLocator();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
