@@ -1,70 +1,120 @@
-import 'package:findatutor360/custom_widgets/button/custom_like_button.dart';
-import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/theme/index.dart';
-import 'package:flutter/material.dart';
+import 'dart:developer';
 
-class ActiveCourse extends StatelessWidget {
+import 'package:findatutor360/core/models/main/course_model.dart';
+import 'package:findatutor360/core/view_models/main/courses_controller.dart';
+import 'package:findatutor360/custom_widgets/card/active_course_card.dart';
+import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
+import 'package:findatutor360/custom_widgets/text/main_text.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/shop/course_details.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class ActiveCourse extends StatefulWidget {
   const ActiveCourse({
     super.key,
   });
+  static const path = 'activeCourses';
+
+  @override
+  State<ActiveCourse> createState() => _ActiveCourseState();
+}
+
+class _ActiveCourseState extends State<ActiveCourse> {
+  Future<List<Course>>? fetchCourses;
+
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final coursesController =
+          Provider.of<CoursesController>(context, listen: false);
+      coursesController.fetchCourses();
+    });
+
+    fetchCourses = CoursesController().fetchCourses();
+  }
+
+  Future<void> _refreshCourse() async {
+    setState(() {
+      fetchCourses = CoursesController().fetchCourses();
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
-        ? Colors.black
-        : Colors.white);
-    return GestureDetector(
-      onTap: () {
-        // router.push('/tutor_profile');
-      },
-      child: Container(
-          width: MediaQuery.of(context).size.width * 0.4,
-          height: MediaQuery.of(context).size.height * 0.27,
-          decoration: BoxDecoration(
-              color: dynamicColor,
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: customTheme['lightGrayColor']!)),
-          child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                    color: customTheme['secondaryColor'],
-                    borderRadius: BorderRadius.circular(10),
-                    image: const DecorationImage(
-                        image: AssetImage('assets/images/activeImg.png'),
-                        fit: BoxFit.contain),
-                  ),
-                  height: MediaQuery.of(context).size.height * 0.14,
+    return SafeArea(
+      child: Scaffold(
+        appBar: const BackIconHeader(
+          header: 'Active Courses',
+        ),
+        body: RefreshIndicator.adaptive(
+          onRefresh: _refreshCourse,
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 24,
+              ),
+              Expanded(
+                child: FutureBuilder<List<Course>>(
+                  future: fetchCourses,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: MainText(
+                          text: 'Error: ${snapshot.error}',
+                          fontSize: 12,
+                        ),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: MainText(
+                          text: 'No courses found',
+                          fontSize: 12,
+                        ),
+                      );
+                    } else {
+                      final courses = snapshot.data!;
+                      return ListView.separated(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(height: 12);
+                        },
+                        shrinkWrap: true,
+                        itemCount: courses.length,
+                        itemBuilder: (context, index) {
+                          final Course course = courses[index];
+                          log('$course', name: 'debug');
+                          return InkWell(
+                            onTap: () {
+                              router.push(CourseDetails.path, extra: course);
+                            },
+                            child: ActiveCourseCard(
+                              image: course.image ?? '',
+                              title: course.name ?? '',
+                              lessonNum: '1/3',
+                            ),
+                          );
+                        },
+                      );
+                    }
+                  },
                 ),
-                const SizedBox(height: 10),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: MainText(
-                    text: 'Introduction to Computer Science',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-
-                // const SizedBox(height: 15),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(left: 10),
-                      child: const MainText(
-                        text: '1/5 Lessons',
-                        fontSize: 12,
-                        fontWeight: FontWeight.w300,
-                      ),
-                    ),
-                    const CustomLikeButton()
-                  ],
-                ),
-              ],
-            ),
-          )),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

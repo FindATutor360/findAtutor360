@@ -6,16 +6,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 abstract class BooksService {
   Future<List<Book>> fetchBooks(String query);
-  // Future<void> addBook(
-  //   String title,
-  //   String author,
-  //   String description,
-  //   String bookImage,
-  //   String amount,
-  //   String publisher,
-  //   String category,
-  //   String pageCount,
-  // );
 
   Future<List<Book>> searchBooks(String query);
 }
@@ -46,35 +36,4 @@ class BooksServiceImpl implements BooksService {
   Future<List<Book>> searchBooks(String query) async {
     return fetchBooks(query); // Same as fetchBooks for now
   }
-
-  // Add a new book (mockup as the real Google Books API doesn't support adding books)
-  // @override
-  // Future<void> addBook(
-  //   String title,
-  //   String author,
-  //   String description,
-  //   String bookImage,
-  //   String amount,
-  //   String publisher,
-  //   String category,
-  //   String pageCount,
-  // ) async {
-  //   // Mockup API request for adding a book
-  //   const url = 'https://example.com/api/addBook';
-  //   final response = await http.post(
-  //     Uri.parse(url),
-  //     body: jsonEncode({
-  //       'title': title,
-  //       'author': author,
-  //       'description': description,
-  //       'thumbnail': bookImage,
-  //       'listPrice': amount,
-  //     }),
-  //     headers: {'Content-Type': 'application/json'},
-  //   );
-
-  //   if (response.statusCode != 200) {
-  //     throw Exception('Failed to add book');
-  //   }
-  // }
 }

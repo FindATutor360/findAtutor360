@@ -5,19 +5,25 @@ import 'package:iconsax/iconsax.dart';
 
 class ActiveCourseCard extends StatelessWidget {
   const ActiveCourseCard({
-    required this.image,
-    required this.title,
-    required this.lessonNum,
+    this.image,
+    this.title,
+    this.lessonNum,
     super.key,
   });
-  final String image;
-  final String title;
-  final String lessonNum;
+  final String? image;
+  final String? title;
+  final String? lessonNum;
 
   @override
   Widget build(BuildContext context) {
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.black
+        : Colors.white);
     return Container(
       width: MediaQuery.sizeOf(context).width / 2.2,
+      height: title!.length > 120
+          ? MediaQuery.of(context).size.height * 0.17
+          : MediaQuery.of(context).size.height * 0.26,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
@@ -28,47 +34,52 @@ class ActiveCourseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: MediaQuery.sizeOf(context).width / 2.2,
+            width: double.infinity,
             height: MediaQuery.sizeOf(context).height / 7.5,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               color: customTheme['fieldColor'],
               image: DecorationImage(
-                image: AssetImage(image),
+                image: NetworkImage(
+                  image ?? '',
+                ),
+                fit: BoxFit.cover,
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MainText(
-                  text: title,
-                  fontSize: 16,
-                  color: const Color(0XFF303539),
-                  overflow: TextOverflow.clip,
-                  softWrap: true,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    MainText(
-                      text: lessonNum,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                      color: customTheme['secondaryTextColor'],
-                    ),
-                    Icon(
-                      Iconsax.play_circle5,
-                      color: customTheme['primaryColor'],
-                    ),
-                  ],
-                ),
-              ],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MainText(
+                    text: title ?? '',
+                    fontSize: 14,
+                    color: const Color(0XFF303539),
+                    overflow: TextOverflow.clip,
+                    softWrap: true,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      MainText(
+                        text: lessonNum ?? '',
+                        fontSize: 10,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                      Icon(
+                        Iconsax.play_circle5,
+                        color: customTheme['primaryColor'],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

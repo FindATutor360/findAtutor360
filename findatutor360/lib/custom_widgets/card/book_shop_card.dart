@@ -7,8 +7,12 @@ import 'package:iconsax/iconsax.dart';
 
 class BookShopCard extends StatelessWidget {
   const BookShopCard({
+    this.name,
+    this.price,
     super.key,
   });
+  final String? name;
+  final double? price;
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +31,21 @@ class BookShopCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const MainText(
-            text: 'The science of leadership',
-            fontSize: 14,
+          Expanded(
+            child: MainText(
+              text: name ?? '',
+              fontSize: 14,
+              softWrap: true,
+            ),
           ),
           const SizedBox(height: 5),
-          MainText(
-            text: 'Marcelos Ramequin',
-            fontSize: 10,
-            color: customTheme['secondaryTextColor']!,
-            fontWeight: FontWeight.w400,
+          Expanded(
+            child: MainText(
+              text: 'Marcelos Ramequin',
+              fontSize: 10,
+              color: customTheme['secondaryTextColor']!,
+              fontWeight: FontWeight.w400,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
@@ -64,33 +73,37 @@ class BookShopCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                ),
-                width: 70,
-                height: MediaQuery.of(context).size.width * 0.1,
-                decoration: BoxDecoration(
-                  color: customTheme['primaryColor'],
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: customTheme['primaryColor']!,
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                  ),
+                  width: 70,
+                  height: MediaQuery.of(context).size.width * 0.1,
+                  decoration: BoxDecoration(
+                    color: customTheme['primaryColor'],
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(
+                      color: customTheme['primaryColor']!,
+                    ),
+                  ),
+                  child: Align(
+                    child: MainText(
+                      text: price != null
+                          ? '\$${price!.toStringAsFixed(2)} | Join'
+                          : '\ Join',
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: customTheme['whiteColor']!,
+                    ),
                   ),
                 ),
-                child: Align(
-                  child: MainText(
-                    text: '\$6 Join',
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                    color: customTheme['whiteColor']!,
-                  ),
-                ),
-              ),
-              const CustomLikeButton(),
-            ],
+                const CustomLikeButton(),
+              ],
+            ),
           ),
         ],
       ),

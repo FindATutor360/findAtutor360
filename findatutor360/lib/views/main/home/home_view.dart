@@ -1,5 +1,10 @@
+import 'dart:developer';
+
 import 'package:findatutor360/core/models/main/books_model.dart';
+import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/view_models/main/books_controller.dart';
+import 'package:findatutor360/core/view_models/main/courses_controller.dart';
+import 'package:findatutor360/custom_widgets/card/active_course_card.dart';
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
 import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
 import 'package:findatutor360/custom_widgets/drawer/custom_drawer.dart';
@@ -11,8 +16,8 @@ import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
-import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
+import 'package:findatutor360/views/main/shop/course_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -27,21 +32,29 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   Future<List<Book>>? fetchBooks;
 
+  Future<List<Course>>? fetchCourses;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final booksController =
           Provider.of<BooksController>(context, listen: false);
-      booksController.fetchBooks('flutter'); // Trigger fetching books
+      booksController.fetchBooks('flutter');
+
+      final coursesController =
+          Provider.of<CoursesController>(context, listen: false);
+      coursesController.fetchCourses();
     });
 
     fetchBooks = BooksController().fetchBooks('flutter');
+    fetchCourses = CoursesController().fetchCourses();
   }
 
   Future<void> _refreshBooks() async {
     setState(() {
       fetchBooks = BooksController().fetchBooks('flutter');
+      fetchCourses = CoursesController().fetchCourses();
     });
   }
 
@@ -76,8 +89,7 @@ class _HomeViewState extends State<HomeView> {
                     TextOption(
                       mainText: 'Recommended Tutors',
                       onPressed: () {
-                        router.push(
-                            '${HomeView.path}/${RecommendedTutorsView.path}');
+                        router.push('${HomeView.path}/activeCourses');
                       },
                     ),
                     const SizedBox(
@@ -104,29 +116,72 @@ class _HomeViewState extends State<HomeView> {
                     TextOption(
                       mainText: 'Active Courses',
                       onPressed: () {
-                        router.push(
-                            '${HomeView.path}/${RecommendedTutorsView.path}');
+                        router.push('${HomeView.path}/${ActiveCourse.path}');
                       },
                     ),
                     const SizedBox(
                       height: 16,
                     ),
                     // ActiveCourse(),
-                    const SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          SizedBox(width: 20),
-                          ActiveCourse(),
-                          SizedBox(width: 20),
-                          ActiveCourse(),
-                          SizedBox(width: 20),
-                          ActiveCourse(),
-                          SizedBox(width: 20),
-                          ActiveCourse()
-                        ],
-                      ),
+
+                    FutureBuilder<List<Course>>(
+                      future: fetchCourses,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          log('${snapshot.error}', name: 'debugs');
+                          return Center(
+                            child: MainText(
+                              text: 'Error: ${snapshot.error}',
+                              fontSize: 12,
+                            ),
+                          );
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: MainText(
+                              text: 'No courses found',
+                              fontSize: 12,
+                            ),
+                          );
+                        } else {
+                          final courses = snapshot.data!;
+                          log('$courses', name: 'debug');
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.31,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(width: 20);
+                              },
+                              shrinkWrap: true,
+                              itemCount: 4,
+                              itemBuilder: (context, index) {
+                                final Course course = courses[index];
+                                log('$course', name: 'debug');
+                                return InkWell(
+                                  onTap: () {
+                                    router.push(CourseDetails.path,
+                                        extra: course);
+                                  },
+                                  child: ActiveCourseCard(
+                                    image: course.image ?? '',
+                                    title: course.name ?? '',
+                                    lessonNum: '1/3',
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
                     ),
+
                     const SizedBox(
                       height: 40,
                     ),
