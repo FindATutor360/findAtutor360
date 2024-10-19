@@ -7,6 +7,7 @@ import 'package:findatutor360/views/main/cart/edit_address_view.dart';
 import 'package:findatutor360/views/main/cart/payment_success_view.dart';
 import 'package:findatutor360/views/main/cart/payment_view.dart';
 import 'package:findatutor360/views/main/cart/wishlist_view.dart';
+import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tutors_view.dart';
@@ -57,6 +58,8 @@ import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:findatutor360/views/parent_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+
+import '../core/models/main/course_model.dart';
 
 final _homeKey = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
 final _shopKey = GlobalKey<NavigatorState>(debugLabel: 'shellShop');
@@ -146,6 +149,12 @@ List<RouteBase> get routes => [
                         header: header,
                         bookQuery: bookQuery,
                       );
+                    },
+                  ),
+                  GoRoute(
+                    path: ActiveCourse.path,
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const ActiveCourse();
                     },
                   ),
                 ],
@@ -252,7 +261,10 @@ List<RouteBase> get routes => [
       GoRoute(
         path: CourseDetails.path,
         builder: (BuildContext context, GoRouterState state) {
-          return const CourseDetails();
+          final course = state.extra! as Course;
+          return CourseDetails(
+            course: course,
+          );
         },
       ),
       GoRoute(
