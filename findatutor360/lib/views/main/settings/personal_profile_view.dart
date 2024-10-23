@@ -10,6 +10,7 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/add_book_basic.dart';
 import 'package:findatutor360/views/main/settings/add_course_general.dart';
 import 'package:findatutor360/views/main/settings/edit_personal_profile_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -25,6 +26,7 @@ class PersonalProfileView extends StatefulWidget {
 class _PersonalProfileViewState extends State<PersonalProfileView> {
   @override
   Widget build(BuildContext context) {
+    User? auth = FirebaseAuth.instance.currentUser;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -46,19 +48,16 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                     CircleAvatar(
                       backgroundColor: customTheme['primaryColor'],
                       radius: 20,
-                      child: Text(
-                        'A',
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: customTheme['whiteColor'],
-                        ),
-                      ), //Text
+                      backgroundImage: NetworkImage(
+                        auth?.photoURL ??
+                            'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    const MainText(
-                      text: 'Anthony Rudiger',
+                    MainText(
+                      text: auth?.displayName ?? 'Uknown',
                       fontSize: 14,
                     ),
                     MainText(
@@ -227,7 +226,7 @@ class StatisticsCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row( 
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               CircleAvatar(

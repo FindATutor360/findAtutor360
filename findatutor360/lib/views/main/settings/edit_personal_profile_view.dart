@@ -8,6 +8,8 @@ import 'package:findatutor360/custom_widgets/textfield/expand_text_form_field.da
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_contact_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
@@ -22,6 +24,15 @@ class EditPersonalProfileView extends StatefulWidget {
 }
 
 class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
+  final auth = FirebaseAuth.instance.currentUser;
+
+  final nameController = TextEditingController()
+    ..text = FirebaseAuth.instance.currentUser?.displayName ?? ''
+    ..selection = TextSelection.fromPosition(
+      TextPosition(
+          offset: FirebaseAuth.instance.currentUser!.displayName!.length),
+    );
+
   String typeDropdown = '';
   @override
   Widget build(BuildContext context) {
@@ -65,8 +76,9 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
               const SizedBox(
                 height: 8,
               ),
-              const CustomTextFormField(
+              CustomTextFormField(
                 hint: 'Enter Your Name',
+                controller: nameController,
               ),
               const SizedBox(
                 height: 12,

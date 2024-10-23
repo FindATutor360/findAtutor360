@@ -7,14 +7,16 @@ import 'package:iconsax/iconsax.dart';
 
 class ShopBookWidget extends StatelessWidget {
   const ShopBookWidget({
-    required this.image,
-    required this.title,
-    required this.author,
+    this.image,
+    this.title,
+    this.author,
+    this.buyTap,
     super.key,
   });
   final String? image;
   final String? title;
   final String? author;
+  final VoidCallback? buyTap;
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +82,7 @@ class ShopBookWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         const MainText(
-                          text: 'GH₵ 50.0',
+                          text: '\$50.0',
                           fontSize: 16,
                         ),
                         Container(width: 30),
@@ -92,9 +94,10 @@ class ShopBookWidget extends StatelessWidget {
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      Container(
+                      InkWell(
+                        onTap: buyTap,
+                        child: Container(
                           margin: const EdgeInsets.symmetric(horizontal: 5),
-                          width: 120,
                           height: MediaQuery.of(context).size.width * 0.11,
                           decoration: BoxDecoration(
                               color: customTheme['primaryColor'],
@@ -104,14 +107,14 @@ class ShopBookWidget extends StatelessWidget {
                           child: Row(
                             children: [
                               TextButton.icon(
-                                onPressed: (() {}),
+                                onPressed: buyTap,
                                 icon: Icon(
                                   Iconsax.buy_crypto,
                                   color: customTheme['whiteColor'],
                                   size: 18,
                                 ),
                                 label: Text(
-                                  "GH6 Buy",
+                                  "\$50.0 Buy",
                                   style: TextStyle(
                                     color: customTheme['whiteColor'],
                                     fontSize: 16,
@@ -120,7 +123,9 @@ class ShopBookWidget extends StatelessWidget {
                                 ),
                               ),
                             ],
-                          )),
+                          ),
+                        ),
+                      ),
                       const CustomLikeButton(),
                     ],
                   ),

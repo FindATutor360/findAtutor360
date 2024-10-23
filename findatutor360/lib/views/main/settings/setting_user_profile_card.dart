@@ -1,5 +1,6 @@
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:findatutor360/theme/index.dart';
@@ -11,6 +12,8 @@ class SettingUserCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? auth = FirebaseAuth.instance.currentUser;
+
     Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
         ? Colors.black
         : Colors.white);
@@ -37,20 +40,17 @@ class SettingUserCard extends StatelessWidget {
               ListTile(
                   leading: CircleAvatar(
                     backgroundColor: const Color(0xFFE6F6FE),
+                    backgroundImage: NetworkImage(auth?.photoURL ??
+                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
                     radius: 20,
-                    child: Text(
-                      'A',
-                      style: TextStyle(
-                          fontSize: 18, color: customTheme['primaryColor']),
-                    ), //Text
                   ),
-                  title: const Text('Anthony Rudiger',
-                      style: TextStyle(
+                  title: Text(auth?.displayName ?? 'Unknown',
+                      style: const TextStyle(
                         fontSize: 18.0,
                         color: Color(0xFFE6F6FE),
                       )),
-                  subtitle: const Text('Anthony Rudiger.',
-                      style: TextStyle(
+                  subtitle: Text(auth?.email ?? '',
+                      style: const TextStyle(
                         fontSize: 14.0,
                         color: Color(0xFFE6F6FE),
                       )),

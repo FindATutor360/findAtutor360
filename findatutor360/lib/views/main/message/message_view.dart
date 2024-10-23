@@ -32,10 +32,12 @@ class _MessageViewState extends State<MessageView> {
 
   @override
   Widget build(BuildContext context) {
+    User? auth = FirebaseAuth.instance.currentUser;
     return SafeArea(
       child: Scaffold(
-        appBar: const AppHeader(
+        appBar: AppHeader(
           showIcon: false,
+          imageUrl: auth?.photoURL,
         ),
         drawer: const CustomDrawer(),
         body: RefreshIndicator(

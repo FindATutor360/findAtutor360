@@ -12,6 +12,7 @@ import 'package:findatutor360/views/main/cart/cart_view.dart';
 import 'package:findatutor360/views/main/shop/reviews_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,7 @@ class BookDetails extends StatefulWidget {
 
 class _BookDetailsState extends State<BookDetails> {
   Future<List<Book>>? fetchBooks;
+  late BooksController _booksController;
 
   @override
   void initState() {
@@ -51,6 +53,7 @@ class _BookDetailsState extends State<BookDetails> {
 
   @override
   Widget build(BuildContext context) {
+    _booksController = context.watch<BooksController>();
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -383,19 +386,32 @@ class _BookDetailsState extends State<BookDetails> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Expanded(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 15,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color(0XFF0476AF),
+                      child: InkWell(
+                        onTap: () {
+                          _booksController.addToCart(widget.books);
+                          Fluttertoast.showToast(
+                            msg: "${widget.books.title} added to cart",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: customTheme['primaryColor'],
+                            textColor: customTheme['whiteColor'],
+                            fontSize: 16.0,
+                          );
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color(0XFF0476AF),
+                            ),
                           ),
-                        ),
-                        child: Align(
-                          child: MainText(
-                            text: 'Add to cart',
-                            fontSize: 18,
-                            color: customTheme['primaryColor'],
+                          child: Align(
+                            child: MainText(
+                              text: 'Add to cart',
+                              fontSize: 18,
+                              color: customTheme['primaryColor'],
+                            ),
                           ),
                         ),
                       ),
@@ -406,7 +422,8 @@ class _BookDetailsState extends State<BookDetails> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          context.go(CartView.path, extra: 3);
+                          _booksController.addToCart(widget.books);
+                          context.go(CartView.path);
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.height / 15,
