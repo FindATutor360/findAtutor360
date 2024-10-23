@@ -212,7 +212,14 @@ List<RouteBase> get routes => [
               GoRoute(
                 path: CartView.path,
                 builder: (BuildContext context, GoRouterState state) {
-                  return const CartView();
+                  final String image = state.pathParameters['image'] ?? '';
+                  final String title = state.pathParameters['title'] ?? '';
+                  final String author = state.pathParameters['author'] ?? '';
+                  return const CartView(
+                      // image: Uri.decodeComponent(image),
+                      // title: Uri.decodeComponent(title),
+                      // author: Uri.decodeComponent(author),
+                      );
                 },
               ),
             ],

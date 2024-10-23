@@ -5,9 +5,11 @@ import 'package:findatutor360/custom_widgets/tabs/categrory_tabs.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/cart/cart_view.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/book_shop_course.dart';
 import 'package:findatutor360/views/main/shop/shop_books.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../custom_widgets/drawer/custom_drawer.dart';
@@ -23,6 +25,7 @@ class ShopView extends StatefulWidget {
 
 class _ShopViewState extends State<ShopView> {
   Future<List<Book>>? fetchBooks;
+  late BooksController _booksController;
 
   @override
   void initState() {
@@ -44,9 +47,14 @@ class _ShopViewState extends State<ShopView> {
 
   @override
   Widget build(BuildContext context) {
+    _booksController = context.watch<BooksController>();
+
+    User? auth = FirebaseAuth.instance.currentUser;
     return SafeArea(
       child: Scaffold(
-        appBar: const AppHeader(),
+        appBar: AppHeader(
+          imageUrl: auth?.photoURL,
+        ),
         drawer: const CustomDrawer(),
         body: RefreshIndicator.adaptive(
           onRefresh: _refreshBooks,
@@ -112,14 +120,6 @@ class _ShopViewState extends State<ShopView> {
                               final Book book = books[i];
                               return InkWell(
                                 onTap: () {
-                                  // final bookData = {
-                                  //   'title': book.title,
-                                  //   'author': book.author,
-                                  //   'description': book.description,
-                                  //   'thumbnail': book.thumbnail,
-                                  //   'textSnippet': book.textSnippet,
-                                  //   'smallThumbnail': book.smallThumbnail,
-                                  // };
                                   router.push(
                                     BookDetails.path,
                                     extra: book,
@@ -130,6 +130,10 @@ class _ShopViewState extends State<ShopView> {
                                       'https://via.placeholder.com/150',
                                   title: book.title,
                                   author: book.author ?? 'Unknown Author',
+                                  buyTap: () {
+                                    _booksController.addToCart(book);
+                                    router.go(CartView.path);
+                                  },
                                 ),
                               );
                             },

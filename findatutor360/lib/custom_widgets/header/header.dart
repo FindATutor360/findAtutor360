@@ -1,6 +1,7 @@
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -17,6 +18,8 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? auth = FirebaseAuth.instance.currentUser;
+
     Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
         ? Colors.black
         : Colors.white);
@@ -60,14 +63,14 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                                   : Colors.black,
                             ))),
                     const SizedBox(width: 5),
-                    const Center(
+                    Center(
                       child: CircleAvatar(
-                        backgroundColor: Color(0xFF0476AF),
+                        backgroundColor: const Color(0xFF0476AF),
                         radius: 20,
-                        child: Text(
-                          'A',
-                          style: TextStyle(fontSize: 25, color: Colors.white),
-                        ), //Text
+                        backgroundImage: NetworkImage(
+                          auth?.photoURL ??
+                              'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                        ),
                       ), //CircleAvatar
                     ),
                   ],

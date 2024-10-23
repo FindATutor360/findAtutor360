@@ -18,6 +18,7 @@ import 'package:findatutor360/views/main/home/active_courses/active_courses.dart
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/course_details.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -60,10 +61,14 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    User? auth = FirebaseAuth.instance.currentUser;
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: const AppHeader(),
+        appBar: AppHeader(
+          imageUrl: auth?.photoURL,
+        ),
         drawer: const CustomDrawer(),
         body: RefreshIndicator.adaptive(
           onRefresh: _refreshBooks,

@@ -9,6 +9,7 @@ class Book {
   final int? pageCount;
   final String? textSnippet;
   final String? smallThumbnail;
+  int quantity;
 
   Book({
     required this.id,
@@ -21,6 +22,7 @@ class Book {
     this.pageCount,
     this.textSnippet,
     this.smallThumbnail,
+    this.quantity = 1,
   });
 
   factory Book.fromJson(Map<String, dynamic> json) {
@@ -48,6 +50,7 @@ class Book {
       smallThumbnail: volumeInfo['imageLinks'] != null
           ? volumeInfo['imageLinks']['smallThumbnail']
           : null,
+      quantity: 1,
     );
   }
 }

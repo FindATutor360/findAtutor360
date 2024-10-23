@@ -1,183 +1,226 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:findatutor360/core/models/main/books_model.dart';
+import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class CartsCard extends StatefulWidget {
   const CartsCard({
-    required this.itemImage,
-    required this.itemName,
-    required this.authorName,
+    required this.book,
     required this.itemPrice,
     this.deleteTap,
+    required this.onPriceChange,
     super.key,
   });
-  final String itemImage;
-  final String itemName;
-  final String authorName;
-  final String itemPrice;
+
+  final Book book;
+  final double itemPrice; // Fixed price of $50 per item
   final VoidCallback? deleteTap;
+  final Function(double) onPriceChange;
 
   @override
   State<CartsCard> createState() => _CartsCardState();
 }
 
 class _CartsCardState extends State<CartsCard> {
-  ValueNotifier<int> quantity = ValueNotifier<int>(1);
-  ValueNotifier<int> addOnQuantity = ValueNotifier<int>(0);
-  // late ValueNotifier<double> totalPrice;
+  // ValueNotifier<int> quantity = ValueNotifier<int>(1); // Default quantity is 1
+  // late ValueNotifier<double> totalPrice =
+  //     ValueNotifier(50.0); // Fixed base price of $50
 
-  @override
-  void initState() {
-    super.initState();
-    // totalPrice = ValueNotifier<double>(
-    //   double.parse(widget.sellingServicesData.price.replaceAll('\$', '')),
-    // );
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
 
-  // void updateTotalPrice() {
-  //   double basePrice =
-  //       double.parse(widget.sellingServicesData.price.replaceAll('\$', ''));
-  //   totalPrice.value = basePrice * (quantity.value + addOnQuantity.value);
+  //   // Notify the parent of the initial total price
+  //   widget.onPriceChange?.call(totalPrice.value);
+
+  //   // Listen to changes in quantity and update the total price
+  //   quantity.addListener(() {
+  //     updateTotalPrice();
+  //     widget.onPriceChange
+  //         ?.call(totalPrice.value); // Notify the parent of the new price
+  //   });
   // }
 
-  void increaseQuantity() {
-    quantity.value++;
-    // updateTotalPrice();
-  }
+  // // Update the total price whenever the quantity changes
+  // void updateTotalPrice() {
+  //   double basePrice = 50.0; // Fixed base price
+  //   totalPrice.value = basePrice * quantity.value;
+  // }
 
-  void increaseAddOnQuantity() {
-    addOnQuantity.value++;
-    // updateTotalPrice();
+  // void increaseQuantity() {
+  //   double basePrice = 50.0; // Fixed base price
+  //   quantity.value++;
+  //   double newTotal = basePrice * quantity.value;
+  //   double difference = newTotal - totalPrice.value; // Calculate the difference
+  //   totalPrice.value = newTotal;
+
+  //   // Update the parent cart total
+  //   widget.onPriceChange?.call(difference);
+  // }
+
+  // void decreaseQuantity() {
+  //   if (quantity.value > 1) {
+  //     double basePrice = 50.0; // Fixed base price
+  //     quantity.value--;
+  //     double newTotal = basePrice * quantity.value;
+  //     double difference =
+  //         totalPrice.value - newTotal; // Calculate the difference
+  //     totalPrice.value = newTotal;
+
+  //     // Update the parent cart total
+  //     widget.onPriceChange?.call(-difference); // Subtract the difference
+  //   }
+  // }
+
+  int quantity = 1; // Default quantity is 1
+
+  late BooksController booksController;
+
+  void increaseQuantity() {
+    setState(() {
+      quantity++;
+      booksController.updateBookQuantity(widget.book, quantity);
+      widget.onPriceChange(widget.itemPrice);
+    });
   }
 
   void decreaseQuantity() {
-    if (quantity.value > 1) {
-      quantity.value--;
-      // updateTotalPrice();
+    if (quantity > 1) {
+      setState(() {
+        quantity--;
+        booksController.updateBookQuantity(widget.book, quantity);
+        widget.onPriceChange(-widget.itemPrice);
+      });
     }
-  }
-
-  void decreaseAddOnQuantity() {
-    if (addOnQuantity.value > 0) {
-      addOnQuantity.value--;
-      // updateTotalPrice();
-    }
-  }
-
-  @override
-  void dispose() {
-    quantity.dispose();
-    addOnQuantity.dispose();
-    // totalPrice.dispose();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    booksController = context.watch<BooksController>();
     return SizedBox(
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.35,
-            height: MediaQuery.of(context).size.height / 7,
-            decoration: BoxDecoration(
-              color: customTheme['secondaryColor'],
-              borderRadius: BorderRadius.circular(10),
-              image: DecorationImage(
-                  image: AssetImage(widget.itemImage), fit: BoxFit.contain),
-            ),
+          CachedNetworkImage(
+            imageUrl: widget.book.thumbnail ?? '',
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                width: MediaQuery.of(context).size.width * 0.35,
+                height: MediaQuery.of(context).size.height / 7,
+                decoration: BoxDecoration(
+                  color: customTheme['secondaryColor'],
+                  borderRadius: BorderRadius.circular(10),
+                  image: DecorationImage(
+                    image: NetworkImage(widget.book.thumbnail ?? ''),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+            placeholder: (context, url) {
+              return Container(
+                width: MediaQuery.of(context).size.width * 0.35,
+                height: MediaQuery.of(context).size.height / 7,
+                decoration: BoxDecoration(
+                  color: customTheme['secondaryColor'],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              );
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 16, left: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                MainText(
-                  text: widget.itemName,
-                  fontSize: 14,
-                ),
-                MainText(
-                  text: widget.authorName,
-                  fontSize: 10,
-                  fontWeight: FontWeight.w400,
-                  color: customTheme['secondaryTextColor'],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                MainText(
-                  text: widget.itemPrice,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: customTheme['smainTextSecondaryColor'],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Row(
-                      children: [
-                        InkWell(
-                          onTap: decreaseQuantity,
-                          child: Icon(
-                            Iconsax.minus_square4,
-                            size: 20,
-                            color: customTheme['primaryColor'],
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        ValueListenableBuilder<int>(
-                          valueListenable: quantity,
-                          builder: (context, value, child) {
-                            return MainText(
-                              text: '$value',
-                              fontSize: 14,
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  MainText(
+                    text: widget.book.title,
+                    fontSize: 14,
+                    softWrap: true,
+                  ),
+                  MainText(
+                    text: widget.book.author ?? 'Unknown',
+                    fontSize: 10,
+                    fontWeight: FontWeight.w400,
+                    color: customTheme['secondaryTextColor'],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  // Display the total price
+                  MainText(
+                    text:
+                        '\$${(widget.itemPrice * quantity).toStringAsFixed(2)}',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: customTheme['smainTextSecondaryColor'],
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: decreaseQuantity,
+                            child: Icon(
+                              Iconsax.minus_square4,
+                              size: 20,
                               color: customTheme['primaryColor'],
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        InkWell(
-                          onTap: increaseQuantity,
-                          child: Icon(
-                            Iconsax.add_square4,
-                            size: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          MainText(
+                            text: '$quantity',
+                            fontSize: 14,
                             color: customTheme['primaryColor'],
                           ),
-                        ),
-                      ],
-                    ),
-                    InkWell(
-                      onTap: widget.deleteTap,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 70),
-                        child: Container(
-                          height: 28,
-                          width: 36,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: const Color(0xFFFC392E),
+                          const SizedBox(
+                            width: 8,
                           ),
-                          child: Icon(
-                            Iconsax.trash,
-                            size: 20,
-                            color: customTheme['whiteColor'],
+                          InkWell(
+                            onTap: increaseQuantity,
+                            child: Icon(
+                              Iconsax.add_square4,
+                              size: 20,
+                              color: customTheme['primaryColor'],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const Spacer(),
+                      InkWell(
+                        onTap: widget.deleteTap,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 70),
+                          child: Container(
+                            height: 28,
+                            width: 36,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: const Color(0xFFFC392E),
+                            ),
+                            child: Icon(
+                              Iconsax.trash,
+                              size: 20,
+                              color: customTheme['whiteColor'],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],
