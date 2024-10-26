@@ -1,3 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'books_model.g.dart';
+
 class Book {
   final String id;
   final String title;
@@ -53,4 +57,40 @@ class Book {
       quantity: 1,
     );
   }
+}
+
+@JsonSerializable()
+class UserBooks {
+  final String? id;
+  final String? userId;
+  final String? title;
+  final String? author;
+  final String? description;
+  final String? image;
+  final String? price;
+  final String? publisher;
+  final String? category;
+  final String? smallImage;
+  final int quantity;
+  final DateTime? createdAt;
+
+  UserBooks({
+    this.id,
+    this.userId,
+    this.title,
+    this.author,
+    this.description,
+    this.image,
+    this.price,
+    this.publisher,
+    this.category,
+    this.createdAt,
+    this.smallImage,
+    this.quantity = 1,
+  });
+
+  factory UserBooks.fromJson(Map<String, dynamic> json) =>
+      _$UserBooksFromJson(json);
+
+  Map<String, dynamic> toJson() => _$UserBooksToJson(this);
 }

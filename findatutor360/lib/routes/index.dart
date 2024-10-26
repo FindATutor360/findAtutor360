@@ -14,7 +14,7 @@ import 'package:findatutor360/views/main/home/recommeded_tutors/recommended_tuto
 import 'package:findatutor360/views/main/home/trending_books/trending_book.dart';
 import 'package:findatutor360/views/main/message/chat.dart';
 import 'package:findatutor360/views/main/settings/add_book_basic.dart';
-import 'package:findatutor360/views/main/settings/add_book_condition.dart';
+import 'package:findatutor360/views/main/settings/add_book_image.dart';
 import 'package:findatutor360/views/main/settings/add_book_publish.dart';
 import 'package:findatutor360/views/main/settings/add_book_success.dart';
 import 'package:findatutor360/views/main/settings/add_course_general.dart';
@@ -377,9 +377,9 @@ List<RouteBase> get routes => [
         },
       ),
       GoRoute(
-        path: AddBookConditionView.path,
+        path: AddBookImageView.path,
         builder: (BuildContext context, GoRouterState state) {
-          return const AddBookConditionView();
+          return const AddBookImageView();
         },
       ),
       GoRoute(

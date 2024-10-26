@@ -63,6 +63,7 @@ class _LoginViewState extends State<LoginView> {
                   children: [
                     CustomTextFormField(
                         controller: _emailController,
+                        textCapitalization: TextCapitalization.none,
                         label: Text('Email',
                             style: TextStyle(
                                 color: customTheme['secondaryTextColor'])),
@@ -77,6 +78,7 @@ class _LoginViewState extends State<LoginView> {
                     const SizedBox(height: 30),
                     CustomTextFormField(
                         controller: _passwordController,
+                        textCapitalization: TextCapitalization.none,
                         label: Text('Password',
                             style: TextStyle(
                                 color: customTheme['secondaryTextColor'])),

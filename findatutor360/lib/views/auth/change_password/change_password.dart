@@ -58,6 +58,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                 child: Column(
                   children: [
                     CustomTextFormField(
+                      textCapitalization: TextCapitalization.none,
                       controller: _oldPasswordController,
                       label: Text('Old Password',
                           style: TextStyle(
@@ -86,6 +87,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     ),
                     const SizedBox(height: 30),
                     CustomTextFormField(
+                      textCapitalization: TextCapitalization.none,
                       controller: _newPasswordController,
                       label: Text('Password',
                           style: TextStyle(
@@ -114,6 +116,7 @@ class _ChangePasswordViewState extends State<ChangePasswordView> {
                     ),
                     const SizedBox(height: 20),
                     CustomTextFormField(
+                      textCapitalization: TextCapitalization.none,
                       controller: _confirmPasswordController,
                       label: Text('Confirm Password',
                           style: TextStyle(
