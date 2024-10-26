@@ -78,6 +78,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                       const SizedBox(height: 20),
                       CustomTextFormField(
                         controller: _emailController,
+                        textCapitalization: TextCapitalization.none,
                         label: Text('Email',
                             style: TextStyle(
                                 color: customTheme['secondaryTextColor'])),
@@ -92,6 +93,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                       ),
                       const SizedBox(height: 30),
                       CustomTextFormField(
+                        textCapitalization: TextCapitalization.none,
                         controller: _passwordController,
                         label: Text('Password',
                             style: TextStyle(
@@ -120,6 +122,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextFormField(
+                        textCapitalization: TextCapitalization.none,
                         controller: _confirmPasswordController,
                         label: Text('Confirm Password',
                             style: TextStyle(

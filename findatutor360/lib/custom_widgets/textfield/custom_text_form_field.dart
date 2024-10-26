@@ -1,3 +1,4 @@
+import 'package:findatutor360/views/main/message/message_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,6 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextInputType keyboardType;
   final TextEditingController? controller;
   final String? Function(String?)? validator;
+  final TextCapitalization textCapitalization;
 
   const CustomTextFormField({
     super.key,
@@ -23,6 +25,7 @@ class CustomTextFormField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.controller,
     this.validator,
+    this.textCapitalization = TextCapitalization.sentences,
   });
 
   @override
@@ -31,6 +34,8 @@ class CustomTextFormField extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.85,
         child: TextFormField(
           controller: controller,
+          textCapitalization: textCapitalization,
+          inputFormatters: [NoLeadingWhitespaceFormatter()],
           style: GoogleFonts.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w400,

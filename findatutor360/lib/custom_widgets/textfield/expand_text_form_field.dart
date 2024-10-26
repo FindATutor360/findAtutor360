@@ -1,4 +1,5 @@
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/message/message_field.dart';
 import 'package:flutter/material.dart';
 
 class ExpandTextFormField extends StatelessWidget {
@@ -19,6 +20,8 @@ class ExpandTextFormField extends StatelessWidget {
       width: MediaQuery.of(context).size.width * 0.85,
       child: TextFormField(
         controller: controller,
+        textCapitalization: TextCapitalization.sentences,
+        inputFormatters: [NoLeadingWhitespaceFormatter()],
         maxLines: 4,
         style: const TextStyle(
           fontSize: 16,

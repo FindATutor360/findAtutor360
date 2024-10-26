@@ -129,62 +129,90 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     // ActiveCourse(),
 
-                    FutureBuilder<List<Course>>(
-                      future: fetchCourses,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
-                          log('${snapshot.error}', name: 'debugs');
-                          return Center(
-                            child: MainText(
-                              text: 'Error: ${snapshot.error}',
-                              fontSize: 12,
+                    // FutureBuilder<List<Course>>(
+                    //   future: fetchCourses,
+                    //   builder: (context, snapshot) {
+                    //     if (snapshot.connectionState ==
+                    //         ConnectionState.waiting) {
+                    //       return const Center(
+                    //           child: CircularProgressIndicator());
+                    //     } else if (snapshot.hasError) {
+                    //       log('${snapshot.error}', name: 'debugs');
+                    //       return Center(
+                    //         child: MainText(
+                    //           text: 'Error: ${snapshot.error}',
+                    //           fontSize: 12,
+                    //         ),
+                    //       );
+                    //     } else if (!snapshot.hasData ||
+                    //         snapshot.data!.isEmpty) {
+                    //       return const Center(
+                    //         child: MainText(
+                    //           text: 'No courses found',
+                    //           fontSize: 12,
+                    //         ),
+                    //       );
+                    //     } else {
+                    //       final courses = snapshot.data!;
+                    //       log('$courses', name: 'debug');
+                    //       return Container(
+                    //         height: MediaQuery.of(context).size.height * 0.31,
+                    //         padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //         child: ListView.separated(
+                    //           padding: EdgeInsets.zero,
+                    //           scrollDirection: Axis.horizontal,
+                    //           separatorBuilder: (context, index) {
+                    //             return const SizedBox(width: 20);
+                    //           },
+                    //           shrinkWrap: true,
+                    //           itemCount: 4,
+                    //           itemBuilder: (context, index) {
+                    //             final Course course = courses[index];
+                    //             log('$course', name: 'debug');
+                    //             return InkWell(
+                    //               onTap: () {
+                    //                 router.push(CourseDetails.path,
+                    //                     extra: course);
+                    //               },
+                    //               child: ActiveCourseCard(
+                    //                 image: course.image ?? '',
+                    //                 title: course.name ?? '',
+                    //                 lessonNum: '1/3',
+                    //               ),
+                    //             );
+                    //           },
+                    //         ),
+                    //       );
+                    //     }
+                    //   },
+                    // ),
+
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.31,
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      child: ListView.separated(
+                        padding: EdgeInsets.zero,
+                        scrollDirection: Axis.horizontal,
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(width: 20);
+                        },
+                        shrinkWrap: true,
+                        itemCount: 4,
+                        itemBuilder: (context, i) {
+                          return InkWell(
+                            onTap: () {
+                              // router.push(CourseDetails.path,
+                              //     extra: course);
+                            },
+                            child: const ActiveCourseCard(
+                              image:
+                                  'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                              title: 'Flutter cookbook',
+                              lessonNum: '1/3',
                             ),
                           );
-                        } else if (!snapshot.hasData ||
-                            snapshot.data!.isEmpty) {
-                          return const Center(
-                            child: MainText(
-                              text: 'No courses found',
-                              fontSize: 12,
-                            ),
-                          );
-                        } else {
-                          final courses = snapshot.data!;
-                          log('$courses', name: 'debug');
-                          return Container(
-                            height: MediaQuery.of(context).size.height * 0.31,
-                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                            child: ListView.separated(
-                              padding: EdgeInsets.zero,
-                              scrollDirection: Axis.horizontal,
-                              separatorBuilder: (context, index) {
-                                return const SizedBox(width: 20);
-                              },
-                              shrinkWrap: true,
-                              itemCount: 4,
-                              itemBuilder: (context, index) {
-                                final Course course = courses[index];
-                                log('$course', name: 'debug');
-                                return InkWell(
-                                  onTap: () {
-                                    router.push(CourseDetails.path,
-                                        extra: course);
-                                  },
-                                  child: ActiveCourseCard(
-                                    image: course.image ?? '',
-                                    title: course.name ?? '',
-                                    lessonNum: '1/3',
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        }
-                      },
+                        },
+                      ),
                     ),
 
                     const SizedBox(
