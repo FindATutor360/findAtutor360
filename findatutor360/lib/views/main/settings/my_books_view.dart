@@ -3,8 +3,6 @@ import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/custom_widgets/card/active_book_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -66,7 +64,7 @@ class _MyBooksViewState extends State<MyBooksView> {
                       } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return const Center(
                           child: MainText(
-                            text: "You haven't added any books yet",
+                            text: "You haven't added any book yet",
                             fontSize: 20,
                           ),
                         );
@@ -92,10 +90,14 @@ class _MyBooksViewState extends State<MyBooksView> {
                                 crossAxisSpacing: 16),
                         itemBuilder: ((BuildContext context, i) {
                           final userBook = userBooks[i];
+
                           return InkWell(
                             onTap: () {
                               // router.push(
+                              //   BookDetails.path,router.push(
                               //   BookDetails.path,
+                              //   extra: userBook,
+                              // );
                               //   extra: userBook,
                               // );
                             },

@@ -13,6 +13,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String?)? validator;
   final TextCapitalization textCapitalization;
+  final Function(String)? onChanged;
 
   const CustomTextFormField({
     super.key,
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatelessWidget {
     this.keyboardType = TextInputType.text,
     this.controller,
     this.validator,
+    this.onChanged,
     this.textCapitalization = TextCapitalization.sentences,
   });
 
@@ -44,6 +46,7 @@ class CustomTextFormField extends StatelessWidget {
           keyboardType: keyboardType,
           obscureText: obscureText,
           validator: validator,
+          onChanged: onChanged,
           decoration: InputDecoration(
             label: label,
             labelStyle:

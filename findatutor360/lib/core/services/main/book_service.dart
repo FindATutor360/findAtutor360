@@ -86,9 +86,9 @@ class BooksServiceImpl implements BooksService {
           .collection('Books')
           .doc(docRef.id)
           .update({'id': docRef.id});
-      log("Book added to DB successfully!", name: 'BooksServiceImpl');
+      log("Book added to DB successfully!", name: 'debug');
     } catch (e) {
-      log("Error adding book to DB: $e", name: 'BooksServiceImpl');
+      log("Error adding book to DB: $e", name: 'debug');
       rethrow;
     }
   }
@@ -108,7 +108,7 @@ class BooksServiceImpl implements BooksService {
         return userBooks;
       });
     } catch (e) {
-      log("Error fetching user books: $e", name: 'BooksServiceImpl');
+      log("Error fetching user books: $e", name: 'debug');
       rethrow;
     }
   }

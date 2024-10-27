@@ -11,25 +11,121 @@ class CoursesController extends BaseProvider {
       locator.get<CoursesServiceImpl>();
   List<Course> courses = [];
   final ValueNotifier<bool> canLoadMore = ValueNotifier(false);
-  final ValueNotifier<bool> isLoading = ValueNotifier(false);
+  final ValueNotifier<bool> _isLoading = ValueNotifier(false);
+  ValueNotifier<bool> get isLoading => _isLoading;
+
+  String? _image;
+  String? _name;
+  double? _actual_price_usd;
+  String? _description;
+  String? _category;
+  String? _duration;
+  String? _day;
+  List<String>? _availability;
+
+  Future<void> addCourseBasicDetails(
+    String? image,
+    String? name,
+    String? description,
+    String? category,
+  ) async {
+    _isLoading.value = true;
+    try {
+      _name = name;
+      _description = description;
+      _category = category;
+      _image = image;
+      _isLoading.value = false;
+      notifyListeners();
+      log("CourseBasicDetails saved successfully", name: "debug");
+    } catch (e) {
+      _isLoading.value = false;
+      throw Exception("Basic details are missing");
+    }
+  }
+
+  Future<void> addCoursePricingDetails(
+    String? duration,
+    double? actual_price_usd,
+    String? day,
+    List<String>? availability,
+  ) async {
+    _isLoading.value = true;
+    try {
+      _duration = duration;
+      _availability = availability;
+      _day = day;
+      _actual_price_usd = actual_price_usd;
+      _isLoading.value = false;
+      notifyListeners();
+      log("CoursePricingDetails saved successfully", name: "debug");
+    } catch (e) {
+      _isLoading.value = false;
+      throw Exception("Pricing details are missing");
+    }
+  }
+
+  Future<void> saveCourseDetails() async {
+    _isLoading.value = true;
+
+    if (_name == null ||
+        _description == null ||
+        _category == null ||
+        _image == null) {
+      _isLoading.value = false;
+      throw Exception("Basic details are missing");
+    }
+    if (_duration == null ||
+        _availability == null ||
+        _actual_price_usd == null ||
+        _day == null) {
+      _isLoading.value = false;
+      throw Exception("Pricing details are missing");
+    }
+    try {
+      await _coursesServiceImpl.addCourse(_image, _name, _actual_price_usd,
+          _description, _category, _duration, _day, _availability);
+      _isLoading.value = false;
+      log("Course saved successfully", name: "debug");
+      resetBookDetails();
+    } catch (e) {
+      _isLoading.value = false;
+      log("Error saving book: $e", name: "debug");
+      rethrow;
+    }
+  }
+
+  Stream<List<Course>> fetchUserCourses() {
+    return _coursesServiceImpl.fetchUserCourses();
+  }
 
   // Fetch all books (default or based on a query)
   Future<List<Course>> fetchCourses() async {
-    isLoading.value = true;
+    _isLoading.value = true;
     // notifyListeners();
 
     try {
       courses = await _coursesServiceImpl.fetchCourses();
 
-      isLoading.value = false;
+      _isLoading.value = false;
       notifyListeners();
       log('Fetched ${courses.length} Courses');
       return courses;
     } catch (e) {
-      isLoading.value = false;
+      _isLoading.value = false;
       notifyListeners();
       log('Error fetching Courses: $e', name: 'debug');
       rethrow;
     }
+  }
+
+  void resetBookDetails() {
+    _actual_price_usd = null;
+    _availability = null;
+    _category = null;
+    _description = null;
+    _name = null;
+    _availability = null;
+    _duration = null;
   }
 }
