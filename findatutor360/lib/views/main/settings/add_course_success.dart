@@ -1,9 +1,11 @@
+import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddCourseSuccessView extends StatelessWidget {
   const AddCourseSuccessView({super.key});
@@ -11,6 +13,8 @@ class AddCourseSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coursesController =
+        Provider.of<CoursesController>(context, listen: false);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -124,29 +128,51 @@ class AddCourseSuccessView extends StatelessWidget {
                         fontWeight: FontWeight.w400)),
               ),
               //button
-              PrimaryButton(
-                isIconPresent: false,
-                text: 'Continue',
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
+
+              ValueListenableBuilder(
+                valueListenable: coursesController.isLoading,
+                builder: (context, isLoading, child) {
+                  return isLoading
+                      ? const CircularProgressIndicator()
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            PrimaryButton(
+                              isIconPresent: false,
+                              text: 'Continue',
+                              onPressed: () async {
+                                coursesController.isLoading.value = true;
+                                Future.delayed(Duration(seconds: 2), () {
+                                  coursesController.isLoading.value =
+                                      false; // Set loading back to false after 2 seconds
+                                });
+                                coursesController.saveCourseDetails();
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                              },
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            OutlineButton(
+                              text: 'Undo All Edit',
+                              textColor: customTheme['badgeColor'],
+                              fontWeight: FontWeight.w600,
+                              borderRadius: BorderRadius.circular(8),
+                              buttonColor: customTheme['whiteColor'],
+                              borderSideColor: customTheme['badgeColor'],
+                              isIconPresent: false,
+                              fontSize: 16,
+                              onPressed: () {
+                                coursesController.resetBookDetails();
+                              },
+                            ),
+                          ],
+                        );
                 },
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              OutlineButton(
-                text: 'Undo All Edit',
-                textColor: customTheme['badgeColor'],
-                fontWeight: FontWeight.w600,
-                borderRadius: BorderRadius.circular(8),
-                buttonColor: customTheme['whiteColor'],
-                borderSideColor: customTheme['badgeColor'],
-                isIconPresent: false,
-                fontSize: 16,
-                onPressed: () {},
-              ),
+
               const SizedBox(
                 height: 20,
               ),

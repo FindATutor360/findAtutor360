@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
@@ -40,8 +42,8 @@ class ActiveCourseCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               color: customTheme['fieldColor'],
               image: DecorationImage(
-                image: NetworkImage(
-                  image ?? '',
+                image: FileImage(
+                  File(image ?? ''),
                 ),
                 fit: BoxFit.cover,
               ),

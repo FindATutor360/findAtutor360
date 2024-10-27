@@ -84,12 +84,15 @@ class BooksController extends BaseProvider {
         _author == null ||
         _description == null ||
         _price == null) {
+      _isLoading.value = false;
       throw Exception("Basic details are missing");
     }
     if (_publisher == null || _category == null) {
+      _isLoading.value = false;
       throw Exception("Publishing details are missing");
     }
     if (_image == null) {
+      _isLoading.value = false;
       throw Exception("Images are missing");
     }
 
