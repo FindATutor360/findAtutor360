@@ -7,7 +7,7 @@ class MessageController extends BaseProvider {
   final MessageServiceImpl _messageServiceImpl =
       locator.get<MessageServiceImpl>();
 
-  List<Messages> _messages = [];
+  final List<Messages> _messages = [];
 
   List<Messages> get messages => _messages;
 

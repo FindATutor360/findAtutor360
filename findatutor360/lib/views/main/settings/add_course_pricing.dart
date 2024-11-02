@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:findatutor360/core/models/main/course_model.dart';
+// import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
@@ -13,7 +13,7 @@ import 'package:findatutor360/views/main/settings/add_course_success.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
-import 'package:iconsax/iconsax.dart';
+// import 'package:iconsax/iconsax.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:provider/provider.dart';
 import 'package:time_scheduler_table/time_scheduler_table.dart';

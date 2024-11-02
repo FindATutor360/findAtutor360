@@ -214,8 +214,8 @@ class _CourseDetailsState extends State<CourseDetails> {
                         ),
                         child: Align(
                           child: MainText(
-                            text: widget.course.actual_price_usd != null
-                                ? '\$${widget.course.actual_price_usd!.toStringAsFixed(2)} | Join'
+                            text: widget.course.actualPriceUsd != null
+                                ? '\$${widget.course.actualPriceUsd!.toStringAsFixed(2)} | Join'
                                 : '\$${0.0} | Join',
                             fontSize: 18,
                             color: customTheme['whiteColor'],

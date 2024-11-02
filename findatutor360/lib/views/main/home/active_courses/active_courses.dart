@@ -4,9 +4,9 @@ import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/card/active_course_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
-import 'package:findatutor360/custom_widgets/text/main_text.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/views/main/shop/course_details.dart';
+// import 'package:findatutor360/custom_widgets/text/main_text.dart';
+// import 'package:findatutor360/routes/routes_notifier.dart';
+// import 'package:findatutor360/views/main/shop/course_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -126,7 +126,7 @@ class _ActiveCourseState extends State<ActiveCourse> {
                         // router.push(CourseDetails.path,
                         //     extra: course);
                       },
-                      child: ActiveCourseCard(
+                      child: const ActiveCourseCard(
                         image:
                             'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
                         title: 'Flutter cookbook',

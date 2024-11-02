@@ -16,7 +16,7 @@ class CoursesController extends BaseProvider {
 
   String? _image;
   String? _name;
-  double? _actual_price_usd;
+  double? _actualPriceUsd;
   String? _description;
   String? _category;
   String? _duration;
@@ -46,7 +46,7 @@ class CoursesController extends BaseProvider {
 
   Future<void> addCoursePricingDetails(
     String? duration,
-    double? actual_price_usd,
+    double? actualPriceUsd,
     String? day,
     List<String>? availability,
   ) async {
@@ -55,7 +55,7 @@ class CoursesController extends BaseProvider {
       _duration = duration;
       _availability = availability;
       _day = day;
-      _actual_price_usd = actual_price_usd;
+      _actualPriceUsd = actualPriceUsd;
       _isLoading.value = false;
       notifyListeners();
       log("CoursePricingDetails saved successfully", name: "debug");
@@ -77,13 +77,13 @@ class CoursesController extends BaseProvider {
     }
     if (_duration == null ||
         _availability == null ||
-        _actual_price_usd == null ||
+        _actualPriceUsd == null ||
         _day == null) {
       _isLoading.value = false;
       throw Exception("Pricing details are missing");
     }
     try {
-      await _coursesServiceImpl.addCourse(_image, _name, _actual_price_usd,
+      await _coursesServiceImpl.addCourse(_image, _name, _actualPriceUsd,
           _description, _category, _duration, _day, _availability);
       _isLoading.value = false;
       log("Course saved successfully", name: "debug");
@@ -120,7 +120,7 @@ class CoursesController extends BaseProvider {
   }
 
   void resetBookDetails() {
-    _actual_price_usd = null;
+    _actualPriceUsd = null;
     _availability = null;
     _category = null;
     _description = null;

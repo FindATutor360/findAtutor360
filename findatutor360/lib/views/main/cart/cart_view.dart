@@ -16,6 +16,7 @@ import 'package:provider/provider.dart';
 
 class CartView extends StatefulWidget {
   const CartView({super.key});
+  //Getting the chartview path
   static const path = '/chartView';
 
   @override
@@ -87,7 +88,7 @@ class _CartViewState extends State<CartView> {
                           itemCount: booksController.cart.length,
                           itemBuilder: (context, i) {
                             final book = booksController.cart[i];
-
+                            //returning Cart Card
                             return CartsCard(
                               book: book,
                               itemPrice: itemPrice, // Fixed price of $50
@@ -96,7 +97,7 @@ class _CartViewState extends State<CartView> {
                                   DeleteDialog(
                                     removeTap: () {
                                       booksController.removeFromCart(book);
-
+                                      //Show toast
                                       Fluttertoast.showToast(
                                         msg: "${book.title} removed from cart",
                                         toastLength: Toast.LENGTH_SHORT,

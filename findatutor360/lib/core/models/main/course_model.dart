@@ -10,7 +10,7 @@ class Course {
   String? userId;
   String? image;
   String? name;
-  double? actual_price_usd;
+  double? actualPriceUsd;
   String? description;
   String? category;
   String? duration;
@@ -24,7 +24,7 @@ class Course {
     this.userId,
     this.image,
     this.name,
-    this.actual_price_usd,
+    this.actualPriceUsd,
     this.description,
     this.category,
     this.duration,
