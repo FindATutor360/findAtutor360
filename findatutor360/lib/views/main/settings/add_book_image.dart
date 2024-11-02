@@ -315,7 +315,7 @@ class _AddBookImageViewState extends State<AddBookImageView> {
     if (selectedFile != null || selectedFile2 != null) {
       try {
         _booksController.isLoading.value = true;
-        Future.delayed(Duration(seconds: 2), () {
+        Future.delayed(const Duration(seconds: 2), () {
           _booksController.isLoading.value =
               false; // Set loading back to false after 2 seconds
         });

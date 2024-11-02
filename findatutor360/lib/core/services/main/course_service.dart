@@ -15,7 +15,7 @@ abstract class CoursesService {
   Future<void> addCourse(
     String? image,
     String? name,
-    double? actual_price_usd,
+    double? actualPriceUsd,
     String? description,
     String? category,
     String? duration,
@@ -65,7 +65,7 @@ class CoursesServiceImpl implements CoursesService {
   Future<void> addCourse(
     String? image,
     String? name,
-    double? actual_price_usd,
+    double? actualPriceUsd,
     String? description,
     String? category,
     String? duration,
@@ -78,7 +78,7 @@ class CoursesServiceImpl implements CoursesService {
         userId: _auth?.uid,
         image: image,
         name: name,
-        actual_price_usd: actual_price_usd,
+        actualPriceUsd: actualPriceUsd,
         description: description,
         category: category,
         duration: duration,

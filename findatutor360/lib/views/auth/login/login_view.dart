@@ -157,11 +157,6 @@ class _LoginViewState extends State<LoginView> {
                       },
                       buttonColor: Colors.transparent),
                   const SizedBox(width: 20),
-                  const SecondaryButton(
-                      imageSrc: 'assets/images/twitter.png',
-                      onPressed: null,
-                      buttonColor: Colors.transparent),
-                  const SizedBox(width: 20),
                   SecondaryButton(
                       imageSrc: 'assets/images/facebook.png',
                       onPressed: () async {

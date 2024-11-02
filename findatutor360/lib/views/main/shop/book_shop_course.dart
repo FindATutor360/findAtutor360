@@ -140,7 +140,7 @@ class _BookShopViewState extends State<BookShopView> {
                             },
                             child: BookShopCard(
                               name: course.name ?? '',
-                              price: course.actual_price_usd,
+                              price: course.actualPriceUsd,
                             ),
                           );
                         }),

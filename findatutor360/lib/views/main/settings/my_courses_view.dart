@@ -7,8 +7,8 @@ import 'package:findatutor360/custom_widgets/card/finish_course_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
-import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/views/main/shop/course_details.dart';
+// import 'package:findatutor360/routes/routes_notifier.dart';
+// import 'package:findatutor360/views/main/shop/course_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

@@ -142,7 +142,7 @@ class AddCourseSuccessView extends StatelessWidget {
                               text: 'Continue',
                               onPressed: () async {
                                 coursesController.isLoading.value = true;
-                                Future.delayed(Duration(seconds: 2), () {
+                                Future.delayed(const Duration(seconds: 2), () {
                                   coursesController.isLoading.value =
                                       false; // Set loading back to false after 2 seconds
                                 });

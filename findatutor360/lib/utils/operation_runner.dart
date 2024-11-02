@@ -32,6 +32,7 @@ abstract class OperationRunnerState<T extends StatefulWidget> extends State<T> {
     return null;
   }
 }
+
 Future<dynamic> showSnackMessage(context, String message,
     {bool isError = false}) async {
   return ScaffoldMessenger.of(context).showSnackBar(

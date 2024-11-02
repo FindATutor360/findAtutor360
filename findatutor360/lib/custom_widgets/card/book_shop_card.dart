@@ -94,7 +94,7 @@ class BookShopCard extends StatelessWidget {
                     child: MainText(
                       text: price != null
                           ? '\$${price!.toStringAsFixed(2)} | Join'
-                          : '\ Join',
+                          : ' Join',
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: customTheme['whiteColor']!,
