@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/models/main/course_model.dart';
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/card/active_course_card.dart';
@@ -31,6 +30,8 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  User? auth = FirebaseAuth.instance.currentUser;
+
   Future<List<Book>>? fetchBooks;
 
   Future<List<Course>>? fetchCourses;
@@ -38,6 +39,9 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+
+    Provider.of<AuthController>(context, listen: false).getUserInfo(auth!.uid);
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final booksController =
           Provider.of<BooksController>(context, listen: false);
@@ -61,14 +65,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    User? auth = FirebaseAuth.instance.currentUser;
-
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppHeader(
-          imageUrl: auth?.photoURL,
-        ),
+        appBar: const AppHeader(),
         drawer: const CustomDrawer(),
         body: RefreshIndicator.adaptive(
           onRefresh: _refreshBooks,

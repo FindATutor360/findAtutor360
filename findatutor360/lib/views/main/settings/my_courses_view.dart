@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/card/active_course_card.dart';

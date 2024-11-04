@@ -11,6 +11,8 @@ class Messages {
   final String? recipientPhotoUrl;
   final String? recipientEmail;
   final String? recipientName;
+  final String? recipientBackground;
+  final String? senderBackground;
   final List<String>? participants;
   final String? message;
   final DateTime? createdAt;
@@ -26,6 +28,8 @@ class Messages {
     this.recipientName,
     this.participants,
     this.message,
+    this.recipientBackground,
+    this.senderBackground,
     this.createdAt,
     this.readBy = false,
   });

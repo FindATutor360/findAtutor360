@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
@@ -36,6 +37,7 @@ class _ChatViewsState extends State<ChatViews> {
   @override
   void initState() {
     super.initState();
+
     _message = context.read<MessageController>();
     _focusNode.addListener(() {
       _isButtonVisible.value = _focusNode.hasFocus;
@@ -92,7 +94,10 @@ class _ChatViewsState extends State<ChatViews> {
                   ),
                 ),
                 Text(
-                  'Programmer/Writer',
+                  widget.messages.recipientEmail != currentUser.email
+                      ? widget.messages.recipientBackground ??
+                          'Programmer/Writer'
+                      : widget.messages.senderBackground ?? 'Programmer/Writer',
                   style: TextStyle(
                     fontSize: 12,
                     color: customTheme['whiteColor'],
@@ -351,6 +356,7 @@ class _ChatViewsState extends State<ChatViews> {
 
   Future<void> sendMessage() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
+    final authController = Provider.of<AuthController>(context, listen: false);
     final Users users = Users();
     if (formKey.currentState != null &&
         formKey.currentState!.validate() &&
@@ -358,6 +364,7 @@ class _ChatViewsState extends State<ChatViews> {
       final senderEmail = auth.currentUser!.email ?? users.email;
       final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
       final senderName = auth.currentUser!.displayName ?? users.fullName;
+      final senderBackground = authController.user!.backGround;
       final recipientEmail = widget.messages.senderEmail == senderEmail
           ? widget.messages.recipientEmail
           : widget.messages.senderEmail;
@@ -367,6 +374,10 @@ class _ChatViewsState extends State<ChatViews> {
       final recipientPhotoUrl = widget.messages.senderPhotoUrl == senderPhotoUrl
           ? widget.messages.recipientPhotoUrl
           : widget.messages.senderPhotoUrl;
+      final recipientBackground =
+          widget.messages.senderBackground == senderBackground
+              ? widget.messages.recipientBackground
+              : widget.messages.senderBackground;
 
       await _message.sendMessage(
         senderEmail ?? '',
@@ -374,6 +385,8 @@ class _ChatViewsState extends State<ChatViews> {
         recipientEmail,
         recipientName,
         recipientPhotoUrl,
+        recipientBackground,
+        senderBackground,
       );
       log(recipientEmail ?? '', name: 'debug');
       log(_messageController.text, name: 'debug');

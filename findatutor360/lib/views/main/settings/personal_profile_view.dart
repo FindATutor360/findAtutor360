@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
@@ -14,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class PersonalProfileView extends StatefulWidget {
   const PersonalProfileView({super.key});
@@ -24,9 +28,22 @@ class PersonalProfileView extends StatefulWidget {
 }
 
 class _PersonalProfileViewState extends State<PersonalProfileView> {
+  User? auth = FirebaseAuth.instance.currentUser;
+  @override
+  void initState() {
+    Provider.of<AuthController>(context, listen: false).getUserInfo(auth!.uid);
+    reload();
+    super.initState();
+  }
+
+  void reload() async {
+    await auth!.reload();
+  }
+
   @override
   Widget build(BuildContext context) {
-    User? auth = FirebaseAuth.instance.currentUser;
+    User? _auth = FirebaseAuth.instance.currentUser;
+    final authController = Provider.of<AuthController>(context);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -45,23 +62,36 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
               Align(
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      backgroundColor: customTheme['primaryColor'],
-                      radius: 20,
-                      backgroundImage: NetworkImage(
-                        auth?.photoURL ??
-                            'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                      ),
-                    ),
+                    _auth?.photoURL == null
+                        ? CircleAvatar(
+                            backgroundColor: customTheme['primaryColor'],
+                            radius: 20,
+                            backgroundImage: NetworkImage(
+                              _auth?.photoURL ??
+                                  'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                            ),
+                          )
+                        : CircleAvatar(
+                            backgroundColor: customTheme['primaryColor'],
+                            radius: 20,
+                            backgroundImage: FileImage(
+                              File(
+                                authController.user!.photoUrl ??
+                                    _auth?.photoURL ??
+                                    '',
+                              ),
+                            ),
+                          ),
                     const SizedBox(
                       height: 10,
                     ),
                     MainText(
-                      text: auth?.displayName ?? 'Uknown',
+                      text: _auth?.displayName ?? 'Uknown',
                       fontSize: 14,
                     ),
                     MainText(
-                      text: 'Educationist/Writer',
+                      text: authController.user!.backGround ??
+                          'Educationist/Writer',
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: customTheme['secondaryTextColor'],

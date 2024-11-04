@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
@@ -203,15 +204,21 @@ class _LoginViewState extends State<LoginView> {
       );
       _authController.isLoading.value = false;
       if (user != null && user.emailVerified) {
-        Fluttertoast.showToast(
-          msg: "Login successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: customTheme['primaryColor'],
-          textColor: customTheme['whiteColor'],
-          fontSize: 16.0,
-        );
-        context.pushReplacement(HomeView.path);
+        final Users? userInfo = await _authController.getUserInfo(user.uid);
+        if (userInfo != null) {
+          Provider.of<AuthController>(context, listen: false)
+              .setUserInfo(userInfo);
+
+          Fluttertoast.showToast(
+            msg: "Login successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
+          context.pushReplacement(HomeView.path);
+        }
       } else {
         _authController.isLoading.value = false;
         log("User not created", name: 'debug');
@@ -237,15 +244,21 @@ class _LoginViewState extends State<LoginView> {
       );
       _authController.isLoading.value = false;
       if (user != null) {
-        Fluttertoast.showToast(
-          msg: "Login successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: customTheme['primaryColor'],
-          textColor: customTheme['whiteColor'],
-          fontSize: 16.0,
-        );
-        context.pushReplacement(HomeView.path);
+        final Users? userInfo = await _authController.getUserInfo(user.uid);
+        if (userInfo != null) {
+          Provider.of<AuthController>(context, listen: false)
+              .setUserInfo(userInfo);
+
+          Fluttertoast.showToast(
+            msg: "Login successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
+          context.pushReplacement(HomeView.path);
+        }
       } else if (!user!.emailVerified) {
         _authController.isLoading.value = false;
         Navigator.push(
@@ -281,15 +294,21 @@ class _LoginViewState extends State<LoginView> {
       _authController.isLoading.value = false;
 
       if (user != null) {
-        Fluttertoast.showToast(
-          msg: "Login successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: customTheme['primaryColor'],
-          textColor: customTheme['whiteColor'],
-          fontSize: 16.0,
-        );
-        context.pushReplacement(HomeView.path);
+        final Users? userInfo = await _authController.getUserInfo(user.uid);
+        if (userInfo != null) {
+          Provider.of<AuthController>(context, listen: false)
+              .setUserInfo(userInfo);
+
+          Fluttertoast.showToast(
+            msg: "Login successful",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
+          context.pushReplacement(HomeView.path);
+        }
       } else if (!user!.emailVerified) {
         _authController.isLoading.value = false;
         Navigator.push(

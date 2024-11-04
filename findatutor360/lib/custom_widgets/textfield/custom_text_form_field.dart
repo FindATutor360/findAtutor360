@@ -1,3 +1,4 @@
+import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/message/message_field.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -14,6 +15,7 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final TextCapitalization textCapitalization;
   final Function(String)? onChanged;
+  final bool enable;
 
   const CustomTextFormField({
     super.key,
@@ -28,6 +30,7 @@ class CustomTextFormField extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.textCapitalization = TextCapitalization.sentences,
+    this.enable = true,
   });
 
   @override
@@ -36,12 +39,13 @@ class CustomTextFormField extends StatelessWidget {
         width: MediaQuery.of(context).size.width * 0.85,
         child: TextFormField(
           controller: controller,
+          enabled: enable,
           textCapitalization: textCapitalization,
           inputFormatters: [NoLeadingWhitespaceFormatter()],
           style: GoogleFonts.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: const Color.fromRGBO(4, 118, 175, 1),
+            color: customTheme['mainTextColor'],
           ),
           keyboardType: keyboardType,
           obscureText: obscureText,
@@ -55,20 +59,33 @@ class CustomTextFormField extends StatelessWidget {
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             floatingLabelBehavior: FloatingLabelBehavior.auto,
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Color.fromRGBO(141, 150, 159, 1), width: 1),
+            ),
             enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                    color: Color.fromRGBO(141, 150, 159, 1), width: 1)),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Color.fromRGBO(141, 159, 153, 1), width: 1),
+            ),
             focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromRGBO(4, 118, 175, 1),
+              ),
+            ),
             errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(
-                    color: Color.fromRGBO(241, 4, 4, 1), width: 1)),
+              borderRadius: BorderRadius.circular(10),
+              borderSide: const BorderSide(
+                  color: Color.fromRGBO(241, 4, 4, 1), width: 1),
+            ),
             focusedErrorBorder: const OutlineInputBorder(
-                borderSide: BorderSide(
-                    width: 1, color: Color.fromRGBO(4, 118, 175, 1))),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromRGBO(4, 118, 175, 1),
+              ),
+            ),
           ),
         ));
   }

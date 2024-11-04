@@ -78,6 +78,18 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
             widget.userName,
             widget.userEmail,
             user!.photoURL,
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
           );
           Fluttertoast.showToast(
             msg: "Account created successful",
