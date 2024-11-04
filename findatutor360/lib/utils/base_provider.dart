@@ -1,17 +1,13 @@
 import 'package:flutter/widgets.dart';
 
-enum ViewState {
-  idle,
-  busy,
-}
+enum AuthStatus { idle, loading, success, error }
 
 class BaseProvider extends ChangeNotifier {
-  ViewState _state = ViewState.idle;
+  AuthStatus _status = AuthStatus.idle;
+  AuthStatus get status => _status;
 
-  ViewState get state => _state;
-
-  void setState(ViewState viewState) {
-    _state = viewState;
+  void setLoading(AuthStatus status) {
+    _status = status;
     notifyListeners();
   }
 }

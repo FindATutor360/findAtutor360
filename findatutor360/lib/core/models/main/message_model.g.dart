@@ -18,6 +18,8 @@ Messages _$MessagesFromJson(Map<String, dynamic> json) => Messages(
           ?.map((e) => e as String)
           .toList(),
       message: json['message'] as String?,
+      recipientBackground: json['recipientBackground'] as String?,
+      senderBackground: json['senderBackground'] as String?,
       createdAt: json['createdAt'] == null
           ? null
           : DateTime.parse(json['createdAt'] as String),
@@ -32,6 +34,8 @@ Map<String, dynamic> _$MessagesToJson(Messages instance) => <String, dynamic>{
       'recipientPhotoUrl': instance.recipientPhotoUrl,
       'recipientEmail': instance.recipientEmail,
       'recipientName': instance.recipientName,
+      'recipientBackground': instance.recipientBackground,
+      'senderBackground': instance.senderBackground,
       'participants': instance.participants,
       'message': instance.message,
       'createdAt': instance.createdAt?.toIso8601String(),

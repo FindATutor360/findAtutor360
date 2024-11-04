@@ -2,7 +2,6 @@
 
 import 'dart:developer';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/services/auth/auth_services.dart';
 import 'package:findatutor360/utils/base_provider.dart';
@@ -11,11 +10,11 @@ import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AuthController extends BaseProvider {
   final AuthServiceImpl _authServiceImpl = locator.get<AuthServiceImpl>();
   AppPreferences appPreferences = AppPreferences();
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final ValueNotifier<bool> _isLoadings = ValueNotifier<bool>(false);
 
@@ -27,6 +26,26 @@ class AuthController extends BaseProvider {
 
   Users? get user => _user;
 
+  String? _fullName;
+  String? _photoUrl;
+  String? _phoneNumber;
+  String? _dOB;
+  String? _sex;
+  String? _backGround;
+  String? _eduLevel;
+  String? _college;
+  String? _certificate;
+  String? _certificateDetails;
+  String? _certImageUrl;
+  String? _award;
+  String? _awardDetails;
+  String? _awardImageUrl;
+
+  void setUserInfo(Users users) {
+    _user = users;
+    notifyListeners();
+  }
+
   Future<User?> continueWithGoogle(BuildContext context) async {
     _isLoadings.value = true;
     try {
@@ -36,11 +55,12 @@ class AuthController extends BaseProvider {
       _isLoadings.value = false;
 
       if (user != null) {
-        await sendEmailVerification(user,
+        await sendEmailVerification(user, context,
             name: user.displayName, email: user.email);
 
         String? userToken = await user.getIdToken();
         if (userToken != null) {
+          await appPreferences.getString('userToken');
           await appPreferences.setString('userToken', userToken);
           log('User token: $userToken', name: 'debug');
         } else {
@@ -74,11 +94,14 @@ class AuthController extends BaseProvider {
 
       if (user != null) {
         await user.updateProfile(displayName: fullName);
+        await user.verifyBeforeUpdateEmail(email);
         await user.reload();
-        await sendEmailVerification(user, name: fullName, email: email);
+        await sendEmailVerification(user, context,
+            name: fullName, email: email);
 
         String? userToken = await user.getIdToken();
         if (userToken != null) {
+          await appPreferences.getString('userToken');
           await appPreferences.setString('userToken', userToken);
           log('User token: $userToken', name: 'debug');
         } else {
@@ -113,6 +136,7 @@ class AuthController extends BaseProvider {
       if (user != null) {
         String? userToken = await user.getIdToken();
         if (userToken != null) {
+          await appPreferences.getString('userToken');
           await appPreferences.setString('userToken', userToken);
           log('User token: $userToken', name: 'debug');
         } else {
@@ -139,12 +163,14 @@ class AuthController extends BaseProvider {
       if (user != null) {
         await sendEmailVerification(
           user,
+          context,
           name: user.displayName!,
           email: user.email!,
         );
 
         String? userToken = await user.getIdToken();
         if (userToken != null) {
+          await appPreferences.getString('userToken');
           await appPreferences.setString('userToken', userToken);
           log('User token: $userToken', name: 'debug');
         } else {
@@ -163,15 +189,126 @@ class AuthController extends BaseProvider {
     }
   }
 
-  Future<void> logout(
-      // BuildContext context,
-      ) async {
+  Future<void> updatePersonalDetails(
+    String? fullName,
+    String? backGround,
+    String? dOB,
+    String? sex,
+  ) async {
+    _isLoadings.value = true;
+    try {
+      _fullName = fullName;
+      _backGround = backGround;
+      _dOB = dOB;
+      _sex = sex;
+      _isLoadings.value = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoadings.value = false;
+      throw Exception("Personal details are missing");
+    }
+  }
+
+  Future<void> updateContactDetails(
+    String? phoneNumber,
+    String? photoUrl,
+  ) async {
+    _isLoadings.value = true;
+    try {
+      _phoneNumber = phoneNumber;
+      _photoUrl = photoUrl;
+      _isLoadings.value = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoadings.value = false;
+      throw Exception("Personal details are missing");
+    }
+  }
+
+  Future<void> updateEducationDetails(
+    String? eduLevel,
+    String? college,
+    String? certificate,
+    String? certificateDetails,
+    String? certImageUrl,
+    String? award,
+    String? awardDetails,
+    String? awardImageUrl,
+  ) async {
+    _isLoadings.value = true;
+    try {
+      _eduLevel = eduLevel;
+      _college = college;
+      _certificate = certificate;
+      _certificateDetails = certificateDetails;
+      _certImageUrl = certImageUrl;
+      _award = award;
+      _awardDetails = awardDetails;
+      _awardImageUrl = awardImageUrl;
+      _isLoadings.value = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoadings.value = false;
+      throw Exception("Personal details are missing");
+    }
+  }
+
+  Future<void> updateUserInfo(BuildContext context) async {
+    _isLoadings.value = true;
+    try {
+      User? currentUser = FirebaseAuth.instance.currentUser;
+
+      if (currentUser != null) {
+        String? userToken = await currentUser.getIdToken();
+        await _authServiceImpl.updateUserInfo(
+          context,
+          fullName: _fullName,
+          backGround: _backGround,
+          dOB: _dOB,
+          sex: _sex,
+          phoneNumber: _phoneNumber,
+          photoUrl: _photoUrl,
+          eduLevel: _eduLevel,
+          college: _college,
+          certificate: _certificate,
+          certificateDetails: _certificateDetails,
+          certImageUrl: _certImageUrl,
+          award: _award,
+          awardDetails: _awardDetails,
+          awardImageUrl: _awardImageUrl,
+        );
+        await currentUser.updateProfile(
+          displayName: _fullName,
+          photoURL: _photoUrl,
+        );
+        await currentUser.reload();
+
+        if (userToken != null) {
+          await appPreferences.setString('userToken', userToken);
+          log('User token: $userToken', name: 'debug');
+        } else {
+          log('Failed to get user token.', name: 'debug');
+        }
+        _isLoadings.value = false;
+        log("User info updated successfully!", name: 'debug');
+
+        resetUserInfoDetails();
+      }
+    } catch (e) {
+      log("Failed to update user info: $e", name: 'debug');
+      rethrow;
+    }
+  }
+
+  Future<void> logout() async {
     await appPreferences.remove('userToken');
     await _authServiceImpl.logout();
+    log('Log out successfully', name: 'debug');
   }
 
   Future<void> sendEmailVerification(
-    User user, {
+    User user,
+    BuildContext context, {
     required String? name,
     required String? email,
   }) async {
@@ -179,37 +316,97 @@ class AuthController extends BaseProvider {
       await user.sendEmailVerification();
       log('Verification email sent', name: 'debug');
     } else if (user.emailVerified) {
+      final updatedUserInfo = await getUserInfo(user.uid);
+      if (updatedUserInfo != null) {
+        Provider.of<AuthController>(context, listen: false)
+            .setUserInfo(updatedUserInfo);
+      }
+
       await addUserInfo(
         user,
-        name,
-        email,
-        user.photoURL,
+        updatedUserInfo?.fullName ?? name,
+        updatedUserInfo?.email ?? email,
+        updatedUserInfo?.photoUrl ?? user.photoURL,
+        updatedUserInfo?.backGround ?? _backGround,
+        updatedUserInfo?.dOB ?? _dOB,
+        updatedUserInfo?.sex ?? _sex,
+        updatedUserInfo?.phoneNumber ?? _phoneNumber,
+        updatedUserInfo?.eduLevel ?? _eduLevel,
+        updatedUserInfo?.college ?? _college,
+        updatedUserInfo?.certificate ?? _certificate,
+        updatedUserInfo?.certificateDetails ?? _certificateDetails,
+        updatedUserInfo?.certImageUrl ?? _certImageUrl,
+        updatedUserInfo?.award ?? _award,
+        updatedUserInfo?.awardDetails ?? _awardDetails,
+        updatedUserInfo?.awardImageUrl ?? _awardImageUrl,
       );
     }
-
-    return;
   }
 
   Future<void> addUserInfo(
-      User user, String? userName, String? email, String? photoUrl) async {
+    User user,
+    String? userName,
+    String? email,
+    String? photoUrl,
+    String? backGround,
+    String? dOB,
+    String? sex,
+    String? phoneNumber,
+    String? eduLevel,
+    String? college,
+    String? certificate,
+    String? certificateDetails,
+    String? certImageUrl,
+    String? award,
+    String? awardDetails,
+    String? awardImageUrl,
+  ) async {
     try {
-      Users newUser = Users(
-        uId: user.uid,
-        fullName: userName,
-        email: email,
-        photoUrl: photoUrl,
+      _authServiceImpl.addUserInfo(
+        user,
+        userName,
+        email,
+        photoUrl,
+        backGround,
+        dOB,
+        sex,
+        phoneNumber,
+        eduLevel,
+        college,
+        certificate,
+        certificateDetails,
+        certImageUrl,
+        award,
+        awardDetails,
+        awardImageUrl,
       );
 
-      final data = newUser.toJson();
-      data['createdAt'] = FieldValue.serverTimestamp();
-      await _firestore.collection('Users').doc(user.uid).set(
-            data,
-          );
       log("User added to DB successfully!", name: 'debug');
     } catch (e) {
       log(e.toString(), name: 'debug');
 
       rethrow;
     }
+  }
+
+  Future<Users?> getUserInfo(String userId) async {
+    return await _authServiceImpl.getUserInfo(userId);
+  }
+
+  void resetUserInfoDetails() {
+    _fullName = null;
+    _backGround = null;
+    _dOB = null;
+    _sex = null;
+    _phoneNumber = null;
+    _photoUrl = null;
+    _eduLevel = null;
+    _college = null;
+    _certificate = null;
+    _certificateDetails = null;
+    _certImageUrl = null;
+    _award = null;
+    _awardDetails = null;
+    _awardImageUrl = null;
   }
 }

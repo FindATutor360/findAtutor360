@@ -9,7 +9,6 @@ import 'package:findatutor360/views/main/cart/cart_view.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/book_shop_course.dart';
 import 'package:findatutor360/views/main/shop/shop_books.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../custom_widgets/drawer/custom_drawer.dart';
@@ -49,12 +48,9 @@ class _ShopViewState extends State<ShopView> {
   Widget build(BuildContext context) {
     _booksController = context.watch<BooksController>();
 
-    User? auth = FirebaseAuth.instance.currentUser;
     return SafeArea(
       child: Scaffold(
-        appBar: AppHeader(
-          imageUrl: auth?.photoURL,
-        ),
+        appBar: const AppHeader(),
         drawer: const CustomDrawer(),
         body: RefreshIndicator.adaptive(
           onRefresh: _refreshBooks,

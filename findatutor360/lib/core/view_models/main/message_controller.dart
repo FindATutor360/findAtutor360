@@ -12,13 +12,23 @@ class MessageController extends BaseProvider {
   List<Messages> get messages => _messages;
 
   Future<void> sendMessage(
-      String? senderEmail,
-      String? message,
-      String? recipientEmail,
-      String? recipientName,
-      String? recipientPhotoUrl) async {
+    String? senderEmail,
+    String? message,
+    String? recipientEmail,
+    String? recipientName,
+    String? recipientPhotoUrl,
+    String? recipientBackground,
+    String? senderBackground,
+  ) async {
     await _messageServiceImpl.sendMessage(
-        senderEmail, message, recipientEmail, recipientName, recipientPhotoUrl);
+      senderEmail,
+      message,
+      recipientEmail,
+      recipientName,
+      recipientPhotoUrl,
+      recipientBackground,
+      senderBackground,
+    );
   }
 
   Stream<List<Messages>> getMessages(

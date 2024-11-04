@@ -1,3 +1,4 @@
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -5,6 +6,8 @@ import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dar
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class EditProfileSuccessView extends StatelessWidget {
   const EditProfileSuccessView({super.key});
@@ -12,6 +15,8 @@ class EditProfileSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context, listen: false);
+
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -66,30 +71,67 @@ class EditProfileSuccessView extends StatelessWidget {
                         fontWeight: FontWeight.w400)),
               ),
               //button
-              PrimaryButton(
-                isIconPresent: false,
-                text: 'Continue',
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                  Navigator.pop(context);
-                },
+
+              Align(
+                child: ValueListenableBuilder(
+                  valueListenable: authController.isLoading,
+                  builder: (context, isLoading, child) {
+                    return isLoading
+                        ? const CircularProgressIndicator()
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              PrimaryButton(
+                                isIconPresent: false,
+                                text: 'Continue',
+                                onPressed: () async {
+                                  authController.isLoading.value = true;
+
+                                  // Update user info and wait for it to complete
+                                  await authController.updateUserInfo(context);
+
+                                  // Set loading back to false after update completes
+                                  authController.isLoading.value = false;
+
+                                  // Perform navigation only after loading completes
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+
+                                  Fluttertoast.showToast(
+                                    msg: "User info updated successfully!",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor:
+                                        customTheme['primaryColor'],
+                                    textColor: customTheme['whiteColor'],
+                                    fontSize: 16.0,
+                                  );
+                                },
+                              ),
+                              const SizedBox(
+                                height: 16,
+                              ),
+                              OutlineButton(
+                                text: 'Undo All Edit',
+                                textColor: customTheme['badgeColor'],
+                                fontWeight: FontWeight.w600,
+                                borderRadius: BorderRadius.circular(8),
+                                buttonColor: customTheme['whiteColor'],
+                                borderSideColor: customTheme['badgeColor'],
+                                isIconPresent: false,
+                                fontSize: 16,
+                                onPressed: () {
+                                  authController.resetUserInfoDetails();
+                                },
+                              ),
+                            ],
+                          );
+                  },
+                ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
-              OutlineButton(
-                text: 'Undo All Edit',
-                textColor: customTheme['badgeColor'],
-                fontWeight: FontWeight.w600,
-                borderRadius: BorderRadius.circular(8),
-                buttonColor: customTheme['whiteColor'],
-                borderSideColor: customTheme['badgeColor'],
-                isIconPresent: false,
-                fontSize: 16,
-                onPressed: () {},
-              ),
+
               const SizedBox(
                 height: 20,
               ),

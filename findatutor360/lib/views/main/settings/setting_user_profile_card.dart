@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,12 +40,22 @@ class SettingUserCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: const Color(0xFFE6F6FE),
-                    backgroundImage: NetworkImage(auth?.photoURL ??
-                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
-                    radius: 20,
-                  ),
+                  leading: auth?.photoURL == null
+                      ? CircleAvatar(
+                          backgroundColor: const Color(0xFFE6F6FE),
+                          backgroundImage: NetworkImage(auth?.photoURL ??
+                              'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
+                          radius: 20,
+                        )
+                      : CircleAvatar(
+                          radius: 20,
+                          backgroundColor: const Color(0xFFE6F6FE),
+                          backgroundImage: FileImage(
+                            File(
+                              auth?.photoURL ?? '',
+                            ),
+                          ),
+                        ),
                   title: Text(auth?.displayName ?? 'Unknown',
                       style: const TextStyle(
                         fontSize: 18.0,

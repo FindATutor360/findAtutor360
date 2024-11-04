@@ -23,9 +23,9 @@ class ExpandTextFormField extends StatelessWidget {
         textCapitalization: TextCapitalization.sentences,
         inputFormatters: [NoLeadingWhitespaceFormatter()],
         maxLines: 4,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 16,
-          color: Color.fromRGBO(4, 118, 175, 1),
+          color: customTheme['mainTextColor'],
         ),
         decoration: InputDecoration(
           isDense: true,

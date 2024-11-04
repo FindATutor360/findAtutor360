@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
@@ -64,14 +66,24 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                             ))),
                     const SizedBox(width: 5),
                     Center(
-                      child: CircleAvatar(
-                        backgroundColor: const Color(0xFF0476AF),
-                        radius: 20,
-                        backgroundImage: NetworkImage(
-                          auth?.photoURL ??
-                              'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                        ),
-                      ), //CircleAvatar
+                      child: auth?.photoURL == null
+                          ? CircleAvatar(
+                              backgroundColor: const Color(0xFF0476AF),
+                              radius: 20,
+                              backgroundImage: NetworkImage(
+                                auth?.photoURL ??
+                                    'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                              ),
+                            )
+                          : CircleAvatar(
+                              backgroundColor: const Color(0xFF0476AF),
+                              radius: 20,
+                              backgroundImage: FileImage(
+                                File(
+                                  auth?.photoURL ?? '',
+                                ),
+                              ),
+                            ), //CircleAvatar
                     ),
                   ],
                 ),
