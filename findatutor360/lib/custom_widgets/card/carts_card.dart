@@ -17,7 +17,7 @@ class CartsCard extends StatefulWidget {
   });
 
   final Book book;
-  final double itemPrice; // Fixed price of $50 per item
+  final double itemPrice;
   final VoidCallback? deleteTap;
   final Function(double) onPriceChange;
 
@@ -26,57 +26,7 @@ class CartsCard extends StatefulWidget {
 }
 
 class _CartsCardState extends State<CartsCard> {
-  // ValueNotifier<int> quantity = ValueNotifier<int>(1); // Default quantity is 1
-  // late ValueNotifier<double> totalPrice =
-  //     ValueNotifier(50.0); // Fixed base price of $50
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // Notify the parent of the initial total price
-  //   widget.onPriceChange?.call(totalPrice.value);
-
-  //   // Listen to changes in quantity and update the total price
-  //   quantity.addListener(() {
-  //     updateTotalPrice();
-  //     widget.onPriceChange
-  //         ?.call(totalPrice.value); // Notify the parent of the new price
-  //   });
-  // }
-
-  // // Update the total price whenever the quantity changes
-  // void updateTotalPrice() {
-  //   double basePrice = 50.0; // Fixed base price
-  //   totalPrice.value = basePrice * quantity.value;
-  // }
-
-  // void increaseQuantity() {
-  //   double basePrice = 50.0; // Fixed base price
-  //   quantity.value++;
-  //   double newTotal = basePrice * quantity.value;
-  //   double difference = newTotal - totalPrice.value; // Calculate the difference
-  //   totalPrice.value = newTotal;
-
-  //   // Update the parent cart total
-  //   widget.onPriceChange?.call(difference);
-  // }
-
-  // void decreaseQuantity() {
-  //   if (quantity.value > 1) {
-  //     double basePrice = 50.0; // Fixed base price
-  //     quantity.value--;
-  //     double newTotal = basePrice * quantity.value;
-  //     double difference =
-  //         totalPrice.value - newTotal; // Calculate the difference
-  //     totalPrice.value = newTotal;
-
-  //     // Update the parent cart total
-  //     widget.onPriceChange?.call(-difference); // Subtract the difference
-  //   }
-  // }
-
-  int quantity = 1; // Default quantity is 1
+  int quantity = 1;
 
   late BooksController booksController;
 

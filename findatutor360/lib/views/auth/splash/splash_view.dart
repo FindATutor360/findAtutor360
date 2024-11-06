@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
+import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:findatutor360/views/auth/onboarding/onboarding_view.dart';
 import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
@@ -9,7 +11,7 @@ import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -20,6 +22,7 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  // late AuthController _authController;
   @override
   void initState() {
     super.initState();
@@ -32,11 +35,18 @@ class _SplashViewState extends State<SplashView> {
       User? user = FirebaseAuth.instance.currentUser;
       String? userToken = await FirebaseAuth.instance.currentUser?.getIdToken();
 
+      AppPreferences appPreferences = AppPreferences();
+
       if (user != null && user.emailVerified && userToken != null) {
-        context.pushReplacement(HomeView.path);
+        final updatedUserInfo = await AuthController().getUserInfo(user.uid);
+        if (updatedUserInfo != null) {
+          Provider.of<AuthController>(context, listen: false)
+              .setUserInfo(updatedUserInfo);
+
+          context.pushReplacement(HomeView.path);
+        }
       } else {
-        SharedPreferences preferences = await SharedPreferences.getInstance();
-        bool showOnboarding = preferences.getBool('userToken') ?? true;
+        bool showOnboarding = await appPreferences.getBool('userToken');
         if (showOnboarding) {
           context.pushReplacement(OnboardingView.path);
         } else {

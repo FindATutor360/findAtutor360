@@ -62,12 +62,12 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
               Align(
                 child: Column(
                   children: [
-                    _auth?.photoURL == null
+                    authController.user?.photoUrl == null
                         ? CircleAvatar(
                             backgroundColor: customTheme['primaryColor'],
                             radius: 20,
                             backgroundImage: NetworkImage(
-                              _auth?.photoURL ??
+                              authController.user?.photoUrl ??
                                   'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
                             ),
                           )
@@ -76,9 +76,7 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                             radius: 20,
                             backgroundImage: FileImage(
                               File(
-                                authController.user!.photoUrl ??
-                                    _auth?.photoURL ??
-                                    '',
+                                authController.user?.photoUrl ?? '',
                               ),
                             ),
                           ),
@@ -86,16 +84,19 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                       height: 10,
                     ),
                     MainText(
-                      text: _auth?.displayName ?? 'Uknown',
+                      text: authController.user?.fullName ??
+                          _auth?.displayName ??
+                          'Unkwon',
                       fontSize: 14,
                     ),
-                    MainText(
-                      text: authController.user!.backGround ??
-                          'Educationist/Writer',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: customTheme['secondaryTextColor'],
-                    ),
+                    if (authController.user?.backGround != null)
+                      MainText(
+                        text: authController.user?.backGround ??
+                            'Educationist/Writer',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
                     const SizedBox(
                       height: 15,
                     ),
