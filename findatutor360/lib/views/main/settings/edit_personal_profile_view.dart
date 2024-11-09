@@ -28,26 +28,28 @@ class EditPersonalProfileView extends StatefulWidget {
 }
 
 class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
-  final auth = FirebaseAuth.instance.currentUser;
-
   late AuthController _authController;
-
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  final formKey = GlobalKey<FormState>();
   final backGroundController = TextEditingController();
   final dOBController = TextEditingController();
+  final nameController = TextEditingController();
+  String? typeDropdown;
 
-  final nameController = TextEditingController()
-    ..text = FirebaseAuth.instance.currentUser?.displayName ?? ''
-    ..selection = TextSelection.fromPosition(
-      TextPosition(
-          offset: FirebaseAuth.instance.currentUser!.displayName!.length),
-    );
+  @override
+  void initState() {
+    super.initState();
+    _authController = context.read<AuthController>();
 
-  String typeDropdown = '';
+    if (_authController.user != null) {
+      nameController.text = _authController.user!.fullName ?? '';
+      backGroundController.text = _authController.user!.backGround ?? '';
+      dOBController.text = _authController.user!.dOB ?? '';
+      typeDropdown = _authController.user!.sex ?? 'ff';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    _authController = context.read<AuthController>();
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -164,6 +166,7 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
                   child: DropdownButtonFormField(
+                    value: typeDropdown,
                     icon: const Icon(Icons.keyboard_arrow_down_outlined),
                     dropdownColor: Colors.white,
                     decoration: InputDecoration(
@@ -221,7 +224,7 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                       });
                     },
                     validator: (value) {
-                      if (typeDropdown.isEmpty) {
+                      if (typeDropdown!.isEmpty) {
                         return "Please select identify Type";
                       }
                       return null;

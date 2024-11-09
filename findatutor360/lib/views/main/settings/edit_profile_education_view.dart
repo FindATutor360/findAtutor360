@@ -34,9 +34,9 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
   final auth = FirebaseAuth.instance.currentUser;
   late AuthController _authController;
 
-  PlatformFile? certImageUrl, awardImageUrl;
+  File? certImageUrl, awardImageUrl;
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   final collegeController = TextEditingController();
   final certificateController = TextEditingController();
@@ -44,11 +44,28 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
   final awardController = TextEditingController();
   final awardDetailsController = TextEditingController();
 
-  String typeDropdown = '';
+  String? typeDropdown;
+
+  @override
+  void initState() {
+    super.initState();
+    _authController = context.read<AuthController>();
+
+    if (_authController.user != null) {
+      collegeController.text = _authController.user!.college ?? '';
+      certificateController.text = _authController.user!.certificate ?? '';
+      certDetailsController.text =
+          _authController.user!.certificateDetails ?? '';
+      awardController.text = _authController.user!.award ?? '';
+      awardDetailsController.text = _authController.user!.awardDetails ?? '';
+      typeDropdown = _authController.user!.eduLevel ?? '';
+      // certImageUrl = File(_authController.user!.certImageUrl ?? '');
+      //awardImageUrl = File(_authController.user!.awardImageUrl ?? '');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    _authController = context.read<AuthController>();
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -98,6 +115,7 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.85,
                   child: DropdownButtonFormField(
+                    value: typeDropdown,
                     icon: const Icon(Icons.keyboard_arrow_down_outlined),
                     dropdownColor: Colors.white,
                     decoration: InputDecoration(
@@ -171,7 +189,7 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                       });
                     },
                     validator: (value) {
-                      if (typeDropdown.isEmpty) {
+                      if (typeDropdown!.isEmpty) {
                         return "Please select your education level";
                       }
                       return null;
@@ -263,41 +281,62 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                 const SizedBox(
                   height: 10,
                 ),
-                certImageUrl != null
-                    ? Container(
-                        width: MediaQuery.sizeOf(context).width / 1.5,
-                        height: MediaQuery.sizeOf(context).height / 5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(
-                              File(
-                                certImageUrl?.path ?? '',
+                _authController.user!.certImageUrl != null ||
+                        certImageUrl != null
+                    ? Stack(
+                        clipBehavior: Clip.none,
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.sizeOf(context).width / 1.5,
+                            height: MediaQuery.sizeOf(context).height / 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: certImageUrl == null
+                                    ? FileImage(
+                                        File(_authController
+                                                .user!.certImageUrl ??
+                                            ''),
+                                      )
+                                    : FileImage(
+                                        File(certImageUrl?.path ?? ''),
+                                      ),
                               ),
                             ),
                           ),
-                        ),
+                          InkWell(
+                            onTap: () {
+                              selectImage(
+                                (file) => setState(
+                                  () {
+                                    certImageUrl = file;
+                                  },
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: customTheme['secondaryColor'],
+                              child: Icon(
+                                Icons.camera_alt_sharp,
+                                color: customTheme['mainTextColor'],
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     : SizedBox(
                         width: MediaQuery.of(context).size.width * 0.85,
                         child: InkWell(
                           onTap: () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles(
-                              type: FileType.image,
-                              allowMultiple: false,
+                            selectImage(
+                              (file) => setState(
+                                () {
+                                  certImageUrl = file;
+                                },
+                              ),
                             );
-
-                            if (result != null) {
-                              PlatformFile file = result.files.first;
-
-                              setState(() {
-                                certImageUrl = file;
-                              });
-                            } else {
-                              context.pop();
-                            }
                           },
                           child: CustomPaint(
                             painter: DashedRectanglePainter(),
@@ -401,41 +440,60 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                 const SizedBox(
                   height: 10,
                 ),
-                awardImageUrl != null
-                    ? Container(
-                        width: MediaQuery.sizeOf(context).width / 1.5,
-                        height: MediaQuery.sizeOf(context).height / 5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(
-                              File(
-                                awardImageUrl?.path ?? '',
+                _authController.user!.awardImageUrl != null ||
+                        awardImageUrl != null
+                    ? Stack(
+                        clipBehavior: Clip.none,
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.sizeOf(context).width / 1.5,
+                            height: MediaQuery.sizeOf(context).height / 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: awardImageUrl == null
+                                    ? FileImage(
+                                        File(_authController.user!.award ?? ''),
+                                      )
+                                    : FileImage(
+                                        File(awardImageUrl?.path ?? ''),
+                                      ),
                               ),
                             ),
                           ),
-                        ),
+                          InkWell(
+                            onTap: () {
+                              selectImage(
+                                (file) => setState(
+                                  () {
+                                    awardImageUrl = file;
+                                  },
+                                ),
+                              );
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: customTheme['secondaryColor'],
+                              child: Icon(
+                                Icons.camera_alt_sharp,
+                                color: customTheme['mainTextColor'],
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     : SizedBox(
                         width: MediaQuery.of(context).size.width * 0.85,
                         child: InkWell(
-                          onTap: () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles(
-                              type: FileType.image,
-                              allowMultiple: false,
+                          onTap: () {
+                            selectImage(
+                              (file) => setState(
+                                () {
+                                  awardImageUrl = file;
+                                },
+                              ),
                             );
-
-                            if (result != null) {
-                              PlatformFile file = result.files.first;
-
-                              setState(() {
-                                awardImageUrl = file;
-                              });
-                            } else {
-                              context.pop();
-                            }
                           },
                           child: CustomPaint(
                             painter: DashedRectanglePainter(),
@@ -568,6 +626,19 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
           fontSize: 16.0,
         );
       }
+    }
+  }
+
+  Future<void> selectImage(Function(File) onSelected) async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      onSelected(File(result.files.first.path!));
+    } else {
+      // Handle cancellation or error if needed
     }
   }
 }

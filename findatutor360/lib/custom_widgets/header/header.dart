@@ -1,11 +1,12 @@
 import 'dart:io';
 
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class Header extends StatelessWidget implements PreferredSizeWidget {
   final String? imageUrl;
@@ -20,7 +21,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    User? auth = FirebaseAuth.instance.currentUser;
+    final authController = Provider.of<AuthController>(context);
 
     Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
         ? Colors.black
@@ -66,12 +67,12 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                             ))),
                     const SizedBox(width: 5),
                     Center(
-                      child: auth?.photoURL == null
+                      child: authController.user?.photoUrl == null
                           ? CircleAvatar(
                               backgroundColor: const Color(0xFF0476AF),
                               radius: 20,
                               backgroundImage: NetworkImage(
-                                auth?.photoURL ??
+                                authController.user?.photoUrl ??
                                     'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
                               ),
                             )
@@ -80,7 +81,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                               radius: 20,
                               backgroundImage: FileImage(
                                 File(
-                                  auth?.photoURL ?? '',
+                                  authController.user?.photoUrl ?? '',
                                 ),
                               ),
                             ), //CircleAvatar

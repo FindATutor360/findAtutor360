@@ -164,26 +164,28 @@ class _CartViewState extends State<CartView> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text.rich(
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          overflow: TextOverflow.ellipsis,
-                                          fontWeight: FontWeight.w400,
-                                          fontFamily: 'Manrope',
-                                          color:
-                                              customTheme['secondaryTextColor'],
-                                        ),
-                                        TextSpan(
-                                          text: book.title,
-                                          children: [
-                                            TextSpan(
-                                              text: '  x${book.quantity}',
-                                              style: TextStyle(
-                                                color: customTheme[
-                                                    'mainTextColor'],
+                                      Expanded(
+                                        child: Text.rich(
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                            overflow: TextOverflow.clip,
+                                            fontWeight: FontWeight.w400,
+                                            fontFamily: 'Manrope',
+                                            color: customTheme[
+                                                'secondaryTextColor'],
+                                          ),
+                                          TextSpan(
+                                            text: book.title,
+                                            children: [
+                                              TextSpan(
+                                                text: '  x${book.quantity}',
+                                                style: TextStyle(
+                                                  color: customTheme[
+                                                      'mainTextColor'],
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
                                       MainText(

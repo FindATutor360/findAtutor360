@@ -145,7 +145,9 @@ class AuthServiceImpl implements AuthService {
           await _auth.signInWithCredential(facebookAuthCredential);
       await facebookAuth.logOut();
 
-      return credential.user;
+      User? user = credential.user;
+
+      return user;
     }
     return null;
   }

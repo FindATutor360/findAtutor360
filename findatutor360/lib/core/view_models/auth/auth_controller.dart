@@ -312,11 +312,15 @@ class AuthController extends BaseProvider {
     required String? name,
     required String? email,
   }) async {
+    final updatedUserInfo = await getUserInfo(user.uid);
     if (!user.emailVerified) {
       await user.sendEmailVerification();
+      if (updatedUserInfo == null) {
+        Provider.of<AuthController>(context, listen: false)
+            .setUserInfo(updatedUserInfo!);
+      }
       log('Verification email sent', name: 'debug');
     } else if (user.emailVerified) {
-      final updatedUserInfo = await getUserInfo(user.uid);
       if (updatedUserInfo != null) {
         Provider.of<AuthController>(context, listen: false)
             .setUserInfo(updatedUserInfo);
@@ -324,8 +328,8 @@ class AuthController extends BaseProvider {
 
       await addUserInfo(
         user,
-        updatedUserInfo?.fullName ?? name,
-        updatedUserInfo?.email ?? email,
+        updatedUserInfo?.fullName ?? user.displayName,
+        updatedUserInfo?.email ?? user.email,
         updatedUserInfo?.photoUrl ?? user.photoURL,
         updatedUserInfo?.backGround ?? _backGround,
         updatedUserInfo?.dOB ?? _dOB,

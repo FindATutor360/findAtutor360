@@ -34,21 +34,27 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
   final auth = FirebaseAuth.instance.currentUser;
   late AuthController _authController;
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   File? _image;
 
   final phoneController = TextEditingController();
-  final emailController = TextEditingController()
-    ..text = FirebaseAuth.instance.currentUser?.email ?? ''
-    ..selection = TextSelection.fromPosition(
-      TextPosition(offset: FirebaseAuth.instance.currentUser!.email!.length),
-    );
+  final emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _authController = context.read<AuthController>();
+
+    if (_authController.user != null) {
+      emailController.text = _authController.user!.email ?? '';
+      phoneController.text = _authController.user!.phoneNumber ?? '';
+      _image = File(_authController.user!.photoUrl ?? '');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    _authController = context.read<AuthController>();
-
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -142,20 +148,50 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                   height: 10,
                 ),
                 _image != null
-                    ? Container(
-                        width: MediaQuery.sizeOf(context).width / 1.5,
-                        height: MediaQuery.sizeOf(context).height / 5,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: FileImage(
-                              File(
-                                _image?.path ?? '',
+                    ? Stack(
+                        clipBehavior: Clip.none,
+                        alignment: AlignmentDirectional.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.sizeOf(context).width / 1.5,
+                            height: MediaQuery.sizeOf(context).height / 5,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(
+                                  File(
+                                    _image?.path ?? '',
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                          InkWell(
+                            onTap: () async {
+                              FilePickerResult? result =
+                                  await FilePicker.platform.pickFiles(
+                                type: FileType.image,
+                                allowMultiple: false,
+                              );
+
+                              if (result != null) {
+                                PlatformFile file = result.files.first;
+
+                                setState(() {
+                                  _image = File(file.path!);
+                                });
+                              }
+                            },
+                            child: CircleAvatar(
+                              backgroundColor: customTheme['secondaryColor'],
+                              child: Icon(
+                                Icons.camera_alt_sharp,
+                                color: customTheme['mainTextColor'],
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     : SizedBox(
                         width: MediaQuery.of(context).size.width * 0.85,
@@ -177,11 +213,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
 
                               setState(() {
                                 _image = File(file.path!);
-
-                                formKey.currentState?.validate();
                               });
-                            } else {
-                              context.pop();
                             }
                           },
                           child: CustomPaint(
