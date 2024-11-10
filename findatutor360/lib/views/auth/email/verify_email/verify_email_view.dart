@@ -45,26 +45,38 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
     super.initState();
     authController = context.read<AuthController>();
     user = FirebaseAuth.instance.currentUser;
-    startCountdown();
-    navigateUser();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startCountdown();
+      navigateUser();
+    });
   }
 
   void startCountdown() {
     countdown.value = 60;
-    authController.isLoading.value = true;
+    setIsLoading(true);
 
     emailVerificationTimer =
         Timer.periodic(const Duration(seconds: 1), (timer) {
       if (countdown.value > 0) {
         countdown.value -= 1;
       } else {
-        authController.isLoading.value = false;
+        setIsLoading(false);
         timer.cancel();
       }
     });
   }
 
+  void setIsLoading(bool value) {
+    // Defer updating isLoading to prevent triggering during build
+    if (authController.isLoading.value != value) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        authController.isLoading.value = value;
+      });
+    }
+  }
+
   Future<void> navigateUser() async {
+    setIsLoading(true);
     if (user != null) {
       Timer.periodic(const Duration(seconds: 3), (timer) async {
         await user!.reload();
@@ -101,12 +113,15 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
           );
           context.pushReplacement(HomeView.path);
 
+          setIsLoading(false);
+
           log("User Email verified", name: 'debug');
         }
       });
     } else {
       log("No user found", name: 'debug');
       context.pushReplacement(RegisterView.path);
+      setIsLoading(false);
     }
   }
 

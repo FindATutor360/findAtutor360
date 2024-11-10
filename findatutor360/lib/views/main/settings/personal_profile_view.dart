@@ -31,18 +31,23 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
   User? auth = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-    Provider.of<AuthController>(context, listen: false).getUserInfo(auth!.uid);
-    reload();
     super.initState();
-  }
+    auth = FirebaseAuth.instance.currentUser;
 
-  void reload() async {
-    await auth!.reload();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(
+          const Duration(milliseconds: 500)); // Give Firebase time to update
+      if (auth != null) {
+        // ignore: use_build_context_synchronously
+        Provider.of<AuthController>(context, listen: false)
+            .getUserInfo(auth!.uid);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    User? _auth = FirebaseAuth.instance.currentUser;
+    User? auth = FirebaseAuth.instance.currentUser;
     final authController = Provider.of<AuthController>(context);
     return SafeArea(
       child: Scaffold(
@@ -67,7 +72,7 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                             backgroundColor: customTheme['primaryColor'],
                             radius: 20,
                             backgroundImage: NetworkImage(
-                              authController.user?.photoUrl ??
+                              auth?.photoURL ??
                                   'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
                             ),
                           )
@@ -85,7 +90,7 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                     ),
                     MainText(
                       text: authController.user?.fullName ??
-                          _auth?.displayName ??
+                          auth?.displayName ??
                           'Unkwon',
                       fontSize: 14,
                     ),

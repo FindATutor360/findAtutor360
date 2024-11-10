@@ -38,6 +38,8 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
 
   File? _image;
 
+  String? _profileImageUrl;
+
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
 
@@ -46,10 +48,10 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     super.initState();
     _authController = context.read<AuthController>();
 
-    if (_authController.user != null) {
-      emailController.text = _authController.user!.email ?? '';
-      phoneController.text = _authController.user!.phoneNumber ?? '';
-      _image = File(_authController.user!.photoUrl ?? '');
+    if (_authController.user != null || auth != null) {
+      emailController.text = _authController.user?.email ?? auth?.email ?? '';
+      phoneController.text = _authController.user?.phoneNumber ?? '';
+      _profileImageUrl = _authController.user?.photoUrl ?? auth?.photoURL;
     }
   }
 
@@ -147,121 +149,9 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                 const SizedBox(
                   height: 10,
                 ),
-                _image != null
-                    ? Stack(
-                        clipBehavior: Clip.none,
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Container(
-                            width: MediaQuery.sizeOf(context).width / 1.5,
-                            height: MediaQuery.sizeOf(context).height / 5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: FileImage(
-                                  File(
-                                    _image?.path ?? '',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () async {
-                              FilePickerResult? result =
-                                  await FilePicker.platform.pickFiles(
-                                type: FileType.image,
-                                allowMultiple: false,
-                              );
-
-                              if (result != null) {
-                                PlatformFile file = result.files.first;
-
-                                setState(() {
-                                  _image = File(file.path!);
-                                });
-                              }
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: customTheme['secondaryColor'],
-                              child: Icon(
-                                Icons.camera_alt_sharp,
-                                color: customTheme['mainTextColor'],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: InkWell(
-                          onTap: () async {
-                            FilePickerResult? result =
-                                await FilePicker.platform.pickFiles(
-                              type: FileType.image,
-                              allowMultiple: false,
-                            );
-
-                            if (result != null) {
-                              PlatformFile file = result.files.first;
-
-                              log('File Name: ${file.name}');
-                              log('File Size: ${file.size}');
-                              log('File Path: ${file.path}');
-                              log('File Path: ${file.identifier}');
-
-                              setState(() {
-                                _image = File(file.path!);
-                              });
-                            }
-                          },
-                          child: CustomPaint(
-                            painter: DashedRectanglePainter(),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 16),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Iconsax.image5,
-                                    color: customTheme['primaryColor'],
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Click to ',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: customTheme['mainTextColor'],
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: 'Upload Photos',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: customTheme['primaryColor'],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  MainText(
-                                    text: 'PNG, JPG, , GIF upto 5MB',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: customTheme['secondaryTextColor'],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                _image != null // Check if a new image is selected
+                    ? displayImageFromFile(_image!)
+                    : displayProfileImageOrPlaceholder(_profileImageUrl),
                 const SizedBox(
                   height: 40,
                 ),
@@ -316,8 +206,9 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
 
   Future<void> updateContactDetails() async {
     if (formKey.currentState != null &&
-        formKey.currentState!.validate() &&
-        _image != null) {
+            formKey.currentState!.validate() &&
+            _image != null ||
+        _authController.user?.photoUrl != null) {
       final FirebaseAuth auth = FirebaseAuth.instance;
 
       try {
@@ -327,7 +218,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
 
         await _authController.updateContactDetails(
           phoneController.text,
-          _image?.path,
+          _authController.user?.photoUrl ?? _image?.path,
         );
 
         _authController.isLoading.value = false;
@@ -350,6 +241,109 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     }
   }
 
+  // Helper to display the profile image from URL or placeholder
+  Widget displayProfileImageOrPlaceholder(String? imageUrl) {
+    return imageUrl == null || _authController.user?.photoUrl != null
+        ? Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                height: MediaQuery.of(context).size.height / 5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: _authController.user?.photoUrl != null
+                      ? imageUrl == null
+                          ? DecorationImage(
+                              image: NetworkImage(imageUrl ?? ''),
+                              fit: BoxFit.cover,
+                            )
+                          : DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(
+                                File(
+                                  _authController.user?.photoUrl ?? '',
+                                ),
+                              ),
+                            )
+                      : null,
+
+                  color: Colors.grey[200], // Placeholder color
+                ),
+              ),
+              buildUploadButton(),
+            ],
+          )
+        : SizedBox(
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: InkWell(
+              onTap: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.image,
+                  allowMultiple: false,
+                );
+
+                if (result != null) {
+                  PlatformFile file = result.files.first;
+
+                  log('File Name: ${file.name}');
+                  log('File Size: ${file.size}');
+                  log('File Path: ${file.path}');
+                  log('File Path: ${file.identifier}');
+
+                  setState(() {
+                    _image = File(file.path!);
+                  });
+                }
+              },
+              child: CustomPaint(
+                painter: DashedRectanglePainter(),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Iconsax.image5,
+                        color: customTheme['primaryColor'],
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Click to ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: customTheme['mainTextColor'],
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Upload Photos',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: customTheme['primaryColor'],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      MainText(
+                        text: 'PNG, JPG, , GIF upto 5MB',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+  }
+
   Future<String> uploadImageToStorage(File imageFile) async {
     try {
       String fileName = FirebaseAuth.instance.currentUser!.uid;
@@ -362,5 +356,52 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     } catch (e) {
       rethrow;
     }
+  }
+
+  Widget displayImageFromFile(File imageFile) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width / 1.5,
+          height: MediaQuery.of(context).size.height / 5,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: FileImage(imageFile),
+            ),
+          ),
+        ),
+        buildUploadButton(),
+      ],
+    );
+  }
+
+  // Build button to upload new image
+  Widget buildUploadButton() {
+    return InkWell(
+      onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          allowMultiple: false,
+        );
+
+        if (result != null) {
+          PlatformFile file = result.files.first;
+
+          setState(() {
+            _image = File(file.path!); // Update with new image
+          });
+        }
+      },
+      child: CircleAvatar(
+        backgroundColor: customTheme['secondaryColor'],
+        child: Icon(
+          Icons.camera_alt_sharp,
+          color: customTheme['mainTextColor'],
+        ),
+      ),
+    );
   }
 }

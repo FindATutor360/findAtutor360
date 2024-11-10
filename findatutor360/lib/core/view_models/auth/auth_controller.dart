@@ -46,6 +46,18 @@ class AuthController extends BaseProvider {
     notifyListeners();
   }
 
+  void clearUserData() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (user != null) {
+        _user = null;
+
+        notifyListeners();
+      } else {
+        log("No user data to clear.", name: 'debug');
+      }
+    });
+  }
+
   Future<User?> continueWithGoogle(BuildContext context) async {
     _isLoadings.value = true;
     try {
@@ -313,12 +325,29 @@ class AuthController extends BaseProvider {
     required String? email,
   }) async {
     final updatedUserInfo = await getUserInfo(user.uid);
-    if (!user.emailVerified) {
+    if (!user.emailVerified && updatedUserInfo != null) {
+      Provider.of<AuthController>(context, listen: false)
+          .setUserInfo(updatedUserInfo);
+      await addUserInfo(
+        user,
+        updatedUserInfo.fullName ?? user.displayName,
+        updatedUserInfo.email ?? user.email,
+        updatedUserInfo.photoUrl ?? user.photoURL,
+        updatedUserInfo.backGround ?? _backGround,
+        updatedUserInfo.dOB ?? _dOB,
+        updatedUserInfo.sex ?? _sex,
+        updatedUserInfo.phoneNumber ?? _phoneNumber,
+        updatedUserInfo.eduLevel ?? _eduLevel,
+        updatedUserInfo.college ?? _college,
+        updatedUserInfo.certificate ?? _certificate,
+        updatedUserInfo.certificateDetails ?? _certificateDetails,
+        updatedUserInfo.certImageUrl ?? _certImageUrl,
+        updatedUserInfo.award ?? _award,
+        updatedUserInfo.awardDetails ?? _awardDetails,
+        _awardImageUrl ?? updatedUserInfo.awardImageUrl,
+      );
+
       await user.sendEmailVerification();
-      if (updatedUserInfo == null) {
-        Provider.of<AuthController>(context, listen: false)
-            .setUserInfo(updatedUserInfo!);
-      }
       log('Verification email sent', name: 'debug');
     } else if (user.emailVerified) {
       if (updatedUserInfo != null) {
@@ -394,7 +423,17 @@ class AuthController extends BaseProvider {
   }
 
   Future<Users?> getUserInfo(String userId) async {
-    return await _authServiceImpl.getUserInfo(userId);
+    _isLoadings.value = true;
+    clearUserData();
+    try {
+      final data = await _authServiceImpl.getUserInfo(userId);
+      _isLoadings.value = false;
+
+      return data;
+    } catch (e) {
+      _isLoadings.value = false;
+      rethrow;
+    }
   }
 
   void resetUserInfoDetails() {

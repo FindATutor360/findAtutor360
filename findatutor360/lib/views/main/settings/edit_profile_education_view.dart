@@ -45,22 +45,23 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
   final awardDetailsController = TextEditingController();
 
   String? typeDropdown;
+  String? _awardImageUrl, _certImageUrl;
 
   @override
   void initState() {
     super.initState();
     _authController = context.read<AuthController>();
 
-    if (_authController.user != null) {
-      collegeController.text = _authController.user!.college ?? '';
-      certificateController.text = _authController.user!.certificate ?? '';
+    if (_authController.user != null || auth != null) {
+      collegeController.text = _authController.user?.college ?? '';
+      certificateController.text = _authController.user?.certificate ?? '';
       certDetailsController.text =
-          _authController.user!.certificateDetails ?? '';
-      awardController.text = _authController.user!.award ?? '';
-      awardDetailsController.text = _authController.user!.awardDetails ?? '';
-      typeDropdown = _authController.user!.eduLevel ?? '';
-      // certImageUrl = File(_authController.user!.certImageUrl ?? '');
-      //awardImageUrl = File(_authController.user!.awardImageUrl ?? '');
+          _authController.user?.certificateDetails ?? '';
+      awardController.text = _authController.user?.award ?? '';
+      awardDetailsController.text = _authController.user?.awardDetails ?? '';
+      typeDropdown = _authController.user?.eduLevel ?? '';
+      _certImageUrl = _authController.user?.certImageUrl ?? '';
+      _awardImageUrl = _authController.user?.awardImageUrl ?? '';
     }
   }
 
@@ -281,109 +282,125 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                 const SizedBox(
                   height: 10,
                 ),
-                _authController.user!.certImageUrl != null ||
-                        certImageUrl != null
-                    ? Stack(
-                        clipBehavior: Clip.none,
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Container(
-                            width: MediaQuery.sizeOf(context).width / 1.5,
-                            height: MediaQuery.sizeOf(context).height / 5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: certImageUrl == null
-                                    ? FileImage(
-                                        File(_authController
-                                                .user!.certImageUrl ??
-                                            ''),
-                                      )
-                                    : FileImage(
-                                        File(certImageUrl?.path ?? ''),
+                certImageUrl != null
+                    ? displayImageFromFile(certImageUrl!)
+                    : _certImageUrl == null ||
+                            _authController.user?.certImageUrl != null
+                        ? Stack(
+                            clipBehavior: Clip.none,
+                            alignment: AlignmentDirectional.center,
+                            children: [
+                              Container(
+                                width: MediaQuery.sizeOf(context).width / 1.5,
+                                height: MediaQuery.sizeOf(context).height / 5,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(16),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: FileImage(
+                                      File(
+                                        _authController.user?.certImageUrl ??
+                                            '',
                                       ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              selectImage(
-                                (file) => setState(
-                                  () {
-                                    certImageUrl = file;
-                                  },
-                                ),
-                              );
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: customTheme['secondaryColor'],
-                              child: Icon(
-                                Icons.camera_alt_sharp,
-                                color: customTheme['mainTextColor'],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: InkWell(
-                          onTap: () async {
-                            selectImage(
-                              (file) => setState(
-                                () {
-                                  certImageUrl = file;
-                                },
-                              ),
-                            );
-                          },
-                          child: CustomPaint(
-                            painter: DashedRectanglePainter(),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 16),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Iconsax.image5,
-                                    color: customTheme['primaryColor'],
+                                    ),
                                   ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Click to ',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: customTheme['mainTextColor'],
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  FilePickerResult? result =
+                                      await FilePicker.platform.pickFiles(
+                                    type: FileType.image,
+                                    allowMultiple: false,
+                                  );
+
+                                  if (result != null) {
+                                    PlatformFile file = result.files.first;
+
+                                    setState(() {
+                                      certImageUrl = File(
+                                          file.path!); // Update with new image
+                                    });
+                                  }
+                                },
+                                child: CircleAvatar(
+                                  backgroundColor:
+                                      customTheme['secondaryColor'],
+                                  child: Icon(
+                                    Icons.camera_alt_sharp,
+                                    color: customTheme['mainTextColor'],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.85,
+                            child: InkWell(
+                              onTap: () async {
+                                FilePickerResult? result =
+                                    await FilePicker.platform.pickFiles(
+                                  type: FileType.image,
+                                  allowMultiple: false,
+                                );
+
+                                if (result != null) {
+                                  PlatformFile file = result.files.first;
+
+                                  setState(() {
+                                    certImageUrl = File(
+                                        file.path!); // Update with new image
+                                  });
+                                }
+                              },
+                              child: CustomPaint(
+                                painter: DashedRectanglePainter(),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 16, horizontal: 16),
+                                  child: Column(
+                                    children: [
+                                      Icon(
+                                        Iconsax.image5,
+                                        color: customTheme['primaryColor'],
                                       ),
-                                      children: [
-                                        TextSpan(
-                                          text: 'Upload file',
+                                      RichText(
+                                        text: TextSpan(
+                                          text: 'Click to ',
                                           style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w400,
-                                            color: customTheme['primaryColor'],
+                                            color: customTheme['mainTextColor'],
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                          children: [
+                                            TextSpan(
+                                              text: 'Upload file',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w400,
+                                                color:
+                                                    customTheme['primaryColor'],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      MainText(
+                                        text: 'PNG, JPG, , PDF upto 5MB',
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w400,
+                                        color:
+                                            customTheme['secondaryTextColor'],
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  MainText(
-                                    text: 'PNG, JPG, , PDF upto 5MB',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: customTheme['secondaryTextColor'],
-                                  ),
-                                ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
                 const SizedBox(
                   height: 12,
                 ),
@@ -440,107 +457,9 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                 const SizedBox(
                   height: 10,
                 ),
-                _authController.user!.awardImageUrl != null ||
-                        awardImageUrl != null
-                    ? Stack(
-                        clipBehavior: Clip.none,
-                        alignment: AlignmentDirectional.center,
-                        children: [
-                          Container(
-                            width: MediaQuery.sizeOf(context).width / 1.5,
-                            height: MediaQuery.sizeOf(context).height / 5,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(16),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: awardImageUrl == null
-                                    ? FileImage(
-                                        File(_authController.user!.award ?? ''),
-                                      )
-                                    : FileImage(
-                                        File(awardImageUrl?.path ?? ''),
-                                      ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              selectImage(
-                                (file) => setState(
-                                  () {
-                                    awardImageUrl = file;
-                                  },
-                                ),
-                              );
-                            },
-                            child: CircleAvatar(
-                              backgroundColor: customTheme['secondaryColor'],
-                              child: Icon(
-                                Icons.camera_alt_sharp,
-                                color: customTheme['mainTextColor'],
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    : SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.85,
-                        child: InkWell(
-                          onTap: () {
-                            selectImage(
-                              (file) => setState(
-                                () {
-                                  awardImageUrl = file;
-                                },
-                              ),
-                            );
-                          },
-                          child: CustomPaint(
-                            painter: DashedRectanglePainter(),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 16, horizontal: 16),
-                              child: Column(
-                                children: [
-                                  Icon(
-                                    Iconsax.image5,
-                                    color: customTheme['primaryColor'],
-                                  ),
-                                  RichText(
-                                    text: TextSpan(
-                                      text: 'Click to ',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w400,
-                                        color: customTheme['mainTextColor'],
-                                      ),
-                                      children: [
-                                        TextSpan(
-                                          text: 'Upload file',
-                                          style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
-                                            color: customTheme['primaryColor'],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 4,
-                                  ),
-                                  MainText(
-                                    text: 'PNG, JPG, , PDF upto 5MB',
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w400,
-                                    color: customTheme['secondaryTextColor'],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                awardImageUrl != null
+                    ? displayImageFromFile(awardImageUrl!)
+                    : displayProfileImageOrPlaceholder(_awardImageUrl),
                 const SizedBox(
                   height: 40,
                 ),
@@ -603,10 +522,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
           collegeController.text,
           certificateController.text,
           certDetailsController.text,
-          certImageUrl?.path,
+          _authController.user?.certImageUrl ?? certImageUrl?.path,
           awardController.text,
           awardDetailsController.text,
-          awardImageUrl?.path,
+          _authController.user?.awardImageUrl ?? awardImageUrl?.path,
         );
 
         _authController.isLoading.value = false;
@@ -627,6 +546,164 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
         );
       }
     }
+  }
+
+  Widget displayImageFromFile(File imageFile) {
+    return Stack(
+      alignment: AlignmentDirectional.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width / 1.5,
+          height: MediaQuery.of(context).size.height / 5,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(16),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: FileImage(imageFile),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: () {
+            selectImage(
+              (file) => setState(
+                () {
+                  imageFile = file;
+                },
+              ),
+            );
+          },
+          child: CircleAvatar(
+            backgroundColor: customTheme['secondaryColor'],
+            child: Icon(
+              Icons.camera_alt_sharp,
+              color: customTheme['mainTextColor'],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget displayProfileImageOrPlaceholder(String? imageUrl) {
+    return imageUrl == null || _authController.user?.awardImageUrl != null
+        ? Stack(
+            alignment: AlignmentDirectional.center,
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width / 1.5,
+                height: MediaQuery.of(context).size.height / 5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: FileImage(
+                      File(
+                        _authController.user?.awardImageUrl ?? '',
+                      ),
+                    ),
+                  ),
+
+                  color: Colors.grey[200], // Placeholder color
+                ),
+              ),
+              buildUploadButton(),
+            ],
+          )
+        : SizedBox(
+            width: MediaQuery.of(context).size.width * 0.85,
+            child: InkWell(
+              onTap: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  type: FileType.image,
+                  allowMultiple: false,
+                );
+
+                if (result != null) {
+                  PlatformFile file = result.files.first;
+
+                  log('File Name: ${file.name}');
+                  log('File Size: ${file.size}');
+                  log('File Path: ${file.path}');
+                  log('File Path: ${file.identifier}');
+
+                  setState(() {
+                    awardImageUrl = File(file.path!);
+                  });
+                }
+              },
+              child: CustomPaint(
+                painter: DashedRectanglePainter(),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Iconsax.image5,
+                        color: customTheme['primaryColor'],
+                      ),
+                      RichText(
+                        text: TextSpan(
+                          text: 'Click to ',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            color: customTheme['mainTextColor'],
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Upload Photos',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: customTheme['primaryColor'],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      MainText(
+                        text: 'PNG, JPG, , GIF upto 5MB',
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+  }
+
+  Widget buildUploadButton() {
+    return InkWell(
+      onTap: () async {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image,
+          allowMultiple: false,
+        );
+
+        if (result != null) {
+          PlatformFile file = result.files.first;
+
+          setState(() {
+            awardImageUrl = File(file.path!); // Update with new image
+          });
+        }
+      },
+      child: CircleAvatar(
+        backgroundColor: customTheme['secondaryColor'],
+        child: Icon(
+          Icons.camera_alt_sharp,
+          color: customTheme['mainTextColor'],
+        ),
+      ),
+    );
   }
 
   Future<void> selectImage(Function(File) onSelected) async {
