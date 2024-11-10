@@ -274,6 +274,8 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                     userName: _fullNameController.text,
                   ))),
         );
+
+        _authController.isLoading.value = false;
       } else {
         _authController.isLoading.value = false;
         log("User not created", name: 'debug');

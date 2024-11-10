@@ -29,6 +29,7 @@ class EditPersonalProfileView extends StatefulWidget {
 
 class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
   late AuthController _authController;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final formKey = GlobalKey<FormState>();
   final backGroundController = TextEditingController();
   final dOBController = TextEditingController();
@@ -40,11 +41,13 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
     super.initState();
     _authController = context.read<AuthController>();
 
-    if (_authController.user != null) {
-      nameController.text = _authController.user!.fullName ?? '';
-      backGroundController.text = _authController.user!.backGround ?? '';
-      dOBController.text = _authController.user!.dOB ?? '';
-      typeDropdown = _authController.user!.sex ?? 'ff';
+    if (_authController.user != null || _auth.currentUser != null) {
+      nameController.text = _authController.user?.fullName ??
+          _auth.currentUser?.displayName ??
+          'No Name';
+      backGroundController.text = _authController.user?.backGround ?? '';
+      dOBController.text = _authController.user?.dOB ?? '';
+      typeDropdown = _authController.user?.sex;
     }
   }
 
