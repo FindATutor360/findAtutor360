@@ -28,6 +28,7 @@ abstract class AuthService {
   Future<User?> continueWithFacebook(
     BuildContext context,
   );
+  Future<void> resetPassword({required String email});
   Future<void> logout();
 
   Future<void> addUserInfo(
@@ -67,7 +68,7 @@ abstract class AuthService {
     String? awardImageUrl,
   });
 
-  Future<Users?> getUserInfo(String userId);
+  Stream<Users?> getUserInfo(String userId);
 }
 
 class AuthServiceImpl implements AuthService {
@@ -120,13 +121,19 @@ class AuthServiceImpl implements AuthService {
     UserCredential credential = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     log('User log in successful', name: 'debug');
-    User? user = credential.user;
-    if (user != null && user.emailVerified) {
-      return user;
+
+    if (credential.user?.emailVerified ?? false) {
+      return credential.user;
     } else {
       await _auth.signOut();
-      showSnackMessage(context, "Please verify your email before logging in",
-          isError: true);
+
+      if (context.mounted) {
+        showSnackMessage(
+          context,
+          "Please verify your email before logging in",
+          isError: true,
+        );
+      }
     }
 
     return null;
@@ -153,6 +160,11 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
+  Future<void> resetPassword({required String email}) async {
+    await _auth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
   Future<void> addUserInfo(
     User user,
     String? userName,
@@ -171,37 +183,31 @@ class AuthServiceImpl implements AuthService {
     String? awardDetails,
     String? awardImageUrl,
   ) async {
-    try {
-      Users newUser = Users(
-        uId: user.uid,
-        fullName: userName,
-        email: email,
-        photoUrl: photoUrl,
-        backGround: backGround,
-        dOB: dOB,
-        sex: sex,
-        phoneNumber: phoneNumber,
-        eduLevel: eduLevel,
-        college: college,
-        certificate: certificate,
-        certificateDetails: certificateDetails,
-        certImageUrl: certImageUrl,
-        award: award,
-        awardDetails: awardDetails,
-        awardImageUrl: awardImageUrl,
-      );
+    Users newUser = Users(
+      uId: user.uid,
+      fullName: userName,
+      email: email,
+      photoUrl: photoUrl,
+      backGround: backGround,
+      dOB: dOB,
+      sex: sex,
+      phoneNumber: phoneNumber,
+      eduLevel: eduLevel,
+      college: college,
+      certificate: certificate,
+      certificateDetails: certificateDetails,
+      certImageUrl: certImageUrl,
+      award: award,
+      awardDetails: awardDetails,
+      awardImageUrl: awardImageUrl,
+    );
 
-      final data = newUser.toJson();
-      data['createdAt'] = FieldValue.serverTimestamp();
-      await _fireStore.collection('Users').doc(user.uid).set(
-            data,
-          );
-      log("User added to DB successfully!", name: 'debug');
-    } catch (e) {
-      log(e.toString(), name: 'debug');
-
-      rethrow;
-    }
+    final data = newUser.toJson();
+    data['createdAt'] = FieldValue.serverTimestamp();
+    await _fireStore.collection('Users').doc(user.uid).set(
+          data,
+        );
+    log("User added to DB successfully!", name: 'debug');
   }
 
   @override
@@ -222,65 +228,50 @@ class AuthServiceImpl implements AuthService {
     String? awardDetails,
     String? awardImageUrl,
   }) async {
-    try {
-      final updatedData = Users(
-        uId: _auth.currentUser!.uid,
-        fullName: fullName,
-        photoUrl: photoUrl,
-        email: _auth.currentUser!.email,
-        phoneNumber: phoneNumber,
-        dOB: dOB,
-        backGround: backGround,
-        award: award,
-        awardDetails: awardDetails,
-        awardImageUrl: awardImageUrl,
-        eduLevel: eduLevel,
-        college: college,
-        certificate: certificate,
-        certificateDetails: certificateDetails,
-        certImageUrl: certImageUrl,
-        sex: sex,
-      );
-      final data = updatedData.toJson()
-        ..['updatedAt'] = FieldValue.serverTimestamp();
-      await _fireStore
-          .collection('Users')
-          .doc(_auth.currentUser?.uid)
-          .update(data);
+    final updatedData = Users(
+      uId: _auth.currentUser!.uid,
+      fullName: fullName,
+      photoUrl: photoUrl,
+      email: _auth.currentUser!.email,
+      phoneNumber: phoneNumber,
+      dOB: dOB,
+      backGround: backGround,
+      award: award,
+      awardDetails: awardDetails,
+      awardImageUrl: awardImageUrl,
+      eduLevel: eduLevel,
+      college: college,
+      certificate: certificate,
+      certificateDetails: certificateDetails,
+      certImageUrl: certImageUrl,
+      sex: sex,
+    );
+    final data = updatedData.toJson()
+      ..['updatedAt'] = FieldValue.serverTimestamp();
+    await _fireStore
+        .collection('Users')
+        .doc(_auth.currentUser?.uid)
+        .update(data);
 
-      Provider.of<AuthController>(context, listen: false)
-          .setUserInfo(updatedData);
+    Provider.of<AuthController>(context, listen: false)
+        .setUserInfo(updatedData);
 
-      log("User info updated successfully!", name: 'debug');
-    } catch (e) {
-      log("Failed to update user info: $e", name: 'debug');
-      rethrow;
-    }
+    log("User info updated successfully!", name: 'debug');
   }
 
   @override
-  Future<Users?> getUserInfo(String userId) async {
-    try {
-      DocumentSnapshot doc =
-          await _fireStore.collection('Users').doc(userId).get();
-      if (doc.exists) {
-        Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-        Users user = Users.fromJson(data);
-        log("User info retrieved successfully!", name: 'debug');
-        return user;
-      } else {
-        log("User not found", name: 'debug');
-        return null;
-      }
-    } catch (e) {
-      log("Failed to get user info: $e", name: 'debug');
-      rethrow;
-    }
+  Stream<Users?> getUserInfo(String userId) {
+    return _fireStore
+        .collection('Users')
+        .doc(userId)
+        .snapshots()
+        .map((data) => Users.fromJson(data.data()!));
   }
 
   @override
   Future<void> logout() async {
     await _auth.signOut();
+    await GoogleSignIn().signOut();
     await facebookAuth.logOut();
     log('Log out successfully', name: 'debug');
   }

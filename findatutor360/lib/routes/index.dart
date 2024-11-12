@@ -1,6 +1,8 @@
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/views/auth/change_password/change_password.dart';
+import 'package:findatutor360/views/auth/forget_password/forget_password.dart';
+import 'package:findatutor360/views/auth/forget_password/password_confirmation_screen.dart';
 import 'package:findatutor360/views/auth/splash/splash_view.dart';
 import 'package:findatutor360/views/main/cart/check_out_view.dart';
 import 'package:findatutor360/views/main/cart/edit_address_view.dart';
@@ -115,6 +117,18 @@ List<RouteBase> get routes => [
         path: ChangePasswordView.path,
         builder: (BuildContext context, GoRouterState state) {
           return const ChangePasswordView();
+        },
+      ),
+      GoRoute(
+        path: ForgetPasswordView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ForgetPasswordView();
+        },
+      ),
+      GoRoute(
+        path: ResetPasswordConfirmationView.path,
+        builder: (BuildContext context, GoRouterState state) {
+          return const ResetPasswordConfirmationView();
         },
       ),
       StatefulShellRoute.indexedStack(

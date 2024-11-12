@@ -38,9 +38,11 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
 
+  String? password, confirmPassword;
+
   late AuthController _authController;
-  bool _passwordvisible = true;
-  bool _confirmPasswordvisible = true;
+
+  bool _passwordvisible = true, _confirmPasswordvisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -108,10 +110,16 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                               },
                             );
                           },
-                          child: Icon(_passwordvisible == true
-                              ? Iconsax.eye
-                              : Iconsax.eye_slash),
+                          child: Icon(
+                            _passwordvisible == true
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash,
+                            color: customTheme['mainTextColor'],
+                          ),
                         ),
+                        onChanged: (String value) {
+                          password = _passwordController.text;
+                        },
                         keyboardType: TextInputType.visiblePassword,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -138,10 +146,16 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                               },
                             );
                           },
-                          child: Icon(_confirmPasswordvisible == true
-                              ? Iconsax.eye
-                              : Iconsax.eye_slash),
+                          child: Icon(
+                            _confirmPasswordvisible == true
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash,
+                            color: customTheme['mainTextColor'],
+                          ),
                         ),
+                        onChanged: (String value) {
+                          confirmPassword = _confirmPasswordController.text;
+                        },
                         keyboardType: TextInputType.visiblePassword,
                         validator: (value) {
                           if (value!.isEmpty) {

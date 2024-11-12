@@ -10,8 +10,8 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
-import 'package:findatutor360/views/auth/change_password/change_password.dart';
 import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
+import 'package:findatutor360/views/auth/forget_password/forget_password.dart';
 import 'package:findatutor360/views/auth/signup/register_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,6 +37,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController _passwordController = TextEditingController();
 
   late AuthController _authController;
+  String? password;
 
   bool _passwordvisible = true;
 
@@ -62,19 +63,20 @@ class _LoginViewState extends State<LoginView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomTextFormField(
-                        controller: _emailController,
-                        textCapitalization: TextCapitalization.none,
-                        label: Text('Email',
-                            style: TextStyle(
-                                color: customTheme['secondaryTextColor'])),
-                        hint: 'Enter your email',
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter your email';
-                          }
-                          return null;
-                        }),
+                      controller: _emailController,
+                      textCapitalization: TextCapitalization.none,
+                      label: Text('Email',
+                          style: TextStyle(
+                              color: customTheme['secondaryTextColor'])),
+                      hint: 'Enter your email',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your email';
+                        }
+                        return null;
+                      },
+                    ),
                     const SizedBox(height: 30),
                     CustomTextFormField(
                         controller: _passwordController,
@@ -93,10 +95,16 @@ class _LoginViewState extends State<LoginView> {
                               },
                             );
                           },
-                          child: Icon(_passwordvisible == true
-                              ? Iconsax.eye
-                              : Iconsax.eye_slash),
+                          child: Icon(
+                            _passwordvisible == true
+                                ? Iconsax.eye
+                                : Iconsax.eye_slash,
+                            color: customTheme['mainTextColor'],
+                          ),
                         ),
+                        onChanged: (String value) {
+                          password = _passwordController.text;
+                        },
                         keyboardType: TextInputType.visiblePassword,
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -110,7 +118,7 @@ class _LoginViewState extends State<LoginView> {
               const SizedBox(height: 15),
               InkWell(
                 onTap: () {
-                  router.push(ChangePasswordView.path);
+                  router.push(ForgetPasswordView.path);
                 },
                 child: Container(
                     alignment: Alignment.centerRight,

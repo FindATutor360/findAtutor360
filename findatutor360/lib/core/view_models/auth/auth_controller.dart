@@ -26,6 +26,8 @@ class AuthController extends BaseProvider {
 
   Users? get user => _user;
 
+  late Stream<Users?>? userStream;
+
   String? _fullName;
   String? _photoUrl;
   String? _phoneNumber;
@@ -44,6 +46,15 @@ class AuthController extends BaseProvider {
   void setUserInfo(Users users) {
     _user = users;
     notifyListeners();
+  }
+
+  void startUserInfo(String userId) {
+    userStream = _authServiceImpl.getUserInfo(userId);
+    userStream?.listen((updatedUserInfo) {
+      if (updatedUserInfo != null) {
+        setUserInfo(updatedUserInfo);
+      }
+    });
   }
 
   void clearUserData() {
@@ -159,6 +170,7 @@ class AuthController extends BaseProvider {
       return user;
     } on FirebaseAuthException catch (e) {
       showSnackMessage(context, "$e", isError: true);
+      log('$e', name: 'debug');
 
       return null;
     } finally {
@@ -198,6 +210,16 @@ class AuthController extends BaseProvider {
       return null;
     } finally {
       _isLoadings.value = false; // Ensure the loading state is reset
+    }
+  }
+
+  Future<void> resetPassword({required String email}) async {
+    _isLoadings.value = true;
+    try {
+      await _authServiceImpl.resetPassword(email: email);
+      log('User\'s $email.', name: 'debug');
+    } catch (e) {
+      log('Failed to get user\'s $email.', name: 'debug');
     }
   }
 
@@ -272,6 +294,8 @@ class AuthController extends BaseProvider {
 
       if (currentUser != null) {
         String? userToken = await currentUser.getIdToken();
+
+        // Update user information
         await _authServiceImpl.updateUserInfo(
           context,
           fullName: _fullName,
@@ -289,26 +313,26 @@ class AuthController extends BaseProvider {
           awardDetails: _awardDetails,
           awardImageUrl: _awardImageUrl,
         );
+
+        // Update profile in Firebase Auth
         await currentUser.updateProfile(
-          displayName: _fullName,
-          photoURL: _photoUrl,
-        );
+            displayName: _fullName, photoURL: _photoUrl);
         await currentUser.reload();
 
+        // Store token
         if (userToken != null) {
           await appPreferences.setString('userToken', userToken);
           log('User token: $userToken', name: 'debug');
-        } else {
-          log('Failed to get user token.', name: 'debug');
         }
-        _isLoadings.value = false;
-        log("User info updated successfully!", name: 'debug');
 
+        log("User info updated successfully!", name: 'debug');
         resetUserInfoDetails();
       }
     } catch (e) {
       log("Failed to update user info: $e", name: 'debug');
       rethrow;
+    } finally {
+      _isLoadings.value = false;
     }
   }
 
@@ -324,55 +348,68 @@ class AuthController extends BaseProvider {
     required String? name,
     required String? email,
   }) async {
-    final updatedUserInfo = await getUserInfo(user.uid);
-    if (!user.emailVerified && updatedUserInfo != null) {
-      Provider.of<AuthController>(context, listen: false)
-          .setUserInfo(updatedUserInfo);
-      await addUserInfo(
-        user,
-        updatedUserInfo.fullName ?? user.displayName,
-        updatedUserInfo.email ?? user.email,
-        updatedUserInfo.photoUrl ?? user.photoURL,
-        updatedUserInfo.backGround ?? _backGround,
-        updatedUserInfo.dOB ?? _dOB,
-        updatedUserInfo.sex ?? _sex,
-        updatedUserInfo.phoneNumber ?? _phoneNumber,
-        updatedUserInfo.eduLevel ?? _eduLevel,
-        updatedUserInfo.college ?? _college,
-        updatedUserInfo.certificate ?? _certificate,
-        updatedUserInfo.certificateDetails ?? _certificateDetails,
-        updatedUserInfo.certImageUrl ?? _certImageUrl,
-        updatedUserInfo.award ?? _award,
-        updatedUserInfo.awardDetails ?? _awardDetails,
-        _awardImageUrl ?? updatedUserInfo.awardImageUrl,
-      );
+    try {
+      await for (var updatedUserInfo in getUserInfo(user.uid)) {
+        if (updatedUserInfo == null) {
+          log("User data is null", name: 'debug');
+          return;
+        }
 
-      await user.sendEmailVerification();
-      log('Verification email sent', name: 'debug');
-    } else if (user.emailVerified) {
-      if (updatedUserInfo != null) {
-        Provider.of<AuthController>(context, listen: false)
-            .setUserInfo(updatedUserInfo);
+        if (!user.emailVerified) {
+          Provider.of<AuthController>(context, listen: false)
+              .setUserInfo(updatedUserInfo);
+          await addUserInfo(
+            user,
+            updatedUserInfo.fullName ?? user.displayName,
+            updatedUserInfo.email ?? user.email,
+            updatedUserInfo.photoUrl ?? user.photoURL,
+            updatedUserInfo.backGround ?? _backGround,
+            updatedUserInfo.dOB ?? _dOB,
+            updatedUserInfo.sex ?? _sex,
+            updatedUserInfo.phoneNumber ?? _phoneNumber,
+            updatedUserInfo.eduLevel ?? _eduLevel,
+            updatedUserInfo.college ?? _college,
+            updatedUserInfo.certificate ?? _certificate,
+            updatedUserInfo.certificateDetails ?? _certificateDetails,
+            updatedUserInfo.certImageUrl ?? _certImageUrl,
+            updatedUserInfo.award ?? _award,
+            updatedUserInfo.awardDetails ?? _awardDetails,
+            updatedUserInfo.awardImageUrl ?? _awardImageUrl,
+          );
+
+          await user.sendEmailVerification();
+
+          log('Verification email sent', name: 'debug');
+        } else {
+          // Handle the case where the email is already verified
+          Provider.of<AuthController>(context, listen: false)
+              .setUserInfo(updatedUserInfo);
+
+          await addUserInfo(
+            user,
+            updatedUserInfo.fullName ?? user.displayName,
+            updatedUserInfo.email ?? user.email,
+            updatedUserInfo.photoUrl ?? user.photoURL,
+            updatedUserInfo.backGround ?? _backGround,
+            updatedUserInfo.dOB ?? _dOB,
+            updatedUserInfo.sex ?? _sex,
+            updatedUserInfo.phoneNumber ?? _phoneNumber,
+            updatedUserInfo.eduLevel ?? _eduLevel,
+            updatedUserInfo.college ?? _college,
+            updatedUserInfo.certificate ?? _certificate,
+            updatedUserInfo.certificateDetails ?? _certificateDetails,
+            updatedUserInfo.certImageUrl ?? _certImageUrl,
+            updatedUserInfo.award ?? _award,
+            updatedUserInfo.awardDetails ?? _awardDetails,
+            updatedUserInfo.awardImageUrl ?? _awardImageUrl,
+          );
+        }
+
+        // Stop the stream once we are done
+        break;
       }
-
-      await addUserInfo(
-        user,
-        updatedUserInfo?.fullName ?? user.displayName,
-        updatedUserInfo?.email ?? user.email,
-        updatedUserInfo?.photoUrl ?? user.photoURL,
-        updatedUserInfo?.backGround ?? _backGround,
-        updatedUserInfo?.dOB ?? _dOB,
-        updatedUserInfo?.sex ?? _sex,
-        updatedUserInfo?.phoneNumber ?? _phoneNumber,
-        updatedUserInfo?.eduLevel ?? _eduLevel,
-        updatedUserInfo?.college ?? _college,
-        updatedUserInfo?.certificate ?? _certificate,
-        updatedUserInfo?.certificateDetails ?? _certificateDetails,
-        updatedUserInfo?.certImageUrl ?? _certImageUrl,
-        updatedUserInfo?.award ?? _award,
-        updatedUserInfo?.awardDetails ?? _awardDetails,
-        updatedUserInfo?.awardImageUrl ?? _awardImageUrl,
-      );
+    } catch (e) {
+      log("Error during email verification process: $e", name: 'debug');
     }
   }
 
@@ -422,16 +459,11 @@ class AuthController extends BaseProvider {
     }
   }
 
-  Future<Users?> getUserInfo(String userId) async {
-    _isLoadings.value = true;
+  Stream<Users?> getUserInfo(String userId) {
     clearUserData();
     try {
-      final data = await _authServiceImpl.getUserInfo(userId);
-      _isLoadings.value = false;
-
-      return data;
+      return _authServiceImpl.getUserInfo(userId);
     } catch (e) {
-      _isLoadings.value = false;
       rethrow;
     }
   }
