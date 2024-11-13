@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
@@ -31,28 +32,20 @@ class EditProfileContactView extends StatefulWidget {
 }
 
 class _EditProfileContactViewState extends State<EditProfileContactView> {
-  final auth = FirebaseAuth.instance.currentUser;
+  final auth = FirebaseAuth.instance;
   late AuthController _authController;
 
   final formKey = GlobalKey<FormState>();
 
-  File? _image;
-
-  String? _profileImageUrl;
-
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
+  final profileImageUrl = ValueNotifier<File?>(File(''));
+  final _profileImageUrl = ValueNotifier<String>('');
 
   @override
   void initState() {
     super.initState();
     _authController = context.read<AuthController>();
-
-    if (_authController.user != null || auth != null) {
-      emailController.text = _authController.user?.email ?? auth?.email ?? '';
-      phoneController.text = _authController.user?.phoneNumber ?? '';
-      _profileImageUrl = _authController.user?.photoUrl ?? auth?.photoURL;
-    }
   }
 
   @override
@@ -67,137 +60,342 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           reverse: true,
           physics: const BouncingScrollPhysics(),
-          child: Form(
-            key: formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 24,
-                ),
-                const ProgressBar(
-                  firstText: 'Personal',
-                  secondText: 'Contact',
-                  thirdText: 'Education',
-                  isFirstDone: true,
-                  isSecondActive: true,
-                ),
-                const SizedBox(
-                  height: 40,
-                ),
-                const MainText(
-                  text: 'Contact Details',
-                  fontSize: 16,
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                MainText(
-                  text: 'Phone Number',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: customTheme['secondaryTextColor'],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                CustomTextFormField(
-                  hint: 'Enter Phone Number',
-                  controller: phoneController,
-                  keyboardType: TextInputType.number,
-                  prefixIcon: Icon(
-                    Iconsax.call,
-                    color: customTheme['secondaryTextColor'],
+          child: StreamBuilder<Users?>(
+            stream: _authController.getUserInfo(auth.currentUser!.uid),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (snapshot.hasData && snapshot.data != null) {
+                final user = snapshot.data!;
+
+                // Load the user data once when the stream emits the data
+
+                phoneController.text = user.phoneNumber ?? '';
+                emailController.text = user.email ?? '';
+
+                profileImageUrl.value = File(user.photoUrl ?? '');
+
+                return Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      const ProgressBar(
+                        firstText: 'Personal',
+                        secondText: 'Contact',
+                        thirdText: 'Education',
+                        isFirstDone: true,
+                        isSecondActive: true,
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      const MainText(
+                        text: 'Contact Details',
+                        fontSize: 16,
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                      MainText(
+                        text: 'Phone Number',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      CustomTextFormField(
+                        hint: 'Enter Phone Number',
+                        controller: phoneController,
+                        keyboardType: TextInputType.number,
+                        prefixIcon: Icon(
+                          Iconsax.call,
+                          color: customTheme['secondaryTextColor'],
+                        ),
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your phone Number';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      MainText(
+                        text: 'Email',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      CustomTextFormField(
+                        hint: 'Enter your email address',
+                        controller: emailController,
+                        enable: false,
+                        prefixIcon: Icon(
+                          Icons.email_outlined,
+                          color: customTheme['secondaryTextColor'],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      MainText(
+                        text: 'Upload Images About yourself',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      ValueListenableBuilder<File?>(
+                        valueListenable: profileImageUrl,
+                        builder: (context, profileImage, child) {
+                          return profileImageUrl.value!.path.isNotEmpty
+                              ? Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                          1.5,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              5,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: FileImage(profileImage!),
+                                        ),
+                                      ),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        FilePickerResult? result =
+                                            await FilePicker.platform.pickFiles(
+                                          type: FileType.image,
+                                          allowMultiple: false,
+                                        );
+
+                                        if (result != null) {
+                                          PlatformFile file =
+                                              result.files.first;
+
+                                          log('File Name: ${file.name}');
+                                          log('File Size: ${file.size}');
+                                          log('File Path: ${file.path}');
+                                          log('File Path: ${file.identifier}');
+
+                                          profileImageUrl.value =
+                                              File(file.path!);
+                                        }
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            customTheme['secondaryColor'],
+                                        child: Icon(
+                                          Icons.camera_alt_sharp,
+                                          color: customTheme['mainTextColor'],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              : _profileImageUrl.value.isEmpty ||
+                                      _authController.user?.photoUrl != null
+                                  ? Stack(
+                                      clipBehavior: Clip.none,
+                                      alignment: AlignmentDirectional.center,
+                                      children: [
+                                        Container(
+                                          width:
+                                              MediaQuery.sizeOf(context).width /
+                                                  1.5,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height /
+                                              5,
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(16),
+                                            image: DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: FileImage(
+                                                File(
+                                                  _authController
+                                                          .user?.photoUrl ??
+                                                      '',
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        InkWell(
+                                          onTap: () async {
+                                            FilePickerResult? result =
+                                                await FilePicker.platform
+                                                    .pickFiles(
+                                              type: FileType.image,
+                                              allowMultiple: false,
+                                            );
+
+                                            if (result != null) {
+                                              PlatformFile file =
+                                                  result.files.first;
+
+                                              profileImageUrl.value = File(file
+                                                  .path!); // Update with new image
+                                            }
+                                          },
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                customTheme['secondaryColor'],
+                                            child: Icon(
+                                              Icons.camera_alt_sharp,
+                                              color:
+                                                  customTheme['mainTextColor'],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.85,
+                                      child: InkWell(
+                                        onTap: () async {
+                                          FilePickerResult? result =
+                                              await FilePicker.platform
+                                                  .pickFiles(
+                                            type: FileType.image,
+                                            allowMultiple: false,
+                                          );
+
+                                          if (result != null) {
+                                            PlatformFile file =
+                                                result.files.first;
+
+                                            profileImageUrl.value = File(file
+                                                .path!); // Update with new image
+                                          }
+                                        },
+                                        child: CustomPaint(
+                                          painter: DashedRectanglePainter(),
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 16, horizontal: 16),
+                                            child: Column(
+                                              children: [
+                                                Icon(
+                                                  Iconsax.image5,
+                                                  color: customTheme[
+                                                      'primaryColor'],
+                                                ),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    text: 'Click to ',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: customTheme[
+                                                          'mainTextColor'],
+                                                    ),
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Upload file',
+                                                        style: TextStyle(
+                                                          fontSize: 16,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          color: customTheme[
+                                                              'primaryColor'],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                                MainText(
+                                                  text:
+                                                      'PNG, JPG, , PDF upto 5MB',
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: customTheme[
+                                                      'secondaryTextColor'],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                        },
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      Align(
+                        child: ValueListenableBuilder(
+                          valueListenable: _authController.isLoading,
+                          builder: (context, isLoading, child) {
+                            return isLoading
+                                ? const CircularProgressIndicator()
+                                : Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      PrimaryButton(
+                                        text: 'Save and Continue',
+                                        isIconPresent: false,
+                                        fontWeight: FontWeight.w600,
+                                        borderRadius: BorderRadius.circular(8),
+                                        onPressed: () {
+                                          updateContactDetails();
+                                        },
+                                      ),
+                                      const SizedBox(
+                                        height: 16,
+                                      ),
+                                      OutlineButton(
+                                        text: 'Cancel',
+                                        textColor: customTheme['primaryColor'],
+                                        fontWeight: FontWeight.w600,
+                                        borderRadius: BorderRadius.circular(8),
+                                        buttonColor: customTheme['whiteColor'],
+                                        isIconPresent: false,
+                                        fontSize: 16,
+                                        onPressed: () {
+                                          context.pop();
+                                        },
+                                      ),
+                                    ],
+                                  );
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                    ],
                   ),
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter your phone Number';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                MainText(
-                  text: 'Email',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: customTheme['secondaryTextColor'],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                CustomTextFormField(
-                  hint: 'Enter your email address',
-                  controller: emailController,
-                  enable: false,
-                  prefixIcon: Icon(
-                    Icons.email_outlined,
-                    color: customTheme['secondaryTextColor'],
-                  ),
-                ),
-                const SizedBox(
-                  height: 12,
-                ),
-                MainText(
-                  text: 'Upload Images About yourself',
-                  fontSize: 12,
-                  fontWeight: FontWeight.w400,
-                  color: customTheme['secondaryTextColor'],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                _image != null // Check if a new image is selected
-                    ? displayImageFromFile(_image!)
-                    : displayProfileImageOrPlaceholder(_profileImageUrl),
-                const SizedBox(
-                  height: 40,
-                ),
-                Align(
-                  child: ValueListenableBuilder(
-                    valueListenable: _authController.isLoading,
-                    builder: (context, isLoading, child) {
-                      return isLoading
-                          ? const CircularProgressIndicator()
-                          : Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                PrimaryButton(
-                                  text: 'Save and Continue',
-                                  isIconPresent: false,
-                                  fontWeight: FontWeight.w600,
-                                  borderRadius: BorderRadius.circular(8),
-                                  onPressed: () {
-                                    updateContactDetails();
-                                  },
-                                ),
-                                const SizedBox(
-                                  height: 16,
-                                ),
-                                OutlineButton(
-                                  text: 'Cancel',
-                                  textColor: customTheme['primaryColor'],
-                                  fontWeight: FontWeight.w600,
-                                  borderRadius: BorderRadius.circular(8),
-                                  buttonColor: customTheme['whiteColor'],
-                                  isIconPresent: false,
-                                  fontSize: 16,
-                                  onPressed: () {
-                                    context.pop();
-                                  },
-                                ),
-                              ],
-                            );
-                    },
-                  ),
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-              ],
-            ),
+                );
+              } else {
+                return const Center(child: Text("No user data found"));
+              }
+            },
           ),
         ),
       ),
@@ -207,18 +405,18 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
   Future<void> updateContactDetails() async {
     if (formKey.currentState != null &&
             formKey.currentState!.validate() &&
-            _image != null ||
-        _authController.user?.photoUrl != null) {
+            profileImageUrl.value != null ||
+        _profileImageUrl.value.isNotEmpty) {
       final FirebaseAuth auth = FirebaseAuth.instance;
 
       try {
         _authController.isLoading.value = true;
 
-        await auth.currentUser!.updatePhotoURL(_image?.path);
+        await auth.currentUser!.updatePhotoURL(profileImageUrl.value!.path);
 
         await _authController.updateContactDetails(
           phoneController.text,
-          _authController.user?.photoUrl ?? _image?.path,
+          profileImageUrl.value!.path,
         );
 
         _authController.isLoading.value = false;
@@ -241,109 +439,6 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     }
   }
 
-  // Helper to display the profile image from URL or placeholder
-  Widget displayProfileImageOrPlaceholder(String? imageUrl) {
-    return imageUrl == null || _authController.user?.photoUrl != null
-        ? Stack(
-            alignment: AlignmentDirectional.center,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width / 1.5,
-                height: MediaQuery.of(context).size.height / 5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: _authController.user?.photoUrl != null
-                      ? imageUrl == null
-                          ? DecorationImage(
-                              image: NetworkImage(imageUrl ?? ''),
-                              fit: BoxFit.cover,
-                            )
-                          : DecorationImage(
-                              fit: BoxFit.cover,
-                              image: FileImage(
-                                File(
-                                  _authController.user?.photoUrl ?? '',
-                                ),
-                              ),
-                            )
-                      : null,
-
-                  color: Colors.grey[200], // Placeholder color
-                ),
-              ),
-              buildUploadButton(),
-            ],
-          )
-        : SizedBox(
-            width: MediaQuery.of(context).size.width * 0.85,
-            child: InkWell(
-              onTap: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  type: FileType.image,
-                  allowMultiple: false,
-                );
-
-                if (result != null) {
-                  PlatformFile file = result.files.first;
-
-                  log('File Name: ${file.name}');
-                  log('File Size: ${file.size}');
-                  log('File Path: ${file.path}');
-                  log('File Path: ${file.identifier}');
-
-                  setState(() {
-                    _image = File(file.path!);
-                  });
-                }
-              },
-              child: CustomPaint(
-                painter: DashedRectanglePainter(),
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                  child: Column(
-                    children: [
-                      Icon(
-                        Iconsax.image5,
-                        color: customTheme['primaryColor'],
-                      ),
-                      RichText(
-                        text: TextSpan(
-                          text: 'Click to ',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: customTheme['mainTextColor'],
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Upload Photos',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                                color: customTheme['primaryColor'],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 4,
-                      ),
-                      MainText(
-                        text: 'PNG, JPG, , GIF upto 5MB',
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: customTheme['secondaryTextColor'],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          );
-  }
-
   Future<String> uploadImageToStorage(File imageFile) async {
     try {
       String fileName = FirebaseAuth.instance.currentUser!.uid;
@@ -356,52 +451,5 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     } catch (e) {
       rethrow;
     }
-  }
-
-  Widget displayImageFromFile(File imageFile) {
-    return Stack(
-      alignment: AlignmentDirectional.center,
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width / 1.5,
-          height: MediaQuery.of(context).size.height / 5,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: FileImage(imageFile),
-            ),
-          ),
-        ),
-        buildUploadButton(),
-      ],
-    );
-  }
-
-  // Build button to upload new image
-  Widget buildUploadButton() {
-    return InkWell(
-      onTap: () async {
-        FilePickerResult? result = await FilePicker.platform.pickFiles(
-          type: FileType.image,
-          allowMultiple: false,
-        );
-
-        if (result != null) {
-          PlatformFile file = result.files.first;
-
-          setState(() {
-            _image = File(file.path!); // Update with new image
-          });
-        }
-      },
-      child: CircleAvatar(
-        backgroundColor: customTheme['secondaryColor'],
-        child: Icon(
-          Icons.camera_alt_sharp,
-          color: customTheme['mainTextColor'],
-        ),
-      ),
-    );
   }
 }

@@ -1,5 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:developer';
+
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
@@ -22,7 +24,6 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  // late AuthController _authController;
   @override
   void initState() {
     super.initState();
@@ -38,13 +39,24 @@ class _SplashViewState extends State<SplashView> {
       AppPreferences appPreferences = AppPreferences();
 
       if (user != null && user.emailVerified && userToken != null) {
-        final updatedUserInfo = await AuthController().getUserInfo(user.uid);
-        if (updatedUserInfo != null) {
-          Provider.of<AuthController>(context, listen: false)
-              .setUserInfo(updatedUserInfo);
+        // Use StreamBuilder or a manual listen to the stream
+        AuthController authController =
+            Provider.of<AuthController>(context, listen: false);
 
-          context.pushReplacement(HomeView.path);
-        }
+        // Start listening to the stream to get the updated user info
+        authController.startUserInfo(user.uid);
+
+        log('User id: ${user.uid}', name: 'debug');
+
+        // This is necessary to update the UI once the stream emits new data
+        authController.userStream?.listen((updatedUserInfo) async {
+          if (updatedUserInfo != null) {
+            // Update user info
+            authController.setUserInfo(updatedUserInfo);
+            log('${updatedUserInfo.sex}', name: 'debug');
+            context.pushReplacement(HomeView.path);
+          }
+        });
       } else {
         bool showOnboarding = await appPreferences.getBool('userToken');
         if (showOnboarding) {

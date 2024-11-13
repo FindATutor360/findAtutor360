@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +24,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final authController = Provider.of<AuthController>(context);
+    final User? auth = FirebaseAuth.instance.currentUser;
 
     Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
         ? Colors.black
@@ -66,25 +69,47 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                                   : Colors.black,
                             ))),
                     const SizedBox(width: 5),
-                    Center(
-                      child: authController.user?.photoUrl == null
-                          ? CircleAvatar(
-                              backgroundColor: const Color(0xFF0476AF),
-                              radius: 20,
-                              backgroundImage: NetworkImage(
-                                authController.user?.photoUrl ??
-                                    'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                              ),
-                            )
-                          : CircleAvatar(
-                              backgroundColor: const Color(0xFF0476AF),
-                              radius: 20,
-                              backgroundImage: FileImage(
-                                File(
-                                  authController.user?.photoUrl ?? '',
-                                ),
-                              ),
-                            ), //CircleAvatar
+                    StreamBuilder<Users?>(
+                      stream: authController.getUserInfo(auth!.uid),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (snapshot.hasError) {
+                          return Center(
+                              child: Text('Error: ${snapshot.error}'));
+                        }
+
+                        final user = snapshot.data;
+
+                        if (user == null) {
+                          return const Center(
+                              child: Text('No user data available.'));
+                        }
+                        return Center(
+                          child: user.photoUrl == null
+                              ? CircleAvatar(
+                                  backgroundColor: const Color(0xFF0476AF),
+                                  radius: 20,
+                                  backgroundImage: NetworkImage(
+                                    user.photoUrl ??
+                                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  backgroundColor: const Color(0xFF0476AF),
+                                  radius: 20,
+                                  backgroundImage: FileImage(
+                                    File(
+                                      user.photoUrl ?? '',
+                                    ),
+                                  ),
+                                ), //CircleAvatar
+                        );
+                      },
                     ),
                   ],
                 ),
