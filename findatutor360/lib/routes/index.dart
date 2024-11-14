@@ -1,3 +1,4 @@
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/views/auth/change_password/change_password.dart';
@@ -209,9 +210,12 @@ List<RouteBase> get routes => [
                     path: ChatViews.path,
                     builder: (BuildContext context, GoRouterState state) {
                       final message = state.extra as Messages;
+                      final user = state.extra as Users;
                       return ChatViews(
                         key: state.pageKey,
-                        messages: message,
+                        // messages: message,
+                        user: user,
+                        tutorEmail: 'asanteadarkwa.usman@gmail.com',
                       );
                     },
                   ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
@@ -16,6 +18,7 @@ import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
 import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
+import 'package:findatutor360/views/main/shop/course_details.dart';
 //import 'package:findatutor360/views/main/shop/course_details.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -129,91 +132,91 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     // ActiveCourse(),
 
-                    // FutureBuilder<List<Course>>(
-                    //   future: fetchCourses,
-                    //   builder: (context, snapshot) {
-                    //     if (snapshot.connectionState ==
-                    //         ConnectionState.waiting) {
-                    //       return const Center(
-                    //           child: CircularProgressIndicator());
-                    //     } else if (snapshot.hasError) {
-                    //       log('${snapshot.error}', name: 'debugs');
-                    //       return Center(
-                    //         child: MainText(
-                    //           text: 'Error: ${snapshot.error}',
-                    //           fontSize: 12,
-                    //         ),
-                    //       );
-                    //     } else if (!snapshot.hasData ||
-                    //         snapshot.data!.isEmpty) {
-                    //       return const Center(
-                    //         child: MainText(
-                    //           text: 'No courses found',
-                    //           fontSize: 12,
-                    //         ),
-                    //       );
-                    //     } else {
-                    //       final courses = snapshot.data!;
-                    //       log('$courses', name: 'debug');
-                    //       return Container(
-                    //         height: MediaQuery.of(context).size.height * 0.31,
-                    //         padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //         child: ListView.separated(
-                    //           padding: EdgeInsets.zero,
-                    //           scrollDirection: Axis.horizontal,
-                    //           separatorBuilder: (context, index) {
-                    //             return const SizedBox(width: 20);
-                    //           },
-                    //           shrinkWrap: true,
-                    //           itemCount: 4,
-                    //           itemBuilder: (context, index) {
-                    //             final Course course = courses[index];
-                    //             log('$course', name: 'debug');
-                    //             return InkWell(
-                    //               onTap: () {
-                    //                 router.push(CourseDetails.path,
-                    //                     extra: course);
-                    //               },
-                    //               child: ActiveCourseCard(
-                    //                 image: course.image ?? '',
-                    //                 title: course.name ?? '',
-                    //                 lessonNum: '1/3',
-                    //               ),
-                    //             );
-                    //           },
-                    //         ),
-                    //       );
-                    //     }
-                    //   },
-                    // ),
-
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.31,
-                      padding: const EdgeInsets.symmetric(horizontal: 20),
-                      child: ListView.separated(
-                        padding: EdgeInsets.zero,
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) {
-                          return const SizedBox(width: 20);
-                        },
-                        shrinkWrap: true,
-                        itemCount: 4,
-                        itemBuilder: (context, i) {
-                          return InkWell(
-                            onTap: () {
-                              // router.push(CourseDetails.path,
-                              //     extra: course);
-                            },
-                            child: const ActiveCourseCard(
-                              image:
-                                  'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                              title: 'Flutter cookbook',
-                              lessonNum: '1/3',
+                    FutureBuilder<List<Course>>(
+                      future: fetchCourses,
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        } else if (snapshot.hasError) {
+                          log('${snapshot.error}', name: 'debugs');
+                          return Center(
+                            child: MainText(
+                              text: 'Error: ${snapshot.error}',
+                              fontSize: 12,
                             ),
                           );
-                        },
-                      ),
+                        } else if (!snapshot.hasData ||
+                            snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: MainText(
+                              text: 'No courses found',
+                              fontSize: 12,
+                            ),
+                          );
+                        } else {
+                          final courses = snapshot.data!;
+                          log('$courses', name: 'debug');
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.33,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: ListView.separated(
+                              padding: EdgeInsets.zero,
+                              scrollDirection: Axis.horizontal,
+                              separatorBuilder: (context, index) {
+                                return const SizedBox(width: 20);
+                              },
+                              shrinkWrap: true,
+                              itemCount: 4,
+                              itemBuilder: (context, index) {
+                                final Course course = courses[index];
+                                log('$course', name: 'debug');
+                                return InkWell(
+                                  onTap: () {
+                                    router.push(CourseDetails.path,
+                                        extra: course);
+                                  },
+                                  child: ActiveCourseCard(
+                                    image: course.image ?? '',
+                                    title: course.name ?? '',
+                                    lessonNum: '1/3',
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        }
+                      },
                     ),
+
+                    // Container(
+                    //   height: MediaQuery.of(context).size.height * 0.31,
+                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
+                    //   child: ListView.separated(
+                    //     padding: EdgeInsets.zero,
+                    //     scrollDirection: Axis.horizontal,
+                    //     separatorBuilder: (context, index) {
+                    //       return const SizedBox(width: 20);
+                    //     },
+                    //     shrinkWrap: true,
+                    //     itemCount: 4,
+                    //     itemBuilder: (context, i) {
+                    //       return InkWell(
+                    //         onTap: () {
+                    //           // router.push(CourseDetails.path,
+                    //           //     extra: course);
+                    //         },
+                    //         child: const ActiveCourseCard(
+                    //           image:
+                    //               'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                    //           title: 'Flutter cookbook',
+                    //           lessonNum: '1/3',
+                    //         ),
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
 
                     const SizedBox(
                       height: 40,

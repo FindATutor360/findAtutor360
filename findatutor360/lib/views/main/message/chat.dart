@@ -15,10 +15,16 @@ import 'package:provider/provider.dart';
 
 class ChatViews extends StatefulWidget {
   const ChatViews({
-    required this.messages,
+    this.user,
+    // this.messages,
+    required this.tutorEmail,
     super.key,
   });
-  final Messages messages;
+
+  final Users? user;
+
+  final String tutorEmail;
+  // final Messages? messages;
 
   static const path = 'chat_view';
 
@@ -49,8 +55,8 @@ class _ChatViewsState extends State<ChatViews> {
   Future<void> _refreshMessages() async {
     setState(
       () {
-        _message.getMessages(FirebaseAuth.instance.currentUser!.email ?? '',
-            widget.messages.recipientEmail ?? '');
+        _message.getMessages(
+            FirebaseAuth.instance.currentUser!.email ?? '', widget.tutorEmail);
       },
     );
   }
@@ -76,28 +82,25 @@ class _ChatViewsState extends State<ChatViews> {
         title: Row(
           children: [
             UserImage(
-              radius: 18,
-              imageUrl: widget.messages.recipientEmail != currentUser!.email
-                  ? widget.messages.recipientPhotoUrl ??
-                      'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'
-                  : widget.messages.senderPhotoUrl ??
-                      'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-            ),
+                radius: 18,
+                imageUrl: widget.tutorEmail == 'asanteadarkwa.usman@gmail.com'
+                    ? 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c'
+                    : widget.user?.photoUrl ??
+                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
             const SizedBox(width: 8),
             Column(
               children: [
                 FittedBox(
                   child: Text(
-                    widget.messages.recipientEmail != currentUser.email
-                        ? widget.messages.recipientName ?? 'Unknown'
-                        : widget.messages.senderName ?? 'Unknown',
+                    widget.tutorEmail == 'asanteadarkwa.usman@gmail.com'
+                        ? 'Usman Asante'
+                        : widget.user?.fullName ?? 'Unknown',
                   ),
                 ),
                 Text(
-                  widget.messages.recipientEmail != currentUser.email
-                      ? widget.messages.recipientBackground ??
-                          'Programmer/Writer'
-                      : widget.messages.senderBackground ?? 'Programmer/Writer',
+                  widget.tutorEmail == 'asanteadarkwa.usman@gmail.com'
+                      ? 'Programmer'
+                      : widget.user?.backGround ?? 'Programmer/Writer',
                   style: TextStyle(
                     fontSize: 12,
                     color: customTheme['whiteColor'],
@@ -119,18 +122,23 @@ class _ChatViewsState extends State<ChatViews> {
               Expanded(
                 child: StreamBuilder<List<Messages>>(
                   stream: _message.getMessages(
-                    currentUser.email ?? '',
-                    widget.messages.recipientEmail ?? '',
+                    currentUser?.email ?? '',
+                    widget.tutorEmail,
                   ),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError ||
-                        !snapshot.hasData ||
-                        snapshot.data!.isEmpty) {
+                    } else if (snapshot.hasError) {
                       return const Center(
                         child: MainText(
                           text: "Error loading messages",
+                          fontSize: 20,
+                        ),
+                      );
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: MainText(
+                          text: "No message yet",
                           fontSize: 20,
                         ),
                       );
@@ -147,7 +155,7 @@ class _ChatViewsState extends State<ChatViews> {
                       itemBuilder: (context, index) {
                         final message = messages[index];
                         final isCurrentUser =
-                            message.senderEmail == currentUser.email;
+                            message.senderEmail == currentUser?.email;
                         final textWidth = _getTextWidth(message.message ?? '');
 
                         return Align(
@@ -231,7 +239,7 @@ class _ChatViewsState extends State<ChatViews> {
                       },
                       separatorBuilder: (BuildContext context, int index) {
                         return const SizedBox(
-                          height: 15,
+                          height: 4,
                         );
                       },
                     );
@@ -358,39 +366,38 @@ class _ChatViewsState extends State<ChatViews> {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final authController = Provider.of<AuthController>(context, listen: false);
     final Users users = Users();
-    if (formKey.currentState != null &&
-        formKey.currentState!.validate() &&
-        auth.currentUser != null) {
-      final senderEmail = auth.currentUser!.email ?? users.email;
+    if (formKey.currentState != null && formKey.currentState!.validate()) {
       final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
-      final senderName = auth.currentUser!.displayName ?? users.fullName;
-      final senderBackground = authController.user!.backGround;
-      final recipientEmail = widget.messages.senderEmail == senderEmail
-          ? widget.messages.recipientEmail
-          : widget.messages.senderEmail;
-      final recipientName = widget.messages.senderName == senderName
-          ? widget.messages.recipientName
-          : widget.messages.senderName;
-      final recipientPhotoUrl = widget.messages.senderPhotoUrl == senderPhotoUrl
-          ? widget.messages.recipientPhotoUrl
-          : widget.messages.senderPhotoUrl;
-      final recipientBackground =
-          widget.messages.senderBackground == senderBackground
-              ? widget.messages.recipientBackground
-              : widget.messages.senderBackground;
+      const tutorEmail = 'asanteadarkwa.usman@gmail.com';
+      final senderEmail = auth.currentUser?.email == tutorEmail
+          ? tutorEmail
+          : auth.currentUser?.email ?? '';
+      final recipientName = auth.currentUser?.email != tutorEmail
+          ? 'Usman Asante'
+          : auth.currentUser?.displayName ?? '';
+      final recipientEmail = auth.currentUser?.email == tutorEmail
+          ? auth.currentUser?.email
+          : tutorEmail;
+
+      final recipientPhotoUrl = auth.currentUser?.email != tutorEmail
+          ? 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c'
+          : auth.currentUser?.photoURL ?? 'f';
 
       await _message.sendMessage(
-        senderEmail ?? '',
+        senderEmail,
         _messageController.text,
         recipientEmail,
         recipientName,
         recipientPhotoUrl,
-        recipientBackground,
-        senderBackground,
       );
       log(recipientEmail ?? '', name: 'debug');
-      log(_messageController.text, name: 'debug');
-      log(senderEmail ?? '', name: 'debug');
+      log(_messageController.text, name: 'debugs');
+      log(senderEmail, name: 'debugss');
+      // log(senderBackground ?? '', name: 'debugsss');
+
+      log(recipientName, name: 'debugssss');
+
+      log(recipientPhotoUrl, name: 'debugssssss');
       _messageController.clear();
     }
   }

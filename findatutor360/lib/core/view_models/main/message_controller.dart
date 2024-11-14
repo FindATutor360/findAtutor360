@@ -17,8 +17,8 @@ class MessageController extends BaseProvider {
     String? recipientEmail,
     String? recipientName,
     String? recipientPhotoUrl,
-    String? recipientBackground,
-    String? senderBackground,
+    // String? recipientBackground,
+    // String? senderBackground,
   ) async {
     await _messageServiceImpl.sendMessage(
       senderEmail,
@@ -26,8 +26,8 @@ class MessageController extends BaseProvider {
       recipientEmail,
       recipientName,
       recipientPhotoUrl,
-      recipientBackground,
-      senderBackground,
+      // recipientBackground,
+      // senderBackground,
     );
   }
 

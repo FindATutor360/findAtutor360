@@ -1,4 +1,6 @@
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/models/main/course_model.dart';
+import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -6,7 +8,9 @@ import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/views/main/message/chat.dart';
 import 'package:findatutor360/views/main/shop/reviews_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +30,7 @@ class CourseDetails extends StatefulWidget {
 
 class _CourseDetailsState extends State<CourseDetails> {
   Future<List<Course>>? fetchCourses;
+  final User? auth = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -47,6 +52,7 @@ class _CourseDetailsState extends State<CourseDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final authController = Provider.of<AuthController>(context);
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -127,6 +133,21 @@ class _CourseDetailsState extends State<CourseDetails> {
                       ),
                       TextExpansionTile(
                         title: const MainText(
+                          text: 'Coruse Description',
+                          fontSize: 18,
+                        ),
+                        description: MainText(
+                          text: widget.course.description ?? '',
+                          color: customTheme['secondaryTextColor'],
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      TextExpansionTile(
+                        title: const MainText(
                           text: 'Reviews',
                           fontSize: 18,
                         ),
@@ -184,24 +205,44 @@ class _CourseDetailsState extends State<CourseDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 15,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          border: Border.all(
-                            color: const Color(0XFF0476AF),
-                          ),
-                        ),
-                        child: Align(
-                          child: MainText(
-                            text: 'Add to cart',
-                            fontSize: 18,
-                            color: customTheme['primaryColor'],
-                          ),
-                        ),
-                      ),
-                    ),
+                    StreamBuilder<Users?>(
+                        stream: authController.getUserInfo(auth!.uid),
+                        builder: (context, snapshot) {
+                          final user = snapshot.data;
+
+                          return Expanded(
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: ((context) => ChatViews(
+                                          user: user,
+                                          tutorEmail:
+                                              'asanteadarkwa.usman@gmail.com',
+                                        )),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                height: MediaQuery.of(context).size.height / 15,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: const Color(0XFF0476AF),
+                                  ),
+                                ),
+                                child: Align(
+                                  child: MainText(
+                                    text: 'Chat Tutor',
+                                    fontSize: 18,
+                                    color: customTheme['primaryColor'],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
                     const SizedBox(
                       width: 16,
                     ),
@@ -214,9 +255,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                         ),
                         child: Align(
                           child: MainText(
-                            text: widget.course.actualPriceUsd != null
-                                ? '\$${widget.course.actualPriceUsd!.toStringAsFixed(2)} | Join'
-                                : '\$${0.0} | Join',
+                            text: 'Enroll',
                             fontSize: 18,
                             color: customTheme['whiteColor'],
                           ),

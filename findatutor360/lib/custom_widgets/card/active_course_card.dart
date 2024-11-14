@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
@@ -35,19 +36,22 @@ class ActiveCourseCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: double.infinity,
-            height: MediaQuery.sizeOf(context).height / 7.5,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: customTheme['fieldColor'],
-              image: DecorationImage(
-                image: FileImage(
-                  File(image ?? ''),
+          CachedNetworkImage(
+            imageUrl: image!,
+            imageBuilder: (context, imageProvider) {
+              return Container(
+                width: double.infinity,
+                height: MediaQuery.sizeOf(context).height / 7.5,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: customTheme['fieldColor'],
+                  image: DecorationImage(
+                    image: NetworkImage(image ?? ''),
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                fit: BoxFit.cover,
-              ),
-            ),
+              );
+            },
           ),
           Expanded(
             child: Padding(
