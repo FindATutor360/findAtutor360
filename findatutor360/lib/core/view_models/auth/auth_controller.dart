@@ -468,6 +468,15 @@ class AuthController extends BaseProvider {
     }
   }
 
+  Future<Users?> getUserByEmail(String email) async {
+    try {
+      await _authServiceImpl.getUserByEmail(email);
+    } catch (e) {
+      log('Error fetching user by email: $e', name: 'debug');
+    }
+    return null;
+  }
+
   void resetUserInfoDetails() {
     _fullName = null;
     _backGround = null;

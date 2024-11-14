@@ -367,37 +367,67 @@ class _ChatViewsState extends State<ChatViews> {
     final authController = Provider.of<AuthController>(context, listen: false);
     final Users users = Users();
     if (formKey.currentState != null && formKey.currentState!.validate()) {
-      final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
+      // final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
+      // const tutorEmail = 'asanteadarkwa.usman@gmail.com';
+      // final senderEmail = auth.currentUser?.email == tutorEmail
+      //     ? tutorEmail
+      //     : auth.currentUser?.email ?? '';
+      // final recipientName = auth.currentUser?.email != tutorEmail
+      //     ? 'Usman Asante'
+      //     : auth.currentUser?.displayName ?? '';
+      // final recipientEmail = auth.currentUser?.email == tutorEmail
+      //     ? auth.currentUser?.email
+      //     : tutorEmail;
+
+      // final recipientPhotoUrl = auth.currentUser?.email != tutorEmail
+      //     ? 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c'
+      //     : auth.currentUser?.photoURL ?? 'f';
+
+      // await _message.sendMessage(
+      //   senderEmail,
+      //   _messageController.text,
+      //   recipientEmail,
+      //   recipientName,
+      //   recipientPhotoUrl,
+      // );
+
       const tutorEmail = 'asanteadarkwa.usman@gmail.com';
-      final senderEmail = auth.currentUser?.email == tutorEmail
-          ? tutorEmail
-          : auth.currentUser?.email ?? '';
-      final recipientName = auth.currentUser?.email != tutorEmail
-          ? 'Usman Asante'
-          : auth.currentUser?.displayName ?? '';
-      final recipientEmail = auth.currentUser?.email == tutorEmail
-          ? auth.currentUser?.email
-          : tutorEmail;
 
-      final recipientPhotoUrl = auth.currentUser?.email != tutorEmail
-          ? 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c'
-          : auth.currentUser?.photoURL ?? 'f';
+      // Get the current user email and display name
+      final currentUserEmail = auth.currentUser?.email ?? '';
+      final currentUserDisplayName = auth.currentUser?.displayName ?? '';
 
+      // Determine sender and recipient details
+      final isTutor = currentUserEmail == tutorEmail;
+      final senderEmail = isTutor ? tutorEmail : currentUserEmail;
+      final recipientEmail = isTutor ? auth.currentUser?.email : tutorEmail;
+      final recipientName =
+          isTutor ? auth.currentUser?.displayName : 'Usman Asante';
+
+      // Get or set recipient and sender photo URLs
+      final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
+      final recipientPhotoUrl = isTutor
+          ? auth.currentUser?.photoURL
+          : 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c';
+
+      // Send the message with prepared data
       await _message.sendMessage(
         senderEmail,
         _messageController.text,
         recipientEmail,
         recipientName,
         recipientPhotoUrl,
+        '',
+        '',
       );
       log(recipientEmail ?? '', name: 'debug');
       log(_messageController.text, name: 'debugs');
       log(senderEmail, name: 'debugss');
       // log(senderBackground ?? '', name: 'debugsss');
 
-      log(recipientName, name: 'debugssss');
+      log(recipientName ?? '', name: 'debugssss');
 
-      log(recipientPhotoUrl, name: 'debugssssss');
+      log(recipientPhotoUrl ?? '', name: 'debugssssss');
       _messageController.clear();
     }
   }

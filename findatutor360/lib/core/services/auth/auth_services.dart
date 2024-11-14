@@ -68,6 +68,8 @@ abstract class AuthService {
     String? awardImageUrl,
   });
 
+  Future<Users?> getUserByEmail(String email);
+
   Stream<Users?> getUserInfo(String userId);
 }
 
@@ -266,6 +268,26 @@ class AuthServiceImpl implements AuthService {
         .doc(userId)
         .snapshots()
         .map((data) => Users.fromJson(data.data()!));
+  }
+
+  @override
+  Future<Users?> getUserByEmail(String email) async {
+    // Query the Firestore collection to find the user by email
+    final querySnapshot = await _fireStore
+        .collection('Users') // Replace 'users' with your actual collection name
+        .where('email', isEqualTo: email)
+        .limit(1) // Limit to 1 result for optimization
+        .get();
+
+    // Check if the user was found
+    if (querySnapshot.docs.isNotEmpty) {
+      // Convert the document data to a Users instance
+      final userData = querySnapshot.docs.first.data();
+      return Users.fromJson(userData);
+    }
+
+    // Return null if no user is found or an error occurs
+    return null;
   }
 
   @override
