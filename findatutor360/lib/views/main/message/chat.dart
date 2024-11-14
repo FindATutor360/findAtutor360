@@ -386,12 +386,12 @@ class _ChatViewsState extends State<ChatViews> {
       final senderEmail = currentUserEmail;
       final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
 
-      // Use passed parameters for the recipient details
+      // Adjust recipient details based on whether the current user is the tutor
       final recipientEmail = isTutor ? otherUserEmail : tutorEmail;
       final recipientName = isTutor ? otherUserName : 'Usman Asante';
       final recipientPhotoUrl = isTutor
           ? otherUserPhotoUrl
-          : 'https://...gggggg'; // Default image URL for tutor
+          : 'https://graph.facebook.com/451133794590900/picture'; // Default image URL for tutor
 
       // Send the message with the correctly set recipient and sender information
       await _message.sendMessage(
@@ -404,14 +404,7 @@ class _ChatViewsState extends State<ChatViews> {
         '',
       );
 
-      // Debug logs
-      log('Recipient Email: $recipientEmail');
-      log('Message Text: ${_messageController.text}');
-      log('Sender Email: $senderEmail');
-      log('Recipient Name: $recipientName');
-      log('Recipient Photo URL: $recipientPhotoUrl');
-
-      // Clear the message controller after sending
+      // Clear the message input after sending
       _messageController.clear();
     }
   }
