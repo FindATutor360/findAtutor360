@@ -12,8 +12,8 @@ abstract class MessageService {
     String? recipientEmail,
     String? recipientName,
     String? recipientPhotoUrl,
-    // String? recipientBackground,
-    // String? senderBackground,
+    String? recipientBackground,
+    String? senderBackground,
   );
   Stream<List<Messages>> getMessages(
     String currentUserEmail,
@@ -33,8 +33,8 @@ class MessageServiceImpl implements MessageService {
     String? recipientEmail,
     String? recipientName,
     String? recipientPhotoUrl,
-    // String? recipientBackground,
-    // String? senderBackground,
+    String? recipientBackground,
+    String? senderBackground,
   ) async {
     try {
       // Ensure that both senderEmail and recipientEmail are included in participants
