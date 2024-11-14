@@ -8,6 +8,7 @@ part 'course_model.g.dart'; // This will be generated
 class Course {
   String? id;
   String? userId;
+  String? userEmail;
   String? image;
   String? name;
   double? actualPriceUsd;
@@ -22,6 +23,7 @@ class Course {
   Course({
     this.id,
     this.userId,
+    this.userEmail,
     this.image,
     this.name,
     this.actualPriceUsd,
