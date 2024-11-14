@@ -317,7 +317,11 @@ class _ChatViewsState extends State<ChatViews> {
                   return isVisible
                       ? InkWell(
                           onTap: () async {
-                            await sendMessage();
+                            await sendMessage(
+                              currentUser?.email ?? '',
+                              currentUser?.displayName ?? '',
+                              currentUser?.photoURL ?? '',
+                            );
                           },
                           child: CircleAvatar(
                             radius: 20,
@@ -362,55 +366,34 @@ class _ChatViewsState extends State<ChatViews> {
     return textPainter.size.width;
   }
 
-  Future<void> sendMessage() async {
+  Future<void> sendMessage(String otherUserEmail, String otherUserName,
+      String otherUserPhotoUrl) async {
     final FirebaseAuth auth = FirebaseAuth.instance;
     final authController = Provider.of<AuthController>(context, listen: false);
     final Users users = Users();
+
     if (formKey.currentState != null && formKey.currentState!.validate()) {
-      // final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
-      // const tutorEmail = 'asanteadarkwa.usman@gmail.com';
-      // final senderEmail = auth.currentUser?.email == tutorEmail
-      //     ? tutorEmail
-      //     : auth.currentUser?.email ?? '';
-      // final recipientName = auth.currentUser?.email != tutorEmail
-      //     ? 'Usman Asante'
-      //     : auth.currentUser?.displayName ?? '';
-      // final recipientEmail = auth.currentUser?.email == tutorEmail
-      //     ? auth.currentUser?.email
-      //     : tutorEmail;
-
-      // final recipientPhotoUrl = auth.currentUser?.email != tutorEmail
-      //     ? 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c'
-      //     : auth.currentUser?.photoURL ?? 'f';
-
-      // await _message.sendMessage(
-      //   senderEmail,
-      //   _messageController.text,
-      //   recipientEmail,
-      //   recipientName,
-      //   recipientPhotoUrl,
-      // );
-
       const tutorEmail = 'asanteadarkwa.usman@gmail.com';
 
-      // Get the current user email and display name
+      // Current user details
       final currentUserEmail = auth.currentUser?.email ?? '';
       final currentUserDisplayName = auth.currentUser?.displayName ?? '';
 
-      // Determine sender and recipient details
+      // Determine if the current user is the tutor
       final isTutor = currentUserEmail == tutorEmail;
-      final senderEmail = isTutor ? tutorEmail : currentUserEmail;
-      final recipientEmail = isTutor ? auth.currentUser?.email : tutorEmail;
-      final recipientName =
-          isTutor ? auth.currentUser?.displayName : 'Usman Asante';
 
-      // Get or set recipient and sender photo URLs
+      // Set sender and recipient details based on context
+      final senderEmail = currentUserEmail;
       final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
-      final recipientPhotoUrl = isTutor
-          ? auth.currentUser?.photoURL
-          : 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c';
 
-      // Send the message with prepared data
+      // Use passed parameters for the recipient details
+      final recipientEmail = isTutor ? otherUserEmail : tutorEmail;
+      final recipientName = isTutor ? otherUserName : 'Usman Asante';
+      final recipientPhotoUrl = isTutor
+          ? otherUserPhotoUrl
+          : 'https://...'; // Default image URL for tutor
+
+      // Send the message with the correctly set recipient and sender information
       await _message.sendMessage(
         senderEmail,
         _messageController.text,
@@ -420,17 +403,64 @@ class _ChatViewsState extends State<ChatViews> {
         '',
         '',
       );
-      log(recipientEmail ?? '', name: 'debug');
-      log(_messageController.text, name: 'debugs');
-      log(senderEmail, name: 'debugss');
-      // log(senderBackground ?? '', name: 'debugsss');
 
-      log(recipientName ?? '', name: 'debugssss');
+      // Debug logs
+      log('Recipient Email: $recipientEmail');
+      log('Message Text: ${_messageController.text}');
+      log('Sender Email: $senderEmail');
+      log('Recipient Name: $recipientName');
+      log('Recipient Photo URL: $recipientPhotoUrl');
 
-      log(recipientPhotoUrl ?? '', name: 'debugssssss');
+      // Clear the message controller after sending
       _messageController.clear();
     }
   }
+
+  // Future<void> sendMessage() async {
+  //   final FirebaseAuth auth = FirebaseAuth.instance;
+  //   final authController = Provider.of<AuthController>(context, listen: false);
+  //   final Users users = Users();
+  //   if (formKey.currentState != null && formKey.currentState!.validate()) {
+  //     const tutorEmail = 'asanteadarkwa.usman@gmail.com';
+
+  //     // Get the current user email and display name
+  //     final currentUserEmail = auth.currentUser?.email ?? '';
+  //     final currentUserDisplayName = auth.currentUser?.displayName ?? '';
+
+  //     // Determine sender and recipient details
+  //     final isTutor = currentUserEmail == tutorEmail;
+  //     final senderEmail = isTutor ? tutorEmail : currentUserEmail;
+  //     final recipientEmail = isTutor ? auth.currentUser?.email : tutorEmail;
+  //     final recipientName =
+  //         isTutor ? auth.currentUser?.displayName : 'Usman Asante';
+
+  //     // Get or set recipient and sender photo URLs
+  //     final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
+  //     final recipientPhotoUrl = isTutor
+  //         ? auth.currentUser?.photoURL
+  //         : 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c';
+
+  //     // Send the message with prepared data
+  //     await _message.sendMessage(
+  //       senderEmail,
+  //       _messageController.text,
+  //       recipientEmail,
+  //       recipientName,
+  //       recipientPhotoUrl,
+  //       '',
+  //       '',
+  //     );
+  //     log(recipientEmail ?? '', name: 'debug');
+  //     log(_messageController.text, name: 'debugs');
+  //     log(senderEmail, name: 'debugss');
+  //     // log(senderBackground ?? '', name: 'debugsss');
+
+  //     log(recipientName ?? '', name: 'debugssss');
+
+  //     log(recipientPhotoUrl ?? '', name: 'debugssssss');
+  //     _messageController.clear();
+  //   }
+  // }
 
   void _handleAttachmentPressed() {
     showModalBottomSheet<void>(
