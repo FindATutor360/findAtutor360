@@ -391,7 +391,7 @@ class _ChatViewsState extends State<ChatViews> {
       final recipientName = isTutor ? otherUserName : 'Usman Asante';
       final recipientPhotoUrl = isTutor
           ? otherUserPhotoUrl
-          : 'https://...'; // Default image URL for tutor
+          : 'https://...gggggg'; // Default image URL for tutor
 
       // Send the message with the correctly set recipient and sender information
       await _message.sendMessage(
