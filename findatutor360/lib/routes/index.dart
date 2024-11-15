@@ -214,7 +214,7 @@ List<RouteBase> get routes => [
                       return ChatViews(
                         key: state.pageKey,
                         messages: message,
-                        user: user,
+                        // user: user,
                         tutorEmail: 'asanteadarkwa.usman@gmail.com',
                       );
                     },

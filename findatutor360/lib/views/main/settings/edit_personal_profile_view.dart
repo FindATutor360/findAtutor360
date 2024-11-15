@@ -35,7 +35,7 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
   final backGroundController = TextEditingController();
   final dOBController = TextEditingController();
   final nameController = TextEditingController();
-  final ValueNotifier<String> sex = ValueNotifier<String>('');
+  final sex = ValueNotifier<String>('');
 
   @override
   void initState() {
@@ -70,7 +70,13 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                 nameController.text = user.fullName ?? '';
                 backGroundController.text = user.backGround ?? '';
                 dOBController.text = user.dOB ?? '';
-                sex.value = user.sex ?? 'Male'; // Set dropdown value
+
+                // Set only if user.sex has a valid value
+                if (user.sex != null && user.sex!.isNotEmpty) {
+                  sex.value = user.sex!;
+                } else {
+                  sex.value = 'Other';
+                }
 
                 return Form(
                   key: formKey,
@@ -218,7 +224,7 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                                 sex.value = value.toString();
                               },
                               validator: (value) {
-                                if (sex.value.isEmpty) {
+                                if (value == null || value.isEmpty) {
                                   return "Please select identify Type";
                                 }
                                 return null;

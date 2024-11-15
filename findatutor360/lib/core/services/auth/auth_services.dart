@@ -95,7 +95,8 @@ class AuthServiceImpl implements AuthService {
       final response = await _auth.signInWithCredential(credential);
 
       await GoogleSignIn().signOut();
-      return response.user;
+      User? user = response.user;
+      return user;
     }
 
     return null;
@@ -154,6 +155,7 @@ class AuthServiceImpl implements AuthService {
           FacebookAuthProvider.credential(loginResult.accessToken!.token);
       UserCredential credential =
           await _auth.signInWithCredential(facebookAuthCredential);
+
       await facebookAuth.logOut();
 
       User? user = credential.user;

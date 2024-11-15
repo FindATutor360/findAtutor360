@@ -1,6 +1,4 @@
-import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/models/main/course_model.dart';
-import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -52,7 +50,6 @@ class _CourseDetailsState extends State<CourseDetails> {
 
   @override
   Widget build(BuildContext context) {
-    final authController = Provider.of<AuthController>(context);
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -205,44 +202,37 @@ class _CourseDetailsState extends State<CourseDetails> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    StreamBuilder<Users?>(
-                        stream: authController.getUserInfo(auth!.uid),
-                        builder: (context, snapshot) {
-                          final user = snapshot.data;
-
-                          return Expanded(
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: ((context) => ChatViews(
-                                          user: user,
-                                          tutorEmail:
-                                              'asanteadarkwa.usman@gmail.com',
-                                        )),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                height: MediaQuery.of(context).size.height / 15,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(
-                                    color: const Color(0XFF0476AF),
-                                  ),
-                                ),
-                                child: Align(
-                                  child: MainText(
-                                    text: 'Chat Tutor',
-                                    fontSize: 18,
-                                    color: customTheme['primaryColor'],
-                                  ),
-                                ),
-                              ),
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: ((context) => const ChatViews(
+                                    // user: user,
+                                    tutorEmail: 'asanteadarkwa.usman@gmail.com',
+                                  )),
                             ),
                           );
-                        }),
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: const Color(0XFF0476AF),
+                            ),
+                          ),
+                          child: Align(
+                            child: MainText(
+                              text: 'Chat Tutor',
+                              fontSize: 18,
+                              color: customTheme['primaryColor'],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       width: 16,
                     ),
