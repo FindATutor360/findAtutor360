@@ -209,7 +209,6 @@ class _LoginViewState extends State<LoginView> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      log('User email ${user?.email}', name: 'debug');
       _authController.isLoading.value = false;
       if (user != null && user.emailVerified) {
         Fluttertoast.showToast(
@@ -244,20 +243,8 @@ class _LoginViewState extends State<LoginView> {
       User? user = await _authController.continueWithGoogle(
         context,
       );
-      log('User email ${user?.email}', name: 'debug');
       _authController.isLoading.value = false;
-      if (user != null) {
-        Fluttertoast.showToast(
-          msg: "Login successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: customTheme['primaryColor'],
-          textColor: customTheme['whiteColor'],
-          fontSize: 16.0,
-        );
-        context.pushReplacement(HomeView.path);
-      } else if (!user!.emailVerified) {
-        _authController.isLoading.value = false;
+      if (user != null && user.emailVerified) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -267,6 +254,9 @@ class _LoginViewState extends State<LoginView> {
                 )),
           ),
         );
+
+        _authController.isLoading.value = false;
+      } else {
         log("User not created", name: 'debug');
       }
     } catch (e) {
@@ -288,21 +278,9 @@ class _LoginViewState extends State<LoginView> {
       User? user = await _authController.continueWithFacebook(
         context,
       );
-      log('User email ${user?.email}', name: 'debug');
       _authController.isLoading.value = false;
 
       if (user != null) {
-        Fluttertoast.showToast(
-          msg: "Login successful",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: customTheme['primaryColor'],
-          textColor: customTheme['whiteColor'],
-          fontSize: 16.0,
-        );
-        context.pushReplacement(HomeView.path);
-      } else if (!user!.emailVerified) {
-        _authController.isLoading.value = false;
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -313,6 +291,8 @@ class _LoginViewState extends State<LoginView> {
           ),
         );
 
+        _authController.isLoading.value = false;
+      } else {
         log("User not created", name: 'debug');
       }
     } catch (e) {

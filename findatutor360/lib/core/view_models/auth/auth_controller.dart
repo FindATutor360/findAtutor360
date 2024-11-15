@@ -93,10 +93,29 @@ class AuthController extends BaseProvider {
       _isLoadings.value = false;
 
       if (user != null) {
-        await sendEmailVerification(user, context,
-            name: user.displayName, email: user.email);
+        await user.updateProfile(displayName: user.displayName);
+        await user.verifyBeforeUpdateEmail(user.email!);
+
+        await sendEmailVerification(
+          user,
+          context,
+          name: user.displayName,
+          email: user.email,
+        );
 
         await storeUserToken(user);
+      } else {
+        await user?.updateProfile(displayName: user.displayName ?? '');
+        await user?.verifyBeforeUpdateEmail(user.email ?? '');
+
+        await sendEmailVerification(
+          user,
+          context,
+          name: user?.displayName,
+          email: user?.email,
+        );
+
+        await storeUserToken(user!);
       }
 
       return user;
@@ -126,10 +145,26 @@ class AuthController extends BaseProvider {
         await user.updateProfile(displayName: fullName);
         await user.verifyBeforeUpdateEmail(email);
 
-        await sendEmailVerification(user, context,
-            name: fullName, email: email);
+        await sendEmailVerification(
+          user,
+          context,
+          name: fullName,
+          email: email,
+        );
 
         await storeUserToken(user);
+      } else {
+        await user?.updateProfile(displayName: fullName);
+        await user?.verifyBeforeUpdateEmail(email);
+
+        await sendEmailVerification(
+          user,
+          context,
+          name: fullName,
+          email: email,
+        );
+
+        await storeUserToken(user!);
       }
 
       return user;
@@ -183,6 +218,18 @@ class AuthController extends BaseProvider {
           email: user.email!,
         );
         await storeUserToken(user);
+      } else {
+        await user?.updateProfile(displayName: user.displayName);
+        await user?.verifyBeforeUpdateEmail(user.email ?? '');
+
+        await sendEmailVerification(
+          user,
+          context,
+          name: user?.displayName,
+          email: user?.email,
+        );
+
+        await storeUserToken(user!);
       }
 
       return user;
@@ -340,8 +387,8 @@ class AuthController extends BaseProvider {
 
           await addUserInfo(
             user,
-            updatedUserInfo.fullName ?? user.displayName,
-            updatedUserInfo.email ?? user.email,
+            updatedUserInfo.fullName ?? name,
+            updatedUserInfo.email ?? email,
             updatedUserInfo.photoUrl ?? user.photoURL,
             updatedUserInfo.backGround ?? _backGround,
             updatedUserInfo.dOB ?? _dOB,
@@ -366,8 +413,8 @@ class AuthController extends BaseProvider {
 
           await addUserInfo(
             user,
-            updatedUserInfo.fullName ?? user.displayName,
-            updatedUserInfo.email ?? user.email,
+            updatedUserInfo.fullName ?? name,
+            updatedUserInfo.email ?? email,
             updatedUserInfo.photoUrl ?? user.photoURL,
             updatedUserInfo.backGround ?? _backGround,
             updatedUserInfo.dOB ?? _dOB,
@@ -389,7 +436,7 @@ class AuthController extends BaseProvider {
       }
     } catch (e) {
       log("Error during email verification process: $e", name: 'debug');
-      _handleError(context, e);
+      // _handleError(context, e);
     }
   }
 

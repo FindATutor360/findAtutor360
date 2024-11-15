@@ -311,7 +311,6 @@ class AuthServiceImpl implements AuthService {
   @override
   Future<void> logout() async {
     await _auth.signOut();
-    await GoogleSignIn().signOut();
     await facebookAuth.logOut();
     log('Log out successfully', name: 'debug');
   }
