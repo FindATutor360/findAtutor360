@@ -468,6 +468,10 @@ class AuthController extends BaseProvider {
     }
   }
 
+  Stream<List<Users>> getUserStream() {
+    return _authServiceImpl.getUsersStream();
+  }
+
   Future<Users?> getUserByEmail(String email) async {
     try {
       await _authServiceImpl.getUserByEmail(email);
