@@ -3,6 +3,7 @@
 import 'dart:developer';
 // ignore: unused_import
 import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +32,11 @@ class RegisterView extends StatefulWidget {
 
 class _RegisterViewState extends OperationRunnerState<RegisterView> {
   bool checkedValue = false;
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
 
   String? password, confirmPassword;
 
@@ -316,6 +316,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
 
   Future<void> continueWithGoogle() async {
     try {
+      AppPreferences appPreferences = AppPreferences();
       _authController.isLoading.value = true;
       User? user = await _authController.continueWithGoogle(
         context,
@@ -331,8 +332,11 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                 )),
           ),
         );
+        await appPreferences.setBool('isEmailVerified', true);
+        await appPreferences.setString('userToken', user.uid);
         _authController.isLoading.value = false;
       } else {
+        await appPreferences.setBool('isEmailVerified', false);
         log("User not created", name: 'debug');
       }
     } catch (e) {
