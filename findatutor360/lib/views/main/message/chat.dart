@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 class ChatViews extends StatefulWidget {
   const ChatViews({
     this.user,
-    // this.messages,
+    this.messages,
     required this.tutorEmail,
     super.key,
   });
@@ -24,7 +24,7 @@ class ChatViews extends StatefulWidget {
   final Users? user;
 
   final String tutorEmail;
-  // final Messages? messages;
+  final Messages? messages;
 
   static const path = 'chat_view';
 
@@ -43,6 +43,7 @@ class _ChatViewsState extends State<ChatViews> {
   @override
   void initState() {
     super.initState();
+    log('Tutor Email ${widget.tutorEmail}', name: 'debug');
 
     _message = context.read<MessageController>();
     _focusNode.addListener(() {
@@ -82,25 +83,25 @@ class _ChatViewsState extends State<ChatViews> {
         title: Row(
           children: [
             UserImage(
-                radius: 18,
-                imageUrl: widget.tutorEmail == 'asanteadarkwa.usman@gmail.com'
-                    ? 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c'
-                    : widget.user?.photoUrl ??
-                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
+              radius: 18,
+              imageUrl: widget.messages?.recipientEmail != currentUser!.email
+                  ? widget.messages?.recipientPhotoUrl ??
+                      'https://graph.facebook.com/451133794590900/picture'
+                  : widget.messages?.senderPhotoUrl ??
+                      'https://graph.facebook.com/451133794590900/picture',
+            ),
             const SizedBox(width: 8),
             Column(
               children: [
                 FittedBox(
                   child: Text(
-                    widget.tutorEmail == 'asanteadarkwa.usman@gmail.com'
-                        ? 'Usman Asante'
-                        : widget.user?.fullName ?? 'Unknown',
+                    widget.messages?.recipientEmail != currentUser.email
+                        ? widget.messages?.recipientName ?? 'Usman Asante'
+                        : widget.messages?.senderName ?? 'Usman Asante',
                   ),
                 ),
                 Text(
-                  widget.tutorEmail == 'asanteadarkwa.usman@gmail.com'
-                      ? 'Programmer'
-                      : widget.user?.backGround ?? 'Programmer/Writer',
+                  widget.user?.backGround ?? '',
                   style: TextStyle(
                     fontSize: 12,
                     color: customTheme['whiteColor'],
@@ -317,11 +318,7 @@ class _ChatViewsState extends State<ChatViews> {
                   return isVisible
                       ? InkWell(
                           onTap: () async {
-                            await sendMessage(
-                              currentUser?.email ?? '',
-                              currentUser?.displayName ?? '',
-                              currentUser?.photoURL ?? '',
-                            );
+                            await sendMessage();
                           },
                           child: CircleAvatar(
                             radius: 20,
@@ -366,34 +363,31 @@ class _ChatViewsState extends State<ChatViews> {
     return textPainter.size.width;
   }
 
-  Future<void> sendMessage(String otherUserEmail, String otherUserName,
-      String otherUserPhotoUrl) async {
+  Future<void> sendMessage() async {
     final FirebaseAuth auth = FirebaseAuth.instance;
-    final authController = Provider.of<AuthController>(context, listen: false);
     final Users users = Users();
-
-    if (formKey.currentState != null && formKey.currentState!.validate()) {
-      const tutorEmail = 'asanteadarkwa.usman@gmail.com';
-
-      // Current user details
-      final currentUserEmail = auth.currentUser?.email ?? '';
-      final currentUserDisplayName = auth.currentUser?.displayName ?? '';
-
-      // Determine if the current user is the tutor
-      final isTutor = currentUserEmail == tutorEmail;
-
-      // Set sender and recipient details based on context
-      final senderEmail = currentUserEmail;
+    if (formKey.currentState != null &&
+        formKey.currentState!.validate() &&
+        auth.currentUser != null &&
+        _messageController.text.isNotEmpty) {
+      final senderEmail = auth.currentUser!.email;
       final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
+      final senderName = auth.currentUser!.displayName ?? users.fullName;
 
-      // Adjust recipient details based on whether the current user is the tutor
-      final recipientEmail = isTutor ? otherUserEmail : tutorEmail;
-      final recipientName = isTutor ? otherUserName : 'Usman Asante';
-      final recipientPhotoUrl = isTutor
-          ? otherUserPhotoUrl
-          : 'https://graph.facebook.com/451133794590900/picture'; // Default image URL for tutor
+      final recipientEmail = widget.messages?.senderEmail == senderEmail
+          ? widget.messages?.recipientEmail ?? widget.tutorEmail
+          : widget.messages?.senderEmail ?? widget.tutorEmail;
 
-      // Send the message with the correctly set recipient and sender information
+      final recipientName = widget.messages?.senderName == senderName
+          ? widget.messages?.recipientName ?? 'Usman Asante'
+          : widget.messages?.senderName ?? 'Usman Asante';
+      final recipientPhotoUrl =
+          widget.messages?.senderPhotoUrl == senderPhotoUrl
+              ? widget.messages?.recipientPhotoUrl ??
+                  'https://graph.facebook.com/451133794590900/picture'
+              : widget.messages?.senderPhotoUrl ??
+                  'https://graph.facebook.com/451133794590900/picture';
+
       await _message.sendMessage(
         senderEmail,
         _messageController.text,
@@ -404,56 +398,17 @@ class _ChatViewsState extends State<ChatViews> {
         '',
       );
 
+      log("Recipient email: $recipientEmail", name: 'debug');
+      log("Message text: ${_messageController.text}", name: 'debug');
+      log("Sender email: $senderEmail", name: 'debug');
+
+      log("Recipient name: $recipientName", name: 'debug');
+      log("Recipient photo URL: $recipientPhotoUrl", name: 'debug');
+
       // Clear the message input after sending
       _messageController.clear();
     }
   }
-
-  // Future<void> sendMessage() async {
-  //   final FirebaseAuth auth = FirebaseAuth.instance;
-  //   final authController = Provider.of<AuthController>(context, listen: false);
-  //   final Users users = Users();
-  //   if (formKey.currentState != null && formKey.currentState!.validate()) {
-  //     const tutorEmail = 'asanteadarkwa.usman@gmail.com';
-
-  //     // Get the current user email and display name
-  //     final currentUserEmail = auth.currentUser?.email ?? '';
-  //     final currentUserDisplayName = auth.currentUser?.displayName ?? '';
-
-  //     // Determine sender and recipient details
-  //     final isTutor = currentUserEmail == tutorEmail;
-  //     final senderEmail = isTutor ? tutorEmail : currentUserEmail;
-  //     final recipientEmail = isTutor ? auth.currentUser?.email : tutorEmail;
-  //     final recipientName =
-  //         isTutor ? auth.currentUser?.displayName : 'Usman Asante';
-
-  //     // Get or set recipient and sender photo URLs
-  //     final senderPhotoUrl = auth.currentUser!.photoURL ?? users.photoUrl;
-  //     final recipientPhotoUrl = isTutor
-  //         ? auth.currentUser?.photoURL
-  //         : 'https://lh3.googleusercontent.com/a/ACg8ocLhSv1F-cAdR6P48IduPxSlErYukLX8GAqCc_gy8mtnoKn7tIyy=s96-c';
-
-  //     // Send the message with prepared data
-  //     await _message.sendMessage(
-  //       senderEmail,
-  //       _messageController.text,
-  //       recipientEmail,
-  //       recipientName,
-  //       recipientPhotoUrl,
-  //       '',
-  //       '',
-  //     );
-  //     log(recipientEmail ?? '', name: 'debug');
-  //     log(_messageController.text, name: 'debugs');
-  //     log(senderEmail, name: 'debugss');
-  //     // log(senderBackground ?? '', name: 'debugsss');
-
-  //     log(recipientName ?? '', name: 'debugssss');
-
-  //     log(recipientPhotoUrl ?? '', name: 'debugssssss');
-  //     _messageController.clear();
-  //   }
-  // }
 
   void _handleAttachmentPressed() {
     showModalBottomSheet<void>(

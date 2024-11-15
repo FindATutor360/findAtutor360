@@ -71,6 +71,8 @@ abstract class AuthService {
   Future<Users?> getUserByEmail(String email);
 
   Stream<Users?> getUserInfo(String userId);
+
+  Stream<List<Users>> getUsersStream();
 }
 
 class AuthServiceImpl implements AuthService {
@@ -268,6 +270,20 @@ class AuthServiceImpl implements AuthService {
         .doc(userId)
         .snapshots()
         .map((data) => Users.fromJson(data.data()!));
+  }
+
+  @override
+  Stream<List<Users>> getUsersStream() {
+    return FirebaseFirestore.instance
+        .collection('Users')
+        .snapshots()
+        .map((QuerySnapshot query) {
+      List<Users> users = [];
+      for (var doc in query.docs) {
+        users.add(Users.fromJson(doc.data() as Map<String, dynamic>));
+      }
+      return users.where((user) => user.uId != _auth.currentUser?.uid).toList();
+    });
   }
 
   @override
