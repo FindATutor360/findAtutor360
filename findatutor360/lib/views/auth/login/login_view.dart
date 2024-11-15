@@ -209,6 +209,7 @@ class _LoginViewState extends State<LoginView> {
         email: _emailController.text,
         password: _passwordController.text,
       );
+      log('User email ${user?.email}', name: 'debug');
       _authController.isLoading.value = false;
       if (user != null && user.emailVerified) {
         Fluttertoast.showToast(
@@ -243,6 +244,7 @@ class _LoginViewState extends State<LoginView> {
       User? user = await _authController.continueWithGoogle(
         context,
       );
+      log('User email ${user?.email}', name: 'debug');
       _authController.isLoading.value = false;
       if (user != null) {
         Fluttertoast.showToast(
@@ -286,6 +288,7 @@ class _LoginViewState extends State<LoginView> {
       User? user = await _authController.continueWithFacebook(
         context,
       );
+      log('User email ${user?.email}', name: 'debug');
       _authController.isLoading.value = false;
 
       if (user != null) {

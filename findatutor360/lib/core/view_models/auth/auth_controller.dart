@@ -57,6 +57,16 @@ class AuthController extends BaseProvider {
     });
   }
 
+  Future<void> storeUserToken(User user) async {
+    String? userToken = await user.getIdToken();
+    if (userToken != null) {
+      await appPreferences.setString('userToken', userToken);
+      log('User token: $userToken', name: 'debug');
+    } else {
+      log('Failed to get user token.', name: 'debug');
+    }
+  }
+
   void clearUserData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (user != null) {
@@ -67,6 +77,11 @@ class AuthController extends BaseProvider {
         log("No user data to clear.", name: 'debug');
       }
     });
+  }
+
+  Future<void> _handleError(BuildContext context, dynamic e) async {
+    log('$e', name: 'debug');
+    showSnackMessage(context, '$e', isError: true);
   }
 
   Future<User?> continueWithGoogle(BuildContext context) async {
@@ -81,20 +96,12 @@ class AuthController extends BaseProvider {
         await sendEmailVerification(user, context,
             name: user.displayName, email: user.email);
 
-        String? userToken = await user.getIdToken();
-        if (userToken != null) {
-          await appPreferences.getString('userToken');
-          await appPreferences.setString('userToken', userToken);
-          log('User token: $userToken', name: 'debug');
-        } else {
-          log('Failed to get user token.', name: 'debug');
-        }
+        await storeUserToken(user);
       }
 
       return user;
     } on FirebaseAuthException catch (e) {
-      log("$e", name: 'debug');
-      showSnackMessage(context, "$e", isError: true);
+      _handleError(context, e);
     }
     return null;
   }
@@ -118,24 +125,16 @@ class AuthController extends BaseProvider {
       if (user != null) {
         await user.updateProfile(displayName: fullName);
         await user.verifyBeforeUpdateEmail(email);
-        await user.reload();
+
         await sendEmailVerification(user, context,
             name: fullName, email: email);
 
-        String? userToken = await user.getIdToken();
-        if (userToken != null) {
-          await appPreferences.getString('userToken');
-          await appPreferences.setString('userToken', userToken);
-          log('User token: $userToken', name: 'debug');
-        } else {
-          log('Failed to get user token.', name: 'debug');
-        }
+        await storeUserToken(user);
       }
 
       return user;
     } on FirebaseAuthException catch (e) {
-      log("$e", name: 'debug');
-      showSnackMessage(context, "$e", isError: true);
+      _handleError(context, e);
       return null;
     } finally {
       _isLoadings.value = false;
@@ -157,20 +156,12 @@ class AuthController extends BaseProvider {
       _isLoadings.value = false;
 
       if (user != null) {
-        String? userToken = await user.getIdToken();
-        if (userToken != null) {
-          await appPreferences.getString('userToken');
-          await appPreferences.setString('userToken', userToken);
-          log('User token: $userToken', name: 'debug');
-        } else {
-          log('Failed to get user token.', name: 'debug');
-        }
+        await storeUserToken(user);
       }
 
       return user;
     } on FirebaseAuthException catch (e) {
-      showSnackMessage(context, "$e", isError: true);
-      log('$e', name: 'debug');
+      _handleError(context, e);
 
       return null;
     } finally {
@@ -191,21 +182,12 @@ class AuthController extends BaseProvider {
           name: user.displayName!,
           email: user.email!,
         );
-
-        String? userToken = await user.getIdToken();
-        if (userToken != null) {
-          await appPreferences.getString('userToken');
-          await appPreferences.setString('userToken', userToken);
-          log('User token: $userToken', name: 'debug');
-        } else {
-          log('Failed to get user token.', name: 'debug');
-        }
+        await storeUserToken(user);
       }
 
       return user;
     } on FirebaseAuthException catch (e) {
-      log("$e", name: 'debug');
-      showSnackMessage(context, "$e", isError: true);
+      _handleError(context, e);
 
       return null;
     } finally {
@@ -293,8 +275,6 @@ class AuthController extends BaseProvider {
       User? currentUser = FirebaseAuth.instance.currentUser;
 
       if (currentUser != null) {
-        String? userToken = await currentUser.getIdToken();
-
         // Update user information
         await _authServiceImpl.updateUserInfo(
           context,
@@ -320,10 +300,7 @@ class AuthController extends BaseProvider {
         await currentUser.reload();
 
         // Store token
-        if (userToken != null) {
-          await appPreferences.setString('userToken', userToken);
-          log('User token: $userToken', name: 'debug');
-        }
+        await storeUserToken(currentUser);
 
         log("User info updated successfully!", name: 'debug');
         resetUserInfoDetails();
@@ -343,21 +320,24 @@ class AuthController extends BaseProvider {
   }
 
   Future<void> sendEmailVerification(
-    User user,
+    User? user,
     BuildContext context, {
     required String? name,
     required String? email,
   }) async {
     try {
-      await for (var updatedUserInfo in getUserInfo(user.uid)) {
+      await for (var updatedUserInfo in getUserInfo(user!.uid)) {
         if (updatedUserInfo == null) {
           log("User data is null", name: 'debug');
           return;
         }
 
         if (!user.emailVerified) {
+          await user.sendEmailVerification();
+
           Provider.of<AuthController>(context, listen: false)
               .setUserInfo(updatedUserInfo);
+
           await addUserInfo(
             user,
             updatedUserInfo.fullName ?? user.displayName,
@@ -377,10 +357,9 @@ class AuthController extends BaseProvider {
             updatedUserInfo.awardImageUrl ?? _awardImageUrl,
           );
 
-          await user.sendEmailVerification();
-
           log('Verification email sent', name: 'debug');
         } else {
+          log('User email already verified', name: 'debug');
           // Handle the case where the email is already verified
           Provider.of<AuthController>(context, listen: false)
               .setUserInfo(updatedUserInfo);
@@ -410,6 +389,7 @@ class AuthController extends BaseProvider {
       }
     } catch (e) {
       log("Error during email verification process: $e", name: 'debug');
+      _handleError(context, e);
     }
   }
 

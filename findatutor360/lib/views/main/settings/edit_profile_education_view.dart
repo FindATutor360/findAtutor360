@@ -87,7 +87,12 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                 awardController.text = user.award ?? '';
 
                 awardDetailsController.text = user.awardDetails ?? '';
-                eduLevel.value = user.eduLevel ?? 'Diploma';
+
+                if (user.eduLevel != null && user.eduLevel!.isNotEmpty) {
+                  eduLevel.value = user.eduLevel!;
+                } else {
+                  eduLevel.value = 'Diploma';
+                }
 
                 awardImageUrl.value = File(user.awardImageUrl ?? '');
                 certImageUrl.value = File(user.certImageUrl ?? '');

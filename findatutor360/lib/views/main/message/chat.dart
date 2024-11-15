@@ -15,13 +15,13 @@ import 'package:provider/provider.dart';
 
 class ChatViews extends StatefulWidget {
   const ChatViews({
-    this.user,
+    // this.user,
     this.messages,
     required this.tutorEmail,
     super.key,
   });
 
-  final Users? user;
+  // final Users? user;
 
   final String tutorEmail;
   final Messages? messages;
@@ -34,6 +34,7 @@ class ChatViews extends StatefulWidget {
 
 class _ChatViewsState extends State<ChatViews> {
   late MessageController _message;
+  late AuthController _authController;
   final TextEditingController _messageController = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final FocusNode _focusNode = FocusNode();
@@ -44,6 +45,7 @@ class _ChatViewsState extends State<ChatViews> {
   void initState() {
     super.initState();
     log('Tutor Email ${widget.tutorEmail}', name: 'debug');
+    _authController = context.read<AuthController>();
 
     _message = context.read<MessageController>();
     _focusNode.addListener(() {
@@ -80,36 +82,54 @@ class _ChatViewsState extends State<ChatViews> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
-        title: Row(
-          children: [
-            UserImage(
-              radius: 18,
-              imageUrl: widget.messages?.recipientEmail != currentUser!.email
-                  ? widget.messages?.recipientPhotoUrl ??
-                      'https://graph.facebook.com/451133794590900/picture'
-                  : widget.messages?.senderPhotoUrl ??
-                      'https://graph.facebook.com/451133794590900/picture',
-            ),
-            const SizedBox(width: 8),
-            Column(
-              children: [
-                FittedBox(
-                  child: Text(
-                    widget.messages?.recipientEmail != currentUser.email
-                        ? widget.messages?.recipientName ?? 'Usman Asante'
-                        : widget.messages?.senderName ?? 'Usman Asante',
+        title: StreamBuilder<Users?>(
+          stream: _authController.getUserInfo(currentUser!.uid),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasData && snapshot.data != null) {
+              final user = snapshot.data!;
+
+              return Row(
+                children: [
+                  UserImage(
+                    radius: 18,
+                    imageUrl: widget.messages?.recipientEmail !=
+                            currentUser.email
+                        ? widget.messages?.recipientPhotoUrl ??
+                            'https://graph.facebook.com/451133794590900/picture'
+                        : widget.messages?.senderPhotoUrl ??
+                            'https://graph.facebook.com/451133794590900/picture',
                   ),
-                ),
-                Text(
-                  widget.user?.backGround ?? '',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: customTheme['whiteColor'],
-                  ),
-                ),
-              ],
-            )
-          ],
+                  const SizedBox(width: 8),
+                  Column(
+                    children: [
+                      FittedBox(
+                        child: Text(
+                          widget.messages?.recipientEmail != currentUser.email
+                              ? widget.messages?.recipientName ?? 'Usman Asante'
+                              : widget.messages?.senderName ?? 'Usman Asante',
+                        ),
+                      ),
+                      Text(
+                        widget.messages?.recipientEmail != currentUser.email
+                            ? 'Programmer'
+                            : user.backGround ?? 'Programmer',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: customTheme['whiteColor'],
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            } else {
+              return const Center(child: Text("No user data found"));
+            }
+          },
         ),
       ),
       body: GestureDetector(
@@ -123,7 +143,7 @@ class _ChatViewsState extends State<ChatViews> {
               Expanded(
                 child: StreamBuilder<List<Messages>>(
                   stream: _message.getMessages(
-                    currentUser?.email ?? '',
+                    currentUser.email ?? '',
                     widget.tutorEmail,
                   ),
                   builder: (context, snapshot) {
@@ -156,7 +176,7 @@ class _ChatViewsState extends State<ChatViews> {
                       itemBuilder: (context, index) {
                         final message = messages[index];
                         final isCurrentUser =
-                            message.senderEmail == currentUser?.email;
+                            message.senderEmail == currentUser.email;
                         final textWidth = _getTextWidth(message.message ?? '');
 
                         return Align(
@@ -394,8 +414,6 @@ class _ChatViewsState extends State<ChatViews> {
         recipientEmail,
         recipientName,
         recipientPhotoUrl,
-        '',
-        '',
       );
 
       log("Recipient email: $recipientEmail", name: 'debug');

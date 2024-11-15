@@ -76,6 +76,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                 emailController.text = user.email ?? '';
 
                 profileImageUrl.value = File(user.photoUrl ?? '');
+                _profileImageUrl.value = user.photoUrl ?? '';
 
                 return Form(
                   key: formKey,
@@ -230,12 +231,8 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                                 BorderRadius.circular(16),
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: FileImage(
-                                                File(
-                                                  _authController
-                                                          .user?.photoUrl ??
-                                                      '',
-                                                ),
+                                              image: NetworkImage(
+                                                user.photoUrl ?? '',
                                               ),
                                             ),
                                           ),
