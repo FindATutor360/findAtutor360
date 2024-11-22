@@ -1,3 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:findatutor360/core/models/main/review_model.dart';
+import 'package:findatutor360/core/view_models/main/review_controller.dart';
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
 import 'package:findatutor360/custom_widgets/dialogs/review_dialog.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -6,13 +9,21 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:provider/provider.dart';
 
 class Reviews extends StatelessWidget {
-  const Reviews({super.key});
+  const Reviews({
+    this.courseName,
+    this.page,
+    super.key,
+  });
   static const path = '/reViews';
+  final String? courseName;
+  final String? page;
 
   @override
   Widget build(BuildContext context) {
+    final reviewController = Provider.of<ReviewController>(context);
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -38,10 +49,10 @@ class Reviews extends StatelessWidget {
                     color: const Color(0XFF79848E),
                   ),
                 ),
-                child: const Column(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
+                    const Row(
                       textBaseline: TextBaseline.alphabetic,
                       children: [
                         MainText(
@@ -59,16 +70,18 @@ class Reviews extends StatelessWidget {
                         ),
                       ],
                     ),
-                    MainText(
+                    const MainText(
                       text: 'Based on 29 reviews',
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 22,
                     ),
                     CustomRatingBar(
                       itemSize: 25,
+                      initialRating: 4.5,
+                      onRatingUpdate: (double) {},
                     ),
                   ],
                 ),
@@ -80,10 +93,21 @@ class Reviews extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              GestureDetector(
+              InkWell(
                 onTap: () {
                   Navigator.of(context).push(
-                    RatingDialog(),
+                    RatingDialog(
+                      initialRating: 1,
+                      onSubmit: (rating, comment) async {
+                        await reviewController.saveReview(
+                          courseName,
+                          comment,
+                          page,
+                          rating,
+                          context,
+                        );
+                      },
+                    ),
                   );
                 },
                 child: Row(
@@ -157,22 +181,45 @@ class Reviews extends StatelessWidget {
                   text: 'Reviews',
                   fontSize: 18,
                 ),
-                description: ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  separatorBuilder: (context, i) {
-                    return const SizedBox(
-                      height: 16,
-                    );
-                  },
-                  itemCount: 4,
-                  itemBuilder: (context, i) {
-                    return const ReviewData(
-                      userImage: 'A',
-                      userName: 'Anthony Rudiger',
-                      review:
-                          'The most interesting read I’ve had so far on this app. Pure passion from the writer. He makes this look like an explanation to a 12-year-old. I really like his style',
-                      date: '15.11.2022',
+                description: StreamBuilder<List<Review>>(
+                  stream: reviewController.fetchReviews(courseName ?? ''),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: MainText(
+                          text: 'No Review yet',
+                          fontSize: 12,
+                        ),
+                      );
+                    }
+                    final reviews = snapshot.data ?? [];
+                    return ListView.separated(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      separatorBuilder: (context, i) {
+                        return const SizedBox(
+                          height: 16,
+                        );
+                      },
+                      itemCount: reviews.length,
+                      itemBuilder: (context, i) {
+                        final review = reviews[i];
+                        final createdAt =
+                            (review.createdAt as Timestamp).toDate();
+                        final formattedDate = formatDate(createdAt);
+
+                        return ReviewData(
+                          userImage: review.profileImage ?? '',
+                          userName: review.senderName ?? '',
+                          review: review.comment ?? '',
+                          date: formattedDate,
+                          rate: review.rating ?? 0,
+                          onRatingUpdate: (double) {},
+                        );
+                      },
                     );
                   },
                 ),
@@ -186,6 +233,32 @@ class Reviews extends StatelessWidget {
       ),
     );
   }
+
+  String formatDate(DateTime createdAt) {
+    final now = DateTime.now();
+
+    if (createdAt.year == now.year &&
+        createdAt.month == now.month &&
+        createdAt.day == now.day) {
+      final difference = now.difference(createdAt);
+      if (difference.inHours < 1) {
+        return '${difference.inMinutes}mins ago';
+      } else if (difference.inHours < 24) {
+        return '${difference.inHours}hr ago';
+      } else {
+        return 'Today';
+      }
+    } else {
+      final yesterday = now.subtract(const Duration(days: 1));
+      if (createdAt.year == yesterday.year &&
+          createdAt.month == yesterday.month &&
+          createdAt.day == yesterday.day) {
+        return 'Yesterday';
+      } else {
+        return '${createdAt.day}/${createdAt.month}/${createdAt.year}';
+      }
+    }
+  }
 }
 
 class ReviewData extends StatelessWidget {
@@ -194,12 +267,16 @@ class ReviewData extends StatelessWidget {
     required this.userName,
     required this.review,
     required this.date,
+    required this.rate,
+    required this.onRatingUpdate,
     super.key,
   });
   final String userImage;
   final String userName;
   final String review;
   final String date;
+  final double rate;
+  final void Function(double) onRatingUpdate;
 
   @override
   Widget build(BuildContext context) {
@@ -227,8 +304,10 @@ class ReviewData extends StatelessWidget {
             const SizedBox(
               width: 12,
             ),
-            const CustomRatingBar(
+            CustomRatingBar(
               itemSize: 25,
+              initialRating: rate,
+              onRatingUpdate: onRatingUpdate,
             ),
           ],
         ),

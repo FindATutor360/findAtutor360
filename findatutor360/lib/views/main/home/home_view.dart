@@ -141,10 +141,11 @@ class _HomeViewState extends State<HomeView> {
                               child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
                           log('${snapshot.error}', name: 'debugs');
-                          return Center(
+                          return const Center(
                             child: MainText(
-                              text: 'Error: ${snapshot.error}',
+                              text: 'Error: Network error',
                               fontSize: 12,
+                              softWrap: true,
                             ),
                           );
                         } else if (!snapshot.hasData ||
@@ -157,7 +158,7 @@ class _HomeViewState extends State<HomeView> {
                           );
                         } else {
                           final courses = snapshot.data!;
-                          log('$courses', name: 'debug');
+
                           return Container(
                             height: MediaQuery.of(context).size.height * 0.33,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -171,7 +172,7 @@ class _HomeViewState extends State<HomeView> {
                               itemCount: 4,
                               itemBuilder: (context, index) {
                                 final Course course = courses[index];
-                                log('$course', name: 'debug');
+
                                 return InkWell(
                                   onTap: () {
                                     router.push(CourseDetails.path,
@@ -189,34 +190,6 @@ class _HomeViewState extends State<HomeView> {
                         }
                       },
                     ),
-
-                    // Container(
-                    //   height: MediaQuery.of(context).size.height * 0.31,
-                    //   padding: const EdgeInsets.symmetric(horizontal: 20),
-                    //   child: ListView.separated(
-                    //     padding: EdgeInsets.zero,
-                    //     scrollDirection: Axis.horizontal,
-                    //     separatorBuilder: (context, index) {
-                    //       return const SizedBox(width: 20);
-                    //     },
-                    //     shrinkWrap: true,
-                    //     itemCount: 4,
-                    //     itemBuilder: (context, i) {
-                    //       return InkWell(
-                    //         onTap: () {
-                    //           // router.push(CourseDetails.path,
-                    //           //     extra: course);
-                    //         },
-                    //         child: const ActiveCourseCard(
-                    //           image:
-                    //               'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                    //           title: 'Flutter cookbook',
-                    //           lessonNum: '1/3',
-                    //         ),
-                    //       );
-                    //     },
-                    //   ),
-                    // ),
 
                     const SizedBox(
                       height: 40,
@@ -242,9 +215,9 @@ class _HomeViewState extends State<HomeView> {
                           return const Center(
                               child: CircularProgressIndicator());
                         } else if (snapshot.hasError) {
-                          return Center(
+                          return const Center(
                             child: MainText(
-                              text: 'Error: ${snapshot.error}',
+                              text: 'Error: Network error',
                               fontSize: 12,
                             ),
                           );

@@ -37,6 +37,8 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
               MainText(
                 text: header,
                 fontSize: 18,
+                overflow: TextOverflow.ellipsis,
+                softWrap: true,
               ),
               const Spacer(),
               if (showIcon) ...[

@@ -77,7 +77,10 @@ class TrendingBookWidget extends StatelessWidget {
                     const SizedBox(
                       height: 10,
                     ),
-                    const CustomRatingBar(),
+                    CustomRatingBar(
+                      initialRating: 4,
+                      onRatingUpdate: (double) {},
+                    ),
                     const Flexible(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

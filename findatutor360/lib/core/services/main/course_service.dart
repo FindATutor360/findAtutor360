@@ -48,9 +48,6 @@ class CoursesServiceImpl implements CoursesService {
       log('Response data: ${response.body}', name: 'APIResponse');
       final data = json.decode(response.body);
 
-      // Inspect what 'data' looks like
-      log('Parsed data: $data', name: 'ParsedData');
-
       List courses = data['courses'] ?? [];
       log('$courses', name: 'debugss');
       return courses.map((courseData) => Course.fromJson(courseData)).toList();

@@ -73,6 +73,8 @@ dependencies:
   flutter_material_design_icons: ^1.1.7447
   flutter_dotenv: ^5.2.1
   open_mail_app: ^0.4.5
+  url_launcher: ^6.3.1
+  webview_flutter: ^4.8.0
 
   flutter_chat_types: any
   http: any

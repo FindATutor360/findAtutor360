@@ -78,7 +78,10 @@ class WishlistView extends StatelessWidget {
                             fontSize: 16,
                             color: customTheme['primaryColor'],
                           ),
-                          const CustomRatingBar(),
+                          CustomRatingBar(
+                            initialRating: 4.5,
+                            onRatingUpdate: (p0) {},
+                          ),
                           const SizedBox(
                             height: 4,
                           ),
