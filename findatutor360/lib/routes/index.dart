@@ -47,6 +47,7 @@ import 'package:findatutor360/views/main/settings/settings_notification.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/book_shop_course.dart';
 import 'package:findatutor360/views/main/shop/course_details.dart';
+import 'package:findatutor360/views/main/shop/enroll_course.dart';
 import 'package:findatutor360/views/main/shop/reviews_view.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:findatutor360/views/main/message/message_view.dart';
@@ -293,9 +294,25 @@ List<RouteBase> get routes => [
         },
       ),
       GoRoute(
-        path: Reviews.path,
+        path: '/enrollView/:title/:url',
         builder: (BuildContext context, GoRouterState state) {
-          return const Reviews();
+          final String title = state.pathParameters['title'] ?? '';
+          final String url = state.pathParameters['url'] ?? '';
+          return EnrollCourseScreen(
+            title: Uri.decodeComponent(title),
+            url: Uri.decodeComponent(url),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/reViews/:courseName/:coursePage',
+        builder: (BuildContext context, GoRouterState state) {
+          final String courseName = state.pathParameters['courseName'] ?? '';
+          final String coursePage = state.pathParameters['coursePage'] ?? '';
+          return Reviews(
+            courseName: Uri.decodeComponent(courseName),
+            page: coursePage,
+          );
         },
       ),
       GoRoute(

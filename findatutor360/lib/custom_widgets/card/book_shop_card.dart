@@ -51,7 +51,10 @@ class BookShopCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const CustomRatingBar(),
+              CustomRatingBar(
+                initialRating: 3,
+                onRatingUpdate: (double) {},
+              ),
               Expanded(
                 child: Row(
                   children: [

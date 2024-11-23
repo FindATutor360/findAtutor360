@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/main/books_model.dart';
+import 'package:findatutor360/core/models/main/review_model.dart';
 import 'package:findatutor360/core/view_models/main/books_controller.dart';
+import 'package:findatutor360/core/view_models/main/review_controller.dart';
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
 import 'package:findatutor360/custom_widgets/card/trending_books_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -54,6 +57,7 @@ class _BookDetailsState extends State<BookDetails> {
   @override
   Widget build(BuildContext context) {
     _booksController = context.watch<BooksController>();
+    final reviewController = Provider.of<ReviewController>(context);
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -128,8 +132,10 @@ class _BookDetailsState extends State<BookDetails> {
                                   const SizedBox(
                                     height: 4,
                                   ),
-                                  const CustomRatingBar(
+                                  CustomRatingBar(
+                                    initialRating: 4.5,
                                     itemSize: 32,
+                                    onRatingUpdate: (p0) {},
                                   ),
                                 ],
                               ),
@@ -264,22 +270,51 @@ class _BookDetailsState extends State<BookDetails> {
                         description: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              separatorBuilder: (context, i) {
-                                return const SizedBox(
-                                  height: 16,
-                                );
-                              },
-                              itemCount: 2,
-                              itemBuilder: (context, i) {
-                                return const ReviewData(
-                                  userImage: 'A',
-                                  userName: 'Anthony Rudiger',
-                                  review:
-                                      'The most interesting read I’ve had so far on this app. Pure passion from the writer. He makes this look like an explanation to a 12-year-old. I really like his style',
-                                  date: '15.11.2022',
+                            StreamBuilder<List<Review>>(
+                              stream: reviewController
+                                  .fetchReviews(widget.books.title),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return const Center(
+                                    child: MainText(
+                                      text: 'No Review yet',
+                                      fontSize: 12,
+                                    ),
+                                  );
+                                }
+
+                                final reviews = snapshot.data ?? [];
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  separatorBuilder: (context, i) {
+                                    return const SizedBox(
+                                      height: 16,
+                                    );
+                                  },
+                                  itemCount: reviews.length,
+                                  itemBuilder: (context, i) {
+                                    final review = reviews[i];
+                                    final createdAt =
+                                        (review.createdAt as Timestamp)
+                                            .toDate();
+                                    final formattedDate = formatDate(createdAt);
+
+                                    return ReviewData(
+                                      userImage: review.profileImage ?? '',
+                                      userName: review.senderName ?? '',
+                                      review: review.comment ?? '',
+                                      date: formattedDate,
+                                      rate: review.rating,
+                                      onRatingUpdate: (p0) {},
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -288,8 +323,10 @@ class _BookDetailsState extends State<BookDetails> {
                             ),
                             InkWell(
                               onTap: () {
+                                final bookName =
+                                    Uri.encodeComponent(widget.books.title);
                                 router.push(
-                                  Reviews.path,
+                                  '/reViews/$bookName/Book',
                                 );
                               },
                               child: Row(
@@ -452,5 +489,31 @@ class _BookDetailsState extends State<BookDetails> {
         ),
       ),
     );
+  }
+
+  String formatDate(DateTime createdAt) {
+    final now = DateTime.now();
+
+    if (createdAt.year == now.year &&
+        createdAt.month == now.month &&
+        createdAt.day == now.day) {
+      final difference = now.difference(createdAt);
+      if (difference.inHours < 1) {
+        return '${difference.inMinutes}mins ago';
+      } else if (difference.inHours < 24) {
+        return '${difference.inHours}hr ago';
+      } else {
+        return 'Today';
+      }
+    } else {
+      final yesterday = now.subtract(const Duration(days: 1));
+      if (createdAt.year == yesterday.year &&
+          createdAt.month == yesterday.month &&
+          createdAt.day == yesterday.day) {
+        return 'Yesterday';
+      } else {
+        return '${createdAt.day}/${createdAt.month}/${createdAt.year}';
+      }
+    }
   }
 }

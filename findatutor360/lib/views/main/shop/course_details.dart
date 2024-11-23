@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/main/course_model.dart';
+import 'package:findatutor360/core/models/main/review_model.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
+import 'package:findatutor360/core/view_models/main/review_controller.dart';
 import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
@@ -50,6 +53,11 @@ class _CourseDetailsState extends State<CourseDetails> {
 
   @override
   Widget build(BuildContext context) {
+    final reviewController = Provider.of<ReviewController>(context);
+
+    final normalizedCourseName = normalizeCourseName(widget.course.name);
+    final courseName = Uri.encodeComponent(normalizedCourseName);
+
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -103,8 +111,10 @@ class _CourseDetailsState extends State<CourseDetails> {
                       const SizedBox(
                         height: 14,
                       ),
-                      const CustomRatingBar(
+                      CustomRatingBar(
                         itemSize: 25,
+                        initialRating: 3.5,
+                        onRatingUpdate: (p0) {},
                       ),
                       const SizedBox(
                         height: 40,
@@ -151,22 +161,50 @@ class _CourseDetailsState extends State<CourseDetails> {
                         description: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ListView.separated(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              separatorBuilder: (context, i) {
-                                return const SizedBox(
-                                  height: 16,
-                                );
-                              },
-                              itemCount: 2,
-                              itemBuilder: (context, i) {
-                                return const ReviewData(
-                                  userImage: 'A',
-                                  userName: 'Anthony Rudiger',
-                                  review:
-                                      'The most interesting read I’ve had so far on this app. Pure passion from the writer. He makes this look like an explanation to a 12-year-old. I really like his style',
-                                  date: '15.11.2022',
+                            StreamBuilder<List<Review>>(
+                              stream: reviewController
+                                  .fetchReviews(normalizedCourseName),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                if (!snapshot.hasData ||
+                                    snapshot.data!.isEmpty) {
+                                  return const Center(
+                                    child: MainText(
+                                      text: 'No Review yet',
+                                      fontSize: 12,
+                                    ),
+                                  );
+                                }
+                                final reviews = snapshot.data ?? [];
+                                return ListView.separated(
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  separatorBuilder: (context, i) {
+                                    return const SizedBox(
+                                      height: 16,
+                                    );
+                                  },
+                                  itemCount: reviews.length,
+                                  itemBuilder: (context, i) {
+                                    final review = reviews[i];
+                                    final createdAt =
+                                        (review.createdAt as Timestamp)
+                                            .toDate();
+                                    final formattedDate = formatDate(createdAt);
+
+                                    return ReviewData(
+                                      userImage: review.profileImage ?? '',
+                                      userName: review.senderName ?? '',
+                                      review: review.comment ?? '',
+                                      date: formattedDate,
+                                      rate: review.rating ?? 0,
+                                      onRatingUpdate: (double) {},
+                                    );
+                                  },
                                 );
                               },
                             ),
@@ -175,9 +213,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                             ),
                             InkWell(
                               onTap: () {
-                                router.push(
-                                  Reviews.path,
-                                );
+                                router.push('/reViews/$courseName/Course');
                               },
                               child: Row(
                                 children: [
@@ -237,17 +273,33 @@ class _CourseDetailsState extends State<CourseDetails> {
                       width: 16,
                     ),
                     Expanded(
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 15,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: const Color(0XFF0476AF),
-                        ),
-                        child: Align(
-                          child: MainText(
-                            text: 'Enroll',
-                            fontSize: 18,
-                            color: customTheme['whiteColor'],
+                      child: InkWell(
+                        onTap: () async {
+                          final sanitizedCourseName = (widget.course.name ?? '')
+                              .replaceAll('©', '(C)')
+                              .replaceAll('&', 'and')
+                              .replaceAll('%', 'percent')
+                              .replaceAll(RegExp(r'[^\w\s-]'), '');
+                          final courseName =
+                              Uri.encodeComponent(sanitizedCourseName);
+                          final searchQuery = Uri.encodeComponent(courseName);
+                          final url = Uri.encodeComponent(
+                              'https://www.udemy.com/courses/search/?src=ukw&q=$searchQuery');
+
+                          router.push('/enrollView/$courseName/$url');
+                        },
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 15,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: const Color(0XFF0476AF),
+                          ),
+                          child: Align(
+                            child: MainText(
+                              text: 'Enroll',
+                              fontSize: 18,
+                              color: customTheme['whiteColor'],
+                            ),
                           ),
                         ),
                       ),
@@ -263,5 +315,31 @@ class _CourseDetailsState extends State<CourseDetails> {
         ),
       ),
     );
+  }
+
+  String formatDate(DateTime createdAt) {
+    final now = DateTime.now();
+
+    if (createdAt.year == now.year &&
+        createdAt.month == now.month &&
+        createdAt.day == now.day) {
+      final difference = now.difference(createdAt);
+      if (difference.inHours < 1) {
+        return '${difference.inMinutes}mins ago';
+      } else if (difference.inHours < 24) {
+        return '${difference.inHours}hr ago';
+      } else {
+        return 'Today';
+      }
+    } else {
+      final yesterday = now.subtract(const Duration(days: 1));
+      if (createdAt.year == yesterday.year &&
+          createdAt.month == yesterday.month &&
+          createdAt.day == yesterday.day) {
+        return 'Yesterday';
+      } else {
+        return '${createdAt.day}/${createdAt.month}/${createdAt.year}';
+      }
+    }
   }
 }

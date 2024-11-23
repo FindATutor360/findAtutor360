@@ -3,6 +3,7 @@ import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
+import 'package:findatutor360/core/view_models/main/review_controller.dart';
 import 'package:findatutor360/core/view_models/main/theme_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
@@ -23,6 +24,9 @@ class AppProviders {
     ),
     ChangeNotifierProvider<CoursesController>(
       create: (_) => CoursesController(),
+    ),
+    ChangeNotifierProvider(
+      create: (_) => ReviewController(),
     ),
   ];
 }

@@ -63,7 +63,10 @@ class RecommededTutorCard extends StatelessWidget {
                   isOnline: false,
                 ),
                 const SizedBox(height: 5),
-                const CustomRatingBar(),
+                CustomRatingBar(
+                  initialRating: 4.5,
+                  onRatingUpdate: (double) {},
+                ),
                 // const SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
