@@ -93,15 +93,15 @@ class AuthController extends BaseProvider {
       _isLoadings.value = false;
 
       if (user != null) {
-        await user.updateProfile(displayName: user.displayName);
-        await user.verifyBeforeUpdateEmail(user.email!);
-
         await sendEmailVerification(
           user,
           context,
           name: user.displayName,
           email: user.email,
         );
+
+        await user.updateProfile(displayName: user.displayName);
+        await user.verifyBeforeUpdateEmail(user.email!);
 
         await storeUserToken(user);
       } else {
@@ -121,6 +121,8 @@ class AuthController extends BaseProvider {
       return user;
     } on FirebaseAuthException catch (e) {
       _handleError(context, e);
+    } finally {
+      _isLoadings.value = false;
     }
     return null;
   }
@@ -214,12 +216,12 @@ class AuthController extends BaseProvider {
         await sendEmailVerification(
           user,
           context,
-          name: user.displayName!,
-          email: user.email!,
+          name: user.displayName,
+          email: user.email,
         );
         await storeUserToken(user);
       } else {
-        await user?.updateProfile(displayName: user.displayName);
+        await user?.updateProfile(displayName: user.displayName ?? '');
         await user?.verifyBeforeUpdateEmail(user.email ?? '');
 
         await sendEmailVerification(

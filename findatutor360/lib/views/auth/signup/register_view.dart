@@ -199,11 +199,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                               fontWeight: FontWeight.w600,
                               onPressed: () async {
                                 if (_formKey.currentState!.validate()) {
-                                  await signUp(
-                                    fullName: _fullNameController.text,
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  );
+                                  await signUp();
                                 }
                               },
                             );
@@ -257,11 +253,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     );
   }
 
-  Future<void> signUp({
-    required String fullName,
-    required String email,
-    required String password,
-  }) async {
+  Future<void> signUp() async {
     try {
       _authController.isLoading.value = true;
       if (!checkPasswords(
@@ -278,7 +270,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
         email: _emailController.text,
         password: _passwordController.text,
       );
-      _authController.isLoading.value = false;
+
       if (user != null) {
         Navigator.push(
           context,
@@ -288,8 +280,6 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                     userName: _fullNameController.text,
                   ))),
         );
-
-        _authController.isLoading.value = false;
       } else {
         _authController.isLoading.value = false;
         log("User not created", name: 'debug');
@@ -304,6 +294,8 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
+    } finally {
+      _authController.isLoading.value = false;
     }
   }
 
@@ -349,6 +341,8 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
+    } finally {
+      _authController.isLoading.value = false;
     }
   }
 
@@ -383,6 +377,8 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
+    } finally {
+      _authController.isLoading.value = false;
     }
   }
 }

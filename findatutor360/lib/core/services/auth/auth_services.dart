@@ -83,20 +83,25 @@ class AuthServiceImpl implements AuthService {
 
   @override
   Future<User?> continueWithGoogle(BuildContext context) async {
-    final googleUser = await GoogleSignIn().signIn();
-    final googleAuth = await googleUser?.authentication;
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      forceCodeForRefreshToken: true,
+      clientId:
+          '989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com', // Add your web client ID here
+    );
+    final GoogleSignInAccount? googleUser =
+        await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
 
-    if (googleAuth != null) {
-      final credential = GoogleAuthProvider.credential(
+    if (googleUser != null) {
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      final response = await _auth.signInWithCredential(credential);
-
-      await GoogleSignIn().signOut();
-      User? user = response.user;
-      return user;
+      UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+      return userCredential.user;
     }
 
     return null;
@@ -145,24 +150,31 @@ class AuthServiceImpl implements AuthService {
   }
 
   @override
-  Future<User?> continueWithFacebook(
-    BuildContext context,
-  ) async {
-    final loginResult = await facebookAuth.login();
+  Future<User?> continueWithFacebook(BuildContext context) async {
+    try {
+      // Log in with Facebook
+      final LoginResult result = await facebookAuth.login(
+        permissions: ['email', 'public_profile'],
+      );
 
-    if (loginResult.status == LoginStatus.success) {
-      final facebookAuthCredential =
-          FacebookAuthProvider.credential(loginResult.accessToken!.token);
-      UserCredential credential =
-          await _auth.signInWithCredential(facebookAuthCredential);
+      if (result.status == LoginStatus.success) {
+        // Extract the Facebook OAuth credential
+        final OAuthCredential facebookAuthCredential =
+            FacebookAuthProvider.credential(result.accessToken!.token);
 
-      await facebookAuth.logOut();
+        // Authenticate with Firebase
+        UserCredential userCredential =
+            await _auth.signInWithCredential(facebookAuthCredential);
 
-      User? user = credential.user;
-
-      return user;
+        return userCredential.user; // Return the authenticated user
+      } else {
+        log('Facebook sign-in failed: ${result.status}', name: 'Facebook');
+        return null;
+      }
+    } catch (e) {
+      log('Error during Facebook sign-in: $e', name: 'Facebook');
+      return null;
     }
-    return null;
   }
 
   @override

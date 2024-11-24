@@ -77,14 +77,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       stream: authController.getUserInfo(auth!.uid),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
+                                ConnectionState.waiting ||
+                            snapshot.hasError) {
+                          return const SizedBox.shrink();
                         }
 
                         final user = snapshot.data;

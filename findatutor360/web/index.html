@@ -1,48 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
 
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
-
-  <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="findatutor360">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png"/>
 
   <title>findatutor360</title>
   <link rel="manifest" href="manifest.json">
 
+  <!-- The value below is injected by flutter build, do not touch. -->
   <script>
-    // The value below is injected by flutter build, do not touch.
     var serviceWorkerVersion = null;
   </script>
-  <!-- This script adds the flutter initialization JS code -->
+
+  <!-- Flutter initialization -->
   <script src="flutter.js" defer></script>
+
+  <!-- Load Facebook SDK -->
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+
+  <!-- Load Google API -->
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  
+  <!-- Setup environment variables for Google OAuth -->
+  <script>
+    var googleClientID = "989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com";
+  </script>
 </head>
+
 <body>
+  <!-- Initialize Flutter -->
   <script>
     window.addEventListener('load', function(ev) {
-      // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
@@ -53,6 +49,23 @@
         return appRunner.runApp();
       });
     });
+  </script>
+
+  <!-- Initialize Facebook SDK -->
+  <script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: '868568571788294',
+        cookie: true,
+        xfbml: true,
+        version: 'v21.0', 
+      });
+      FB.AppEvents.logPageView();
+      console.log("Facebook SDK initialized.");
+      FB.getLoginStatus(function(response) {   // Called after the JS SDK has been initialized.
+      statusChangeCallback(response);        // Returns the login status.
+    });
+    };
   </script>
 </body>
 </html>
