@@ -80,6 +80,7 @@ dependencies:
   http: any
   path_provider: any
   uuid: any
+  webview_flutter_web: ^0.2.3+2
 dev_dependencies:
   flutter_test:
     sdk: flutter
