@@ -9,13 +9,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-import 'package:webview_flutter_web/webview_flutter_web.dart';
-
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  WebViewPlatform.instance = WebWebViewPlatform();
+
   await dotenv.load(fileName: ".env");
 
   setupLocator();
