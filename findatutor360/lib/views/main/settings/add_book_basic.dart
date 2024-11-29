@@ -121,6 +121,7 @@ class _AddBookBasicViewState extends State<AddBookBasicView> {
                 CustomTextFormField(
                   hint: 'Enter Book Price',
                   controller: _priceController,
+                  keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter book price';

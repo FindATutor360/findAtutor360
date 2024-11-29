@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/view_models/main/books_controller.dart';
@@ -6,6 +8,7 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CartsCard extends StatefulWidget {
   const CartsCard({
@@ -51,38 +54,66 @@ class _CartsCardState extends State<CartsCard> {
   @override
   Widget build(BuildContext context) {
     booksController = context.watch<BooksController>();
+
+    final isFile = widget.book.thumbnail != null &&
+        File(widget.book.thumbnail!).existsSync();
+    final isUrl = widget.book.thumbnail != null &&
+        Uri.tryParse(widget.book.thumbnail!)?.hasAbsolutePath == true;
     return SizedBox(
       width: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CachedNetworkImage(
-            imageUrl: widget.book.thumbnail ?? '',
-            imageBuilder: (context, imageProvider) {
-              return Container(
-                width: MediaQuery.of(context).size.width * 0.35,
-                height: MediaQuery.of(context).size.height / 7,
-                decoration: BoxDecoration(
-                  color: customTheme['secondaryColor'],
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.book.thumbnail ?? ''),
-                    fit: BoxFit.cover,
+          isFile
+              ? Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  height: MediaQuery.of(context).size.height / 7,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: customTheme['fieldColor'],
+                    image: DecorationImage(
+                      image: FileImage(
+                        File(widget.book.thumbnail ?? ''),
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.sizeOf(context).height / 7.5,
+                    ),
+                  ),
+                )
+              : CachedNetworkImage(
+                  imageUrl: widget.book.thumbnail ?? '',
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      height: MediaQuery.of(context).size.height / 7,
+                      decoration: BoxDecoration(
+                        color: customTheme['secondaryColor'],
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                          image: NetworkImage(widget.book.thumbnail ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  placeholder: (context, image) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        height: MediaQuery.of(context).size.height / 7,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-            placeholder: (context, url) {
-              return Container(
-                width: MediaQuery.of(context).size.width * 0.35,
-                height: MediaQuery.of(context).size.height / 7,
-                decoration: BoxDecoration(
-                  color: customTheme['secondaryColor'],
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              );
-            },
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -90,7 +121,7 @@ class _CartsCardState extends State<CartsCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MainText(
-                    text: widget.book.title,
+                    text: widget.book.title ?? '',
                     fontSize: 14,
                     softWrap: true,
                   ),

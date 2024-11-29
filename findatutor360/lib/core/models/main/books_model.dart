@@ -2,10 +2,13 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'books_model.g.dart';
 
+@JsonSerializable(explicitToJson: true)
 class Book {
-  final String id;
-  final String title;
+  final String? id;
+  final String? userId;
+  final String? title;
   final String? author;
+  final String? price;
   final String? description;
   final String? thumbnail;
   final String? publisher;
@@ -14,11 +17,14 @@ class Book {
   final String? textSnippet;
   final String? smallThumbnail;
   int quantity;
+  final DateTime? createdAt;
 
   Book({
-    required this.id,
-    required this.title,
+    this.id,
+    this.userId,
+    this.title,
     this.author,
+    this.price,
     this.description,
     this.thumbnail,
     this.publisher,
@@ -27,36 +33,14 @@ class Book {
     this.textSnippet,
     this.smallThumbnail,
     this.quantity = 1,
+    this.createdAt,
   });
 
-  factory Book.fromJson(Map<String, dynamic> json) {
-    final volumeInfo = json['volumeInfo'] ?? {};
-    final searchInfo = json['searchInfo'] ?? {};
-    final id = json['id'];
-    return Book(
-      id: id,
-      title: volumeInfo['title'] ?? 'No Title',
-      author: (volumeInfo['authors'] != null)
-          ? volumeInfo['authors'].join(', ')
-          : 'Unknown Author',
-      description: volumeInfo['description'] ?? 'No Description',
-      thumbnail: volumeInfo['imageLinks'] != null
-          ? volumeInfo['imageLinks']['thumbnail']
-          : null,
-      publisher: volumeInfo['publisher'] ?? 'No Publisher',
-      category: (volumeInfo['categories'] != null)
-          ? volumeInfo['categories'].join(', ')
-          : 'Unknown',
-      pageCount: (volumeInfo['pageCount'] != null)
-          ? int.tryParse(volumeInfo['pageCount'].toString()) ?? 0
-          : 0,
-      textSnippet: searchInfo['textSnippet'] ?? '',
-      smallThumbnail: volumeInfo['imageLinks'] != null
-          ? volumeInfo['imageLinks']['smallThumbnail']
-          : null,
-      quantity: 1,
-    );
-  }
+  /// Factory constructor for creating a new `Book` instance from a map.
+  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+
+  /// Method for converting a `Book` instance to a map.
+  Map<String, dynamic> toJson() => _$BookToJson(this);
 }
 
 @JsonSerializable()

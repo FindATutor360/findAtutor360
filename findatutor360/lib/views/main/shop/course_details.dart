@@ -101,7 +101,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                             width: 8,
                           ),
                           MainText(
-                            text: 'Marcelos Ramequin',
+                            text: 'Dr. Khaled Ramadan Mohamed',
                             fontWeight: FontWeight.w400,
                             fontSize: 16,
                             color: customTheme['secondaryTextColor'],
@@ -115,6 +115,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                         itemSize: 25,
                         initialRating: 3.5,
                         onRatingUpdate: (p0) {},
+                        canRate: false,
                       ),
                       const SizedBox(
                         height: 40,
@@ -129,10 +130,12 @@ class _CourseDetailsState extends State<CourseDetails> {
                           fontSize: 18,
                         ),
                         description: MainText(
-                          text: 'This is the description for Title 1.',
+                          text:
+                              'received the B. Sc. (Honors) degree from the Higher Institute of Engineering (El-Shorouk Academy), in 2011, and received the M. Sc. and Ph. D. degrees from the Faculty of Electronic Engineering, Menoufia University, Menouf, Egypt, in 2018, 2021, respectively. Also, he is working as an assistant professor in the communications and computer engineering department at the Higher Institute of Engineering (El-Shorouk Academy) - Egypt. His research areas of interest include multicarrier communication systems, Multiple-Input Multiple-Output (MIMO) systems, Digital Signal Processing (DSP), digital communications, channel equalization, Carrier Frequency Offsets (CFOs) estimations and compensations, Underwater Acoustic (UWA) wireless communication systems, and multicarrier Non Orthogonal Multiple Access (NOMA) for 5G networks.',
                           color: customTheme['secondaryTextColor'],
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
+                          softWrap: true,
                         ),
                       ),
                       const SizedBox(
@@ -148,6 +151,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                           color: customTheme['secondaryTextColor'],
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
+                          softWrap: true,
                         ),
                       ),
                       const SizedBox(
@@ -275,6 +279,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                     Expanded(
                       child: InkWell(
                         onTap: () async {
+                          final courseUrl = widget.course.url ?? '';
                           final sanitizedCourseName = (widget.course.name ?? '')
                               .replaceAll('©', '(C)')
                               .replaceAll('&', 'and')
@@ -282,11 +287,13 @@ class _CourseDetailsState extends State<CourseDetails> {
                               .replaceAll(RegExp(r'[^\w\s-]'), '');
                           final courseName =
                               Uri.encodeComponent(sanitizedCourseName);
-                          final searchQuery = Uri.encodeComponent(courseName);
-                          final url = Uri.encodeComponent(
-                              'https://www.udemy.com/courses/search/?src=ukw&q=$searchQuery');
 
-                          router.push('/enrollView/$courseName/$url');
+                          final encodedUrl = (courseUrl.isEmpty)
+                              ? Uri.encodeComponent(
+                                  'https://www.udemy.com/courses/search/?src=ukw&q=$courseName')
+                              : Uri.encodeComponent(courseUrl);
+
+                          router.push('/enrollView/$courseName/$encodedUrl');
                         },
                         child: Container(
                           height: MediaQuery.of(context).size.height / 15,

@@ -84,6 +84,9 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
 
                         final user = snapshot.data;
 
+                        final isFile = user?.photoUrl != null &&
+                            File(user!.photoUrl!).existsSync();
+
                         if (user == null) {
                           return const Center(
                               child: Text('No user data available.'));
@@ -99,7 +102,7 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(3.0),
-                              child: user.photoUrl == null
+                              child: !isFile
                                   ? CachedNetworkImage(
                                       imageUrl: user.photoUrl ??
                                           'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',

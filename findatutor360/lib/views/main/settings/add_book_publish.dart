@@ -26,7 +26,8 @@ class AddBookPublishView extends StatefulWidget {
 class _AddBookPublishViewState extends State<AddBookPublishView> {
   late BooksController _booksController;
 
-  final TextEditingController _publisherController = TextEditingController();
+  final _publisherController = TextEditingController();
+  final _textSnippetController = TextEditingController();
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String typeDropdown = '';
@@ -83,6 +84,28 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter book publisher';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                MainText(
+                  text: 'Book Details',
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  color: customTheme['secondaryTextColor'],
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                CustomTextFormField(
+                  hint: 'Enter Book Details',
+                  controller: _textSnippetController,
+                  validator: (value) {
+                    if (value!.isEmpty) {
+                      return 'Please enter book details';
                     }
                     return null;
                   },
@@ -254,6 +277,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
         _booksController.isLoading.value = true;
         await _booksController.addBookPublishDetails(
           _publisherController.text,
+          _textSnippetController.text,
           typeDropdown,
         );
         log(typeDropdown, name: 'debug');

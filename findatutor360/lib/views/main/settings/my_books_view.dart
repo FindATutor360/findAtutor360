@@ -3,6 +3,8 @@ import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/custom_widgets/card/active_book_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -56,7 +58,7 @@ class _MyBooksViewState extends State<MyBooksView> {
                 const SizedBox(
                   height: 24,
                 ),
-                StreamBuilder<List<UserBooks>>(
+                StreamBuilder<List<Book>>(
                     stream: _booksController.fetchUserBooks(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -93,16 +95,15 @@ class _MyBooksViewState extends State<MyBooksView> {
 
                           return InkWell(
                             onTap: () {
-                              // router.push(
-                              //   BookDetails.path,router.push(
-                              //   BookDetails.path,
-                              //   extra: userBook,
-                              // );
+                              router.push(
+                                BookDetails.path,
+                                extra: userBook,
+                              );
                               //   extra: userBook,
                               // );
                             },
                             child: ActiveBookCard(
-                              image: userBook.image ?? '',
+                              image: userBook.thumbnail ?? '',
                               title: userBook.title ?? '',
                               lessonPecent: '77%',
                             ),

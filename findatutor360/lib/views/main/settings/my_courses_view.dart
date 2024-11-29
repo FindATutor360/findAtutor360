@@ -5,9 +5,10 @@ import 'package:findatutor360/custom_widgets/card/finish_course_card.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
-// import 'package:findatutor360/routes/routes_notifier.dart';
-// import 'package:findatutor360/views/main/shop/course_details.dart';
+import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/views/main/shop/course_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class MyCoursesView extends StatefulWidget {
@@ -20,17 +21,20 @@ class MyCoursesView extends StatefulWidget {
 
 class _MyCoursesViewState extends State<MyCoursesView> {
   late CoursesController _coursesController;
+  Future<List<Course>>? fetchCourses;
 
   @override
   void initState() {
     super.initState();
     _coursesController = context.read<CoursesController>();
+    fetchCourses = CoursesController().fetchCourses();
   }
 
   Future<void> _refreshMessages() async {
     setState(
       () {
         _coursesController.fetchUserCourses();
+        fetchCourses = CoursesController().fetchCourses();
       },
     );
   }
@@ -93,9 +97,8 @@ class _MyCoursesViewState extends State<MyCoursesView> {
                           final userCourse = userCourses[i];
                           return InkWell(
                             onTap: () {
-                              // router.push(
-                              //   CourseDetails.path,
-                              // );
+                              router.push(CourseDetails.path,
+                                  extra: userCourse);
                             },
                             child: ActiveCourseCard(
                               image: userCourse.image ?? '',
@@ -116,32 +119,51 @@ class _MyCoursesViewState extends State<MyCoursesView> {
                 const SizedBox(
                   height: 24,
                 ),
-                ListView.separated(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  padding: EdgeInsets.zero,
-                  separatorBuilder: (context, i) {
-                    return const SizedBox(
-                      height: 16,
-                    );
-                  },
-                  itemCount: 5,
-                  itemBuilder: (context, i) {
-                    return InkWell(
-                      onTap: () {
-                        // router.push(
-                        //   CourseDetails.path,
-                        // );
-                      },
-                      child: const FinishedCourseCard(
-                        image: 'assets/images/activeImg.png',
-                        title: 'The science of leadership',
-                        subTitle: 'Rabatoir Amtics',
-                        lessonNum: '1/5 Lessons',
-                      ),
-                    );
-                  },
-                ),
+                FutureBuilder<List<Course>>(
+                    future: fetchCourses,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snapshot.hasError ||
+                          !snapshot.hasData ||
+                          snapshot.data!.isEmpty) {
+                        return const Center(
+                          child: MainText(
+                            text: 'No courses found',
+                            fontSize: 12,
+                          ),
+                        );
+                      } else {
+                        final courses = snapshot.data!;
+                        return ListView.separated(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          separatorBuilder: (context, i) {
+                            return const SizedBox(
+                              height: 16,
+                            );
+                          },
+                          itemCount: 3,
+                          itemBuilder: (context, i) {
+                            final Course course = courses[i];
+                            return InkWell(
+                              onTap: () {
+                                router.push(CourseDetails.path, extra: course);
+                              },
+                              child: FinishedCourseCard(
+                                image: course.image ??
+                                    'assets/images/activeImg.png',
+                                title:
+                                    course.name ?? 'The science of leadership',
+                                author: 'Rabatoir Amtics',
+                                lessonNum: '1/5 Lessons',
+                              ),
+                            );
+                          },
+                        );
+                      }
+                    }),
                 const SizedBox(
                   height: 20,
                 ),

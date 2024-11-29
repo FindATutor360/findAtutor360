@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/models/main/review_model.dart';
@@ -19,6 +21,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class BookDetails extends StatefulWidget {
   const BookDetails({
@@ -58,6 +61,11 @@ class _BookDetailsState extends State<BookDetails> {
   Widget build(BuildContext context) {
     _booksController = context.watch<BooksController>();
     final reviewController = Provider.of<ReviewController>(context);
+
+    final isFile = widget.books.thumbnail != null &&
+        File(widget.books.thumbnail!).existsSync();
+    final isUrl = widget.books.thumbnail != null &&
+        Uri.tryParse(widget.books.thumbnail!)?.hasAbsolutePath == true;
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -92,10 +100,28 @@ class _BookDetailsState extends State<BookDetails> {
                                   topLeft: Radius.circular(10.0),
                                   topRight: Radius.circular(10.0),
                                 ),
-                                image: DecorationImage(
-                                  image: NetworkImage(widget.books.thumbnail ??
-                                      'https://via.placeholder.com/150'),
-                                  fit: BoxFit.cover,
+                                image: isFile
+                                    ? DecorationImage(
+                                        image: FileImage(
+                                          File(widget.books.thumbnail ?? ''),
+                                        ),
+                                        fit: BoxFit.cover,
+                                      )
+                                    : DecorationImage(
+                                        image: NetworkImage(widget
+                                                .books.thumbnail ??
+                                            'https://via.placeholder.com/150'),
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                              child: Shimmer.fromColors(
+                                baseColor: Colors.grey.shade300,
+                                highlightColor: Colors.grey.shade100,
+                                child: SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.35,
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.20,
                                 ),
                               ),
                             ),
@@ -110,7 +136,7 @@ class _BookDetailsState extends State<BookDetails> {
                                     height: 16,
                                   ),
                                   MainText(
-                                    text: widget.books.title,
+                                    text: widget.books.title ?? '',
                                     fontSize: 18,
                                     softWrap: true,
                                   ),
@@ -125,7 +151,9 @@ class _BookDetailsState extends State<BookDetails> {
                                     height: 8,
                                   ),
                                   MainText(
-                                    text: '\$256.50',
+                                    text: widget.books.price != null
+                                        ? '\$${widget.books.price}'
+                                        : '\$256.50',
                                     fontSize: 16,
                                     color: customTheme['primaryColor'],
                                   ),
@@ -133,9 +161,10 @@ class _BookDetailsState extends State<BookDetails> {
                                     height: 4,
                                   ),
                                   CustomRatingBar(
-                                    initialRating: 4.5,
-                                    itemSize: 32,
-                                    onRatingUpdate: (p0) {},
+                                    initialRating: 4.0,
+                                    itemSize: 26,
+                                    onRatingUpdate: (value) {},
+                                    canRate: false,
                                   ),
                                 ],
                               ),
@@ -213,11 +242,31 @@ class _BookDetailsState extends State<BookDetails> {
                                     decoration: BoxDecoration(
                                       color: customTheme['secondaryColor'],
                                       borderRadius: BorderRadius.circular(10),
-                                      image: DecorationImage(
-                                        image: NetworkImage(widget
-                                                .books.smallThumbnail ??
-                                            'https://via.placeholder.com/150'),
-                                        fit: BoxFit.cover,
+                                      image: isFile
+                                          ? DecorationImage(
+                                              image: FileImage(
+                                                File(widget
+                                                        .books.smallThumbnail ??
+                                                    ''),
+                                              ),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : DecorationImage(
+                                              image: NetworkImage(widget
+                                                      .books.smallThumbnail ??
+                                                  'https://via.placeholder.com/150'),
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                    child: Shimmer.fromColors(
+                                      baseColor: Colors.grey.shade300,
+                                      highlightColor: Colors.grey.shade100,
+                                      child: SizedBox(
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.38,
+                                        height:
+                                            MediaQuery.of(context).size.height,
                                       ),
                                     ),
                                   ),
@@ -241,6 +290,7 @@ class _BookDetailsState extends State<BookDetails> {
                           color: customTheme['secondaryTextColor'],
                           fontSize: 12,
                           fontWeight: FontWeight.w400,
+                          softWrap: true,
                         ),
                       ),
                       const SizedBox(
@@ -272,7 +322,7 @@ class _BookDetailsState extends State<BookDetails> {
                           children: [
                             StreamBuilder<List<Review>>(
                               stream: reviewController
-                                  .fetchReviews(widget.books.title),
+                                  .fetchReviews(widget.books.title ?? ''),
                               builder: (context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -323,8 +373,8 @@ class _BookDetailsState extends State<BookDetails> {
                             ),
                             InkWell(
                               onTap: () {
-                                final bookName =
-                                    Uri.encodeComponent(widget.books.title);
+                                final bookName = Uri.encodeComponent(
+                                    widget.books.title ?? '');
                                 router.push(
                                   '/reViews/$bookName/Book',
                                 );

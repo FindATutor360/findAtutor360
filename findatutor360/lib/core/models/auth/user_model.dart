@@ -20,6 +20,7 @@ class Users {
   final String? award;
   final String? awardDetails;
   final String? awardImageUrl;
+  final bool emailVerified;
 
   Users({
     this.uId,
@@ -38,6 +39,7 @@ class Users {
     this.college,
     this.eduLevel,
     this.sex,
+    this.emailVerified = false,
   });
 
   factory Users.fromJson(Map<String, dynamic> json) => _$UsersFromJson(json);

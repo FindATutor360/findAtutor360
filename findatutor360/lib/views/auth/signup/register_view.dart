@@ -2,10 +2,10 @@
 
 import 'dart:developer';
 // ignore: unused_import
-import 'package:findatutor360/routes/routes_notifier.dart';
-import 'package:findatutor360/utils/shared_pref.dart';
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
+import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -308,41 +308,78 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
 
   Future<void> continueWithGoogle() async {
     try {
-      AppPreferences appPreferences = AppPreferences();
       _authController.isLoading.value = true;
-      User? user = await _authController.continueWithGoogle(
-        context,
-      );
-      _authController.isLoading.value = false;
+      User? user = await _authController.continueWithGoogle(context);
+
       if (user != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => VerifyEmailView(
-                  userEmail: user.email,
-                  userName: user.displayName,
-                )),
-          ),
-        );
-        await appPreferences.setBool('isEmailVerified', true);
-        await appPreferences.setString('userToken', user.uid);
-        _authController.isLoading.value = false;
+        Users? users = await _authController.getUserInfo(user.uid).first; // '
+
+        if (user.emailVerified) {
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? users?.fullName,
+            user.email ?? users?.email,
+            user.photoURL ?? users?.photoUrl,
+            users?.backGround,
+            users?.dOB,
+            users?.sex,
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel,
+            users?.college,
+            users?.certificate,
+            users?.certificateDetails,
+            users?.certImageUrl,
+            users?.award,
+            users?.awardDetails,
+            users?.awardImageUrl,
+          );
+        } else {
+          // Send email verification and update profile
+          await _authController.sendEmailVerification(
+            user,
+            context,
+            name: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL,
+          );
+          // Update profile after sending verification
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? '',
+            user.email ?? '',
+            user.photoURL ?? '',
+            users?.backGround ?? '',
+            users?.dOB ?? '',
+            users?.sex ?? '',
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel ?? '',
+            users?.college ?? '',
+            users?.certificate ?? '',
+            users?.certificateDetails ?? '',
+            users?.certImageUrl ?? '',
+            users?.award ?? '',
+            users?.awardDetails ?? '',
+            users?.awardImageUrl ?? '',
+          );
+        }
+
+        // Navigate to home
+        context.pushReplacement(HomeView.path);
       } else {
-        await appPreferences.setBool('isEmailVerified', false);
         log("User not created", name: 'debug');
       }
+
+      _authController.isLoading.value = false;
     } catch (e) {
       _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Failed to create account",
+        msg: "Login fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
-    } finally {
-      _authController.isLoading.value = false;
     }
   }
 
@@ -353,32 +390,73 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
         context,
       );
       _authController.isLoading.value = false;
+
       if (user != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => VerifyEmailView(
-                  userEmail: user.email,
-                  userName: user.displayName,
-                )),
-          ),
-        );
-      } else {
+        Users? users = await _authController.getUserInfo(user.uid).first; // '
+
+        if (user.emailVerified) {
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? users?.fullName,
+            user.email ?? users?.email,
+            user.photoURL ?? users?.photoUrl,
+            users?.backGround,
+            users?.dOB,
+            users?.sex,
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel,
+            users?.college,
+            users?.certificate,
+            users?.certificateDetails,
+            users?.certImageUrl,
+            users?.award,
+            users?.awardDetails,
+            users?.awardImageUrl,
+          );
+        } else {
+          // Send email verification and update profile
+          await _authController.sendEmailVerification(
+            user,
+            context,
+            name: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL,
+          );
+          // Update profile after sending verification
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? '',
+            user.email ?? '',
+            user.photoURL ?? '',
+            users?.backGround ?? '',
+            users?.dOB ?? '',
+            users?.sex ?? '',
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel ?? '',
+            users?.college ?? '',
+            users?.certificate ?? '',
+            users?.certificateDetails ?? '',
+            users?.certImageUrl ?? '',
+            users?.award ?? '',
+            users?.awardDetails ?? '',
+            users?.awardImageUrl ?? '',
+          );
+        }
+
         _authController.isLoading.value = false;
+      } else {
         log("User not created", name: 'debug');
       }
     } catch (e) {
       _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Failed to create account",
+        msg: "Login fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
         textColor: customTheme['whiteColor'],
         fontSize: 16.0,
       );
-    } finally {
-      _authController.isLoading.value = false;
     }
   }
 }

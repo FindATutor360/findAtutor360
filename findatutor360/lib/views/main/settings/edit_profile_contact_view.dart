@@ -163,7 +163,10 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                       ValueListenableBuilder<File?>(
                         valueListenable: profileImageUrl,
                         builder: (context, profileImage, child) {
-                          return profileImageUrl.value!.path.isNotEmpty
+                          final isFile = _profileImageUrl.value.isNotEmpty &&
+                              profileImageUrl.value!.existsSync();
+
+                          return isFile
                               ? Stack(
                                   alignment: AlignmentDirectional.center,
                                   children: [
@@ -213,8 +216,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                     ),
                                   ],
                                 )
-                              : _profileImageUrl.value.isEmpty ||
-                                      _authController.user?.photoUrl != null
+                              : !isFile
                                   ? Stack(
                                       clipBehavior: Clip.none,
                                       alignment: AlignmentDirectional.center,

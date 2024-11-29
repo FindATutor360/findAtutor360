@@ -33,6 +33,8 @@ class Reviews extends StatelessWidget {
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24),
+          reverse: true,
+          physics: const BouncingScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -40,7 +42,6 @@ class Reviews extends StatelessWidget {
                 height: 24,
               ),
               Container(
-                height: MediaQuery.of(context).size.height * 0.20,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                 decoration: BoxDecoration(
@@ -80,8 +81,9 @@ class Reviews extends StatelessWidget {
                     ),
                     CustomRatingBar(
                       itemSize: 25,
-                      initialRating: 4.5,
-                      onRatingUpdate: (double) {},
+                      initialRating: 4.0,
+                      onRatingUpdate: (value) {},
+                      canRate: false,
                     ),
                   ],
                 ),

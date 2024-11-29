@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/auth/user_model.dart';
@@ -8,6 +9,7 @@ import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +75,10 @@ abstract class AuthService {
   Stream<Users?> getUserInfo(String userId);
 
   Stream<List<Users>> getUsersStream();
+
+  Future<void> markEmailAsVerified(String userId);
+
+  Future<void> checkEmailVerified(String userId);
 }
 
 class AuthServiceImpl implements AuthService {
@@ -80,31 +86,52 @@ class AuthServiceImpl implements AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FacebookAuth facebookAuth = FacebookAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  final String webClientID = dotenv.env['WEB_CLIENT_ID'] ?? '';
 
   @override
   Future<User?> continueWithGoogle(BuildContext context) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn(
-      forceCodeForRefreshToken: true,
-      clientId:
-          '989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com', // Add your web client ID here
-    );
-    final GoogleSignInAccount? googleUser =
-        await googleSignIn.signInSilently() ?? await googleSignIn.signIn();
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        clientId: Platform.isWindows ? webClientID : null,
+      );
 
-    if (googleUser != null) {
+      GoogleSignInAccount? googleUser;
+
+      if (Platform.isAndroid || Platform.isIOS) {
+        // Native sign-in for Android/iOS
+        googleUser = await googleSignIn.signIn();
+      } else if (Platform.isWindows) {
+        // Silent sign-in for web
+        googleUser = await googleSignIn.signInSilently();
+      }
+
+      // If user is null, the sign-in process was canceled or failed
+      if (googleUser == null) {
+        return null;
+      }
+
+      // Retrieve authentication tokens
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
+
+      // Create credential for Firebase
       final AuthCredential credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
-      return userCredential.user;
-    }
+      await GoogleSignIn().signOut();
 
-    return null;
+      // Sign in with Firebase
+      final UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+
+      return userCredential.user;
+    } catch (e) {
+      // Handle exceptions and errors
+      log("Google sign-in error: $e", name: 'Google sign in');
+      return null;
+    }
   }
 
   @override
@@ -162,6 +189,8 @@ class AuthServiceImpl implements AuthService {
         final OAuthCredential facebookAuthCredential =
             FacebookAuthProvider.credential(result.accessToken!.token);
 
+        await facebookAuth.logOut();
+
         // Authenticate with Firebase
         UserCredential userCredential =
             await _auth.signInWithCredential(facebookAuthCredential);
@@ -203,28 +232,33 @@ class AuthServiceImpl implements AuthService {
   ) async {
     Users newUser = Users(
       uId: user.uid,
-      fullName: userName,
-      email: email,
-      photoUrl: photoUrl,
-      backGround: backGround,
-      dOB: dOB,
-      sex: sex,
-      phoneNumber: phoneNumber,
-      eduLevel: eduLevel,
-      college: college,
-      certificate: certificate,
-      certificateDetails: certificateDetails,
-      certImageUrl: certImageUrl,
-      award: award,
-      awardDetails: awardDetails,
-      awardImageUrl: awardImageUrl,
+      fullName: userName ?? '',
+      email: email ?? '',
+      photoUrl: photoUrl ?? '',
+      backGround: backGround ?? '',
+      dOB: dOB ?? '',
+      sex: sex ?? '',
+      phoneNumber: phoneNumber ?? '',
+      eduLevel: eduLevel ?? '',
+      college: college ?? '',
+      certificate: certificate ?? '',
+      certificateDetails: certificateDetails ?? '',
+      certImageUrl: certImageUrl ?? '',
+      award: award ?? '',
+      awardDetails: awardDetails ?? '',
+      awardImageUrl: awardImageUrl ?? '',
     );
 
     final data = newUser.toJson();
     data['createdAt'] = FieldValue.serverTimestamp();
+
     await _fireStore.collection('Users').doc(user.uid).set(
           data,
+          SetOptions(
+              merge:
+                  true), // This ensures we don't overwrite the entire document
         );
+
     log("User added to DB successfully!", name: 'debug');
   }
 
@@ -279,11 +313,35 @@ class AuthServiceImpl implements AuthService {
 
   @override
   Stream<Users?> getUserInfo(String userId) {
-    return _fireStore
-        .collection('Users')
-        .doc(userId)
-        .snapshots()
-        .map((data) => Users.fromJson(data.data()!));
+    return _fireStore.collection('Users').doc(userId).snapshots().map((data) {
+      final json = data.data();
+      if (json != null) {
+        return Users.fromJson(json);
+      }
+      return null;
+    });
+  }
+
+  @override
+  Future<void> markEmailAsVerified(String userId) async {
+    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
+      'emailVerified': true,
+    });
+  }
+
+  @override
+  Future<void> checkEmailVerified(String userId) async {
+    final userInfo = await getUserInfo(userId).first;
+
+    if (userInfo != null) {
+      bool emailVerifiedBefore = userInfo.emailVerified;
+
+      if (emailVerifiedBefore) {
+        log("Email was verified before.");
+      } else {
+        log("Email was not verified before.");
+      }
+    }
   }
 
   @override

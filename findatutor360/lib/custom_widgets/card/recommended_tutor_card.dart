@@ -5,6 +5,7 @@ import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class RecommededTutorCard extends StatelessWidget {
   const RecommededTutorCard({
@@ -36,10 +37,16 @@ class RecommededTutorCard extends StatelessWidget {
                   height: 75,
                   imageUrl:
                       'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                  placeholder: (context, url) => CircleAvatar(
-                    backgroundColor: customTheme['secondaryColor']!,
-                    radius: 20,
-                  ),
+                  placeholder: (context, image) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: MediaQuery.of(context).size.height * 0.27,
+                      ),
+                    );
+                  },
                   imageBuilder: (context, image) => CircleAvatar(
                     backgroundImage: image,
                     backgroundColor: customTheme['secondaryColor']!,

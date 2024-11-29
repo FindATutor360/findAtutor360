@@ -23,6 +23,7 @@ Users _$UsersFromJson(Map<String, dynamic> json) => Users(
       college: json['college'] as String?,
       eduLevel: json['eduLevel'] as String?,
       sex: json['sex'] as String?,
+      emailVerified: json['emailVerified'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$UsersToJson(Users instance) => <String, dynamic>{
@@ -42,4 +43,5 @@ Map<String, dynamic> _$UsersToJson(Users instance) => <String, dynamic>{
       'award': instance.award,
       'awardDetails': instance.awardDetails,
       'awardImageUrl': instance.awardImageUrl,
+      'emailVerified': instance.emailVerified,
     };
