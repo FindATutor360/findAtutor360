@@ -73,6 +73,7 @@ class CoursesServiceImpl implements CoursesService {
       final courseData = Course(
         id: null,
         userId: _auth?.uid,
+        userEmail: _auth?.email,
         image: image,
         name: name,
         actualPriceUsd: actualPriceUsd,
@@ -81,6 +82,7 @@ class CoursesServiceImpl implements CoursesService {
         duration: duration,
         day: day,
         availability: availability,
+        createdAt: DateTime.now().toUtc(),
       );
 
       DocumentReference docRef =
@@ -103,6 +105,7 @@ class CoursesServiceImpl implements CoursesService {
       return _fireStore
           .collection('Courses')
           .where('userId', isEqualTo: _auth?.uid)
+          .where('userEmail', isEqualTo: _auth?.email)
           .orderBy('createdAt', descending: true)
           .snapshots()
           .map((snapshots) {

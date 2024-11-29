@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/models/main/message_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
@@ -27,6 +28,8 @@ class MessageView extends StatefulWidget {
 class _MessageViewState extends State<MessageView> {
   final User? auth = FirebaseAuth.instance.currentUser;
   final String? currentUserEmail = FirebaseAuth.instance.currentUser?.email;
+
+  final Course course = Course();
   Future<void> _refreshMessages() async {
     setState(
       () {

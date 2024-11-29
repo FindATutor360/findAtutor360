@@ -2,6 +2,7 @@
 
 import 'dart:developer';
 
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/button/secondary_button.dart';
@@ -10,7 +11,7 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
-import 'package:findatutor360/views/auth/email/verify_email/verify_email_view.dart';
+import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/forget_password/forget_password.dart';
 import 'package:findatutor360/views/auth/signup/register_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
@@ -35,6 +36,7 @@ class _LoginViewState extends State<LoginView> {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  AppPreferences appPreferences = AppPreferences();
 
   late AuthController _authController;
   String? password;
@@ -240,25 +242,67 @@ class _LoginViewState extends State<LoginView> {
   Future<void> continueWithGoogle() async {
     try {
       _authController.isLoading.value = true;
-      User? user = await _authController.continueWithGoogle(
-        context,
-      );
-      _authController.isLoading.value = false;
-      if (user != null && user.emailVerified) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => VerifyEmailView(
-                  userEmail: user.email,
-                  userName: user.displayName,
-                )),
-          ),
-        );
+      User? user = await _authController.continueWithGoogle(context);
 
-        _authController.isLoading.value = false;
+      if (user != null) {
+        Users? users = await _authController.getUserInfo(user.uid).first; // '
+
+        if (user.emailVerified) {
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? users?.fullName,
+            user.email ?? users?.email,
+            user.photoURL ?? users?.photoUrl,
+            users?.backGround,
+            users?.dOB,
+            users?.sex,
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel,
+            users?.college,
+            users?.certificate,
+            users?.certificateDetails,
+            users?.certImageUrl,
+            users?.award,
+            users?.awardDetails,
+            users?.awardImageUrl,
+          );
+        } else {
+          // Send email verification and update profile
+          await _authController.sendEmailVerification(
+            user,
+            context,
+            name: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL,
+          );
+          // Update profile after sending verification
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? '',
+            user.email ?? '',
+            user.photoURL ?? '',
+            users?.backGround ?? '',
+            users?.dOB ?? '',
+            users?.sex ?? '',
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel ?? '',
+            users?.college ?? '',
+            users?.certificate ?? '',
+            users?.certificateDetails ?? '',
+            users?.certImageUrl ?? '',
+            users?.award ?? '',
+            users?.awardDetails ?? '',
+            users?.awardImageUrl ?? '',
+          );
+        }
+
+        // Navigate to home
+        context.pushReplacement(HomeView.path);
       } else {
         log("User not created", name: 'debug');
       }
+
+      _authController.isLoading.value = false;
     } catch (e) {
       _authController.isLoading.value = false;
       Fluttertoast.showToast(
@@ -281,15 +325,56 @@ class _LoginViewState extends State<LoginView> {
       _authController.isLoading.value = false;
 
       if (user != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: ((context) => VerifyEmailView(
-                  userEmail: user.email,
-                  userName: user.displayName,
-                )),
-          ),
-        );
+        Users? users = await _authController.getUserInfo(user.uid).first; // '
+
+        if (user.emailVerified) {
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? users?.fullName,
+            user.email ?? users?.email,
+            user.photoURL ?? users?.photoUrl,
+            users?.backGround,
+            users?.dOB,
+            users?.sex,
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel,
+            users?.college,
+            users?.certificate,
+            users?.certificateDetails,
+            users?.certImageUrl,
+            users?.award,
+            users?.awardDetails,
+            users?.awardImageUrl,
+          );
+        } else {
+          // Send email verification and update profile
+          await _authController.sendEmailVerification(
+            user,
+            context,
+            name: user.displayName,
+            email: user.email,
+            photoUrl: user.photoURL,
+          );
+          // Update profile after sending verification
+          await _authController.addUserInfo(
+            user,
+            user.displayName ?? '',
+            user.email ?? '',
+            user.photoURL ?? '',
+            users?.backGround ?? '',
+            users?.dOB ?? '',
+            users?.sex ?? '',
+            users?.phoneNumber ?? user.phoneNumber,
+            users?.eduLevel ?? '',
+            users?.college ?? '',
+            users?.certificate ?? '',
+            users?.certificateDetails ?? '',
+            users?.certImageUrl ?? '',
+            users?.award ?? '',
+            users?.awardDetails ?? '',
+            users?.awardImageUrl ?? '',
+          );
+        }
 
         _authController.isLoading.value = false;
       } else {

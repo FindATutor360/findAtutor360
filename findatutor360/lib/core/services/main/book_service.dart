@@ -22,6 +22,7 @@ abstract class BooksService {
     String? publisher,
     String? category,
     String? smallImage,
+      String? textSnippet,
   );
 }
 
@@ -64,19 +65,21 @@ class BooksServiceImpl implements BooksService {
     String? publisher,
     String? category,
     String? smallImage,
+    String? textSnippet,
   ) async {
     try {
-      final bookData = UserBooks(
+      final bookData = Book(
         id: null,
         userId: _auth?.uid,
         title: title,
         author: author,
         description: description,
-        image: image,
+        thumbnail: image,
         price: price,
         publisher: publisher,
         category: category,
-        smallImage: smallImage,
+        smallThumbnail: smallImage,
+        textSnippet: textSnippet,
         createdAt: DateTime.now().toUtc(),
       );
 
@@ -93,7 +96,7 @@ class BooksServiceImpl implements BooksService {
     }
   }
 
-  Stream<List<UserBooks>> fetchUserBooks() {
+  Stream<List<Book>> fetchUserBooks() {
     try {
       return _fireStore
           .collection('Books')
@@ -101,9 +104,8 @@ class BooksServiceImpl implements BooksService {
           .orderBy('createdAt', descending: true)
           .snapshots()
           .map((snapshots) {
-        List<UserBooks> userBooks = snapshots.docs
-            .map((doc) => UserBooks.fromJson(doc.data()))
-            .toList();
+        List<Book> userBooks =
+            snapshots.docs.map((doc) => Book.fromJson(doc.data())).toList();
 
         return userBooks;
       });

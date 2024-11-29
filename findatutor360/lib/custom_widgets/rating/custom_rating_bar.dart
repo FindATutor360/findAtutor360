@@ -6,11 +6,13 @@ class CustomRatingBar extends StatefulWidget {
   final double itemSize;
   final double initialRating;
   final Function(double) onRatingUpdate;
+  final bool canRate;
 
   const CustomRatingBar({
     required this.onRatingUpdate,
     this.itemSize = 15.0,
     this.initialRating = 0.0,
+    this.canRate = true,
     super.key,
   });
 
@@ -21,19 +23,23 @@ class CustomRatingBar extends StatefulWidget {
 class _CustomRatingBarState extends State<CustomRatingBar> {
   @override
   Widget build(BuildContext context) {
-    return RatingBar.builder(
-      initialRating: widget.initialRating,
-      minRating: 1,
-      direction: Axis.horizontal,
-      allowHalfRating: true,
-      unratedColor: const Color.fromARGB(255, 96, 95, 93).withAlpha(50),
-      itemCount: 5,
-      itemSize: widget.itemSize,
-      itemBuilder: (context, _) => Icon(
-        Icons.star,
-        color: customTheme['ratingColor']!,
+    return AbsorbPointer(
+      absorbing:
+          !widget.canRate, // Prevent user interaction if canRate is false
+      child: RatingBar.builder(
+        initialRating: widget.initialRating,
+        minRating: 1,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        unratedColor: const Color.fromARGB(255, 96, 95, 93).withAlpha(50),
+        itemCount: 5,
+        itemSize: widget.itemSize,
+        itemBuilder: (context, _) => Icon(
+          Icons.star,
+          color: customTheme['ratingColor']!,
+        ),
+        onRatingUpdate: widget.onRatingUpdate,
       ),
-      onRatingUpdate: widget.onRatingUpdate,
     );
   }
 }

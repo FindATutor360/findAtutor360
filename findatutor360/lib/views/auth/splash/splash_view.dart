@@ -31,33 +31,48 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _navigateUser() async {
+    if (!mounted) return;
+
     await Future.delayed(const Duration(seconds: 3));
+
+    AppPreferences appPreferences = AppPreferences();
+
     try {
       User? user = FirebaseAuth.instance.currentUser;
-      String? userToken = await FirebaseAuth.instance.currentUser?.getIdToken();
 
-      AppPreferences appPreferences = AppPreferences();
+      // Check if user exists and reload to ensure the state is up-to-date
+      await user?.reload();
+      user = FirebaseAuth.instance.currentUser; // Refresh user data
+
+      String? userToken = await user?.getIdToken();
 
       if (user != null && user.emailVerified && userToken != null) {
-        // Use StreamBuilder or a manual listen to the stream
+        // User is logged in, email is verified, and token is available
         AuthController authController =
             Provider.of<AuthController>(context, listen: false);
 
-        // Start listening to the stream to get the updated user info
         authController.startUserInfo(user.uid);
 
         log('User id: ${user.uid}', name: 'debug');
 
-        // This is necessary to update the UI once the stream emits new data
         authController.userStream?.listen((updatedUserInfo) async {
           if (updatedUserInfo != null) {
-            // Update user info
             authController.setUserInfo(updatedUserInfo);
             log('${updatedUserInfo.sex}', name: 'debug');
             context.pushReplacement(HomeView.path);
           }
         });
+      } else if (user!.email == null) {
+        // User account is deleted
+        showSnackMessage(context, "Account deleted. Please sign up again.",
+            isError: true);
+        context.pushReplacement(WelcomeView.path);
+      } else if (user.email != null && user.emailVerified) {
+        // User email is not verified
+        showSnackMessage(context, "Please login to continue.", isError: true);
+        context.pushReplacement(LoginView.path);
       } else {
+        // Handle token issues or other unknown cases
         bool showOnboarding = await appPreferences.getBool('userToken');
         if (showOnboarding) {
           context.pushReplacement(OnboardingView.path);
@@ -66,6 +81,7 @@ class _SplashViewState extends State<SplashView> {
         }
       }
     } catch (e) {
+      // Handle network or unexpected errors
       context.pushReplacement(WelcomeView.path);
       showSnackMessage(context, "Network Error", isError: true);
     }
@@ -95,5 +111,11 @@ class _SplashViewState extends State<SplashView> {
       //   ),
       //  )
     );
+  }
+
+  @override
+  void dispose() {
+    _navigateUser().ignore();
+    super.dispose();
   }
 }

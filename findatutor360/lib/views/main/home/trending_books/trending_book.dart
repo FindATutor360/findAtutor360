@@ -105,7 +105,7 @@ class _BooksCategorViewState extends State<BooksCategorView> {
                                 BookDetails.path,
                                 extra: book,
                               );
-                              log(book.id, name: 'debug');
+                              log(book.id ?? '', name: 'debug');
                             },
                             child: TrendingBookWidget(
                               image: book.thumbnail ??

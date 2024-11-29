@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
@@ -78,6 +79,8 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   Future<void> navigateUser() async {
     setIsLoading(true);
     if (user != null) {
+      Users? users = await authController.getUserInfo(user!.uid).first; // '
+
       Timer.periodic(const Duration(seconds: 3), (timer) async {
         await user!.reload();
         user = FirebaseAuth.instance.currentUser;
@@ -85,23 +88,24 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
         if (user!.emailVerified) {
           timer.cancel();
           emailVerificationTimer?.cancel();
+
           await authController.addUserInfo(
             user!,
-            widget.userName,
-            widget.userEmail,
-            user!.photoURL,
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+            widget.userName ?? users?.fullName,
+            widget.userEmail ?? users?.email,
+            user!.photoURL ?? users?.photoUrl,
+            users?.backGround ?? '',
+            users?.dOB ?? '',
+            users?.sex ?? '',
+            users?.phoneNumber ?? user!.phoneNumber,
+            users?.eduLevel ?? '',
+            users?.college ?? '',
+            users?.certificate ?? '',
+            users?.certificateDetails ?? '',
+            users?.certImageUrl ?? '',
+            users?.award ?? '',
+            users?.awardDetails ?? '',
+            users?.awardImageUrl ?? '',
           );
           Fluttertoast.showToast(
             msg: "Account created successful",

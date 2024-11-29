@@ -5,6 +5,7 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ActiveCourseCard extends StatelessWidget {
   const ActiveCourseCard({
@@ -22,11 +23,16 @@ class ActiveCourseCard extends StatelessWidget {
     Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
         ? Colors.black
         : Colors.white);
+
+    final isFile = image != null && File(image!).existsSync();
+    final isUrl =
+        image != null && Uri.tryParse(image!)?.hasAbsolutePath == true;
+
     return Container(
       width: MediaQuery.sizeOf(context).width / 2.2,
-      height: title!.length > 120
+      height: title!.length > 190
           ? MediaQuery.of(context).size.height * 0.17
-          : MediaQuery.of(context).size.height * 0.26,
+          : MediaQuery.of(context).size.height * 0.29,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
@@ -36,23 +42,56 @@ class ActiveCourseCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CachedNetworkImage(
-            imageUrl: image!,
-            imageBuilder: (context, imageProvider) {
-              return Container(
-                width: double.infinity,
-                height: MediaQuery.sizeOf(context).height / 7.5,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: customTheme['fieldColor'],
-                  image: DecorationImage(
-                    image: NetworkImage(image ?? ''),
-                    fit: BoxFit.cover,
+          isFile
+              ? Container(
+                  width: double.infinity,
+                  height: MediaQuery.sizeOf(context).height / 7.5,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: customTheme['fieldColor'],
+                    image: DecorationImage(
+                      image: FileImage(
+                        File(image ?? ''),
+                      ),
+                      fit: BoxFit.cover,
+                    ),
                   ),
+                  child: Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: MediaQuery.sizeOf(context).height / 7.5,
+                    ),
+                  ),
+                )
+              : CachedNetworkImage(
+                  imageUrl: image!,
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      width: double.infinity,
+                      height: MediaQuery.sizeOf(context).height / 7.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: customTheme['fieldColor'],
+                        image: DecorationImage(
+                          image: NetworkImage(image ?? ''),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    );
+                  },
+                  placeholder: (context, image) {
+                    return Shimmer.fromColors(
+                      baseColor: Colors.grey.shade300,
+                      highlightColor: Colors.grey.shade100,
+                      child: SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.sizeOf(context).height / 7.5,
+                      ),
+                    );
+                  },
                 ),
-              );
-            },
-          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),

@@ -37,8 +37,8 @@ class _EnrollCourseScreenState extends State<EnrollCourseScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: const BackIconHeader(
-          header: '',
+        appBar: BackIconHeader(
+          header: widget.title,
         ),
         body: WebViewWidget(controller: _controller),
       ),

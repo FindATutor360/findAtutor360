@@ -16,6 +16,7 @@ Course _$CourseFromJson(Map<String, dynamic> json) => Course(
       description: json['description'] as String?,
       category: json['category'] as String?,
       duration: json['duration'] as String?,
+      url: json['url'] as String?,
       day: json['day'] as String?,
       availability: (json['availability'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -36,6 +37,7 @@ Map<String, dynamic> _$CourseToJson(Course instance) => <String, dynamic>{
       'description': instance.description,
       'category': instance.category,
       'duration': instance.duration,
+      'url': instance.url,
       'day': instance.day,
       'availability': instance.availability,
       'quantity': instance.quantity,

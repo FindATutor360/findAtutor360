@@ -98,24 +98,13 @@ class AuthController extends BaseProvider {
           context,
           name: user.displayName,
           email: user.email,
+          photoUrl: user.photoURL,
         );
 
-        await user.updateProfile(displayName: user.displayName);
-        await user.verifyBeforeUpdateEmail(user.email!);
+        // await user.updateProfile(displayName: user.displayName);
+        // await user.verifyBeforeUpdateEmail(user.email!);
 
         await storeUserToken(user);
-      } else {
-        await user?.updateProfile(displayName: user.displayName ?? '');
-        await user?.verifyBeforeUpdateEmail(user.email ?? '');
-
-        await sendEmailVerification(
-          user,
-          context,
-          name: user?.displayName,
-          email: user?.email,
-        );
-
-        await storeUserToken(user!);
       }
 
       return user;
@@ -144,8 +133,8 @@ class AuthController extends BaseProvider {
       );
 
       if (user != null) {
-        await user.updateProfile(displayName: fullName);
-        await user.verifyBeforeUpdateEmail(email);
+        // await user.updateProfile(displayName: fullName);
+        // await user.verifyBeforeUpdateEmail(email);
 
         await sendEmailVerification(
           user,
@@ -156,8 +145,8 @@ class AuthController extends BaseProvider {
 
         await storeUserToken(user);
       } else {
-        await user?.updateProfile(displayName: fullName);
-        await user?.verifyBeforeUpdateEmail(email);
+        // await user?.updateProfile(displayName: fullName);
+        // await user?.verifyBeforeUpdateEmail(email);
 
         await sendEmailVerification(
           user,
@@ -213,23 +202,17 @@ class AuthController extends BaseProvider {
       User? user = await _authServiceImpl.continueWithFacebook(context);
 
       if (user != null) {
-        await sendEmailVerification(
-          user,
-          context,
-          name: user.displayName,
-          email: user.email,
-        );
+        await sendEmailVerification(user, context,
+            name: user.displayName, email: user.email, photoUrl: user.photoURL);
         await storeUserToken(user);
       } else {
-        await user?.updateProfile(displayName: user.displayName ?? '');
-        await user?.verifyBeforeUpdateEmail(user.email ?? '');
+        // await user?.updateProfile(displayName: user.displayName ?? '');
+        // await user?.verifyBeforeUpdateEmail(user.email ?? '');
 
-        await sendEmailVerification(
-          user,
-          context,
-          name: user?.displayName,
-          email: user?.email,
-        );
+        await sendEmailVerification(user, context,
+            name: user?.displayName,
+            email: user?.email,
+            photoUrl: user?.photoURL);
 
         await storeUserToken(user!);
       }
@@ -327,12 +310,12 @@ class AuthController extends BaseProvider {
         // Update user information
         await _authServiceImpl.updateUserInfo(
           context,
-          fullName: _fullName,
+          fullName: _fullName ?? currentUser.displayName,
           backGround: _backGround,
           dOB: _dOB,
           sex: _sex,
           phoneNumber: _phoneNumber,
-          photoUrl: _photoUrl,
+          photoUrl: _photoUrl ?? currentUser.photoURL,
           eduLevel: _eduLevel,
           college: _college,
           certificate: _certificate,
@@ -371,8 +354,9 @@ class AuthController extends BaseProvider {
   Future<void> sendEmailVerification(
     User? user,
     BuildContext context, {
-    required String? name,
-    required String? email,
+    String? name,
+    String? email,
+    String? photoUrl,
   }) async {
     try {
       await for (var updatedUserInfo in getUserInfo(user!.uid)) {
@@ -391,7 +375,7 @@ class AuthController extends BaseProvider {
             user,
             updatedUserInfo.fullName ?? name,
             updatedUserInfo.email ?? email,
-            updatedUserInfo.photoUrl ?? user.photoURL,
+            photoUrl ?? user.photoURL ?? _photoUrl,
             updatedUserInfo.backGround ?? _backGround,
             updatedUserInfo.dOB ?? _dOB,
             updatedUserInfo.sex ?? _sex,
@@ -405,6 +389,11 @@ class AuthController extends BaseProvider {
             updatedUserInfo.awardDetails ?? _awardDetails,
             updatedUserInfo.awardImageUrl ?? _awardImageUrl,
           );
+
+          // await user.updateProfile(photoURL: photoUrl);
+          // await user.reload();
+
+          await user.sendEmailVerification();
 
           log('Verification email sent', name: 'debug');
         } else {
@@ -417,7 +406,7 @@ class AuthController extends BaseProvider {
             user,
             updatedUserInfo.fullName ?? name,
             updatedUserInfo.email ?? email,
-            updatedUserInfo.photoUrl ?? user.photoURL,
+            photoUrl ?? user.photoURL ?? _photoUrl,
             updatedUserInfo.backGround ?? _backGround,
             updatedUserInfo.dOB ?? _dOB,
             updatedUserInfo.sex ?? _sex,
@@ -431,6 +420,9 @@ class AuthController extends BaseProvider {
             updatedUserInfo.awardDetails ?? _awardDetails,
             updatedUserInfo.awardImageUrl ?? _awardImageUrl,
           );
+
+          // await user.updateProfile(photoURL: photoUrl);
+          // await user.reload();
         }
 
         // Stop the stream once we are done
@@ -438,7 +430,7 @@ class AuthController extends BaseProvider {
       }
     } catch (e) {
       log("Error during email verification process: $e", name: 'debug');
-      // _handleError(context, e);
+      _handleError(context, e);
     }
   }
 
@@ -499,6 +491,22 @@ class AuthController extends BaseProvider {
 
   Stream<List<Users>> getUserStream() {
     return _authServiceImpl.getUsersStream();
+  }
+
+  Future<void> markEmailAsVerified(String userId) async {
+    try {
+      await _authServiceImpl.markEmailAsVerified(userId);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> checkEmailVerified(String userId) async {
+    try {
+      await _authServiceImpl.checkEmailVerified(userId);
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<Users?> getUserByEmail(String email) async {

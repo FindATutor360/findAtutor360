@@ -34,11 +34,16 @@ class BackIconHeader extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: backTap ?? () => Navigator.pop(context),
               ),
               const Spacer(),
-              MainText(
-                text: header,
-                fontSize: 18,
-                overflow: TextOverflow.ellipsis,
-                softWrap: true,
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width / 1.4,
+                child: Align(
+                  child: MainText(
+                    text: header,
+                    fontSize: 18,
+                    overflow: TextOverflow.ellipsis,
+                    softWrap: true,
+                  ),
+                ),
               ),
               const Spacer(),
               if (showIcon) ...[

@@ -15,6 +15,7 @@ class Course {
   String? description;
   String? category;
   String? duration;
+  String? url;
   final String? day;
   List<String>? availability;
   final int quantity;
@@ -30,6 +31,7 @@ class Course {
     this.description,
     this.category,
     this.duration,
+    this.url,
     this.day,
     this.availability,
     this.createdAt,

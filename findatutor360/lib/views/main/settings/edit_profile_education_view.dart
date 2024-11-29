@@ -96,6 +96,7 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
 
                 awardImageUrl.value = File(user.awardImageUrl ?? '');
                 certImageUrl.value = File(user.certImageUrl ?? '');
+                _certImageUrl.value = user.certImageUrl ?? '';
 
                 return Form(
                   key: formKey,
@@ -310,196 +311,138 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                         height: 10,
                       ),
                       ValueListenableBuilder<File?>(
-                          valueListenable: certImageUrl,
-                          builder: (context, certImage, child) {
-                            return certImageUrl.value!.path.isNotEmpty
-                                ? Stack(
-                                    alignment: AlignmentDirectional.center,
-                                    children: [
-                                      Container(
-                                        width:
-                                            MediaQuery.of(context).size.width /
-                                                1.5,
-                                        height:
-                                            MediaQuery.of(context).size.height /
-                                                5,
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(16),
-                                          image: DecorationImage(
-                                            fit: BoxFit.cover,
-                                            image: FileImage(certImage!),
-                                          ),
+                        valueListenable: certImageUrl,
+                        builder: (context, certImage, child) {
+                          // Check if a valid image exists
+                          final bool hasImage =
+                              certImage != null && certImage.existsSync();
+
+                          return hasImage
+                              ? Stack(
+                                  alignment: AlignmentDirectional.center,
+                                  children: [
+                                    // Display the image
+                                    Container(
+                                      width: MediaQuery.of(context).size.width /
+                                          1.5,
+                                      height:
+                                          MediaQuery.of(context).size.height /
+                                              5,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(16),
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: FileImage(
+                                              certImage), // Use the file image
                                         ),
                                       ),
-                                      InkWell(
-                                        onTap: () async {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles(
-                                            type: FileType.image,
-                                            allowMultiple: false,
-                                          );
+                                    ),
+                                    // Upload button
+                                    InkWell(
+                                      onTap: () async {
+                                        FilePickerResult? result =
+                                            await FilePicker.platform.pickFiles(
+                                          type: FileType.image,
+                                          allowMultiple: false,
+                                        );
 
-                                          if (result != null) {
-                                            PlatformFile file =
-                                                result.files.first;
+                                        if (result != null) {
+                                          PlatformFile file =
+                                              result.files.first;
 
-                                            log('File Name: ${file.name}');
-                                            log('File Size: ${file.size}');
-                                            log('File Path: ${file.path}');
-                                            log('File Path: ${file.identifier}');
+                                          log('File Name: ${file.name}');
+                                          log('File Size: ${file.size}');
+                                          log('File Path: ${file.path}');
 
-                                            certImageUrl.value =
-                                                File(file.path!);
-                                          }
-                                        },
-                                        child: CircleAvatar(
-                                          backgroundColor:
-                                              customTheme['secondaryColor'],
-                                          child: Icon(
-                                            Icons.camera_alt_sharp,
-                                            color: customTheme['mainTextColor'],
-                                          ),
+                                          // Update ValueListenable with the new file
+                                          certImageUrl.value = File(file.path!);
+                                        }
+                                      },
+                                      child: CircleAvatar(
+                                        backgroundColor:
+                                            customTheme['secondaryColor'],
+                                        child: Icon(
+                                          Icons.camera_alt_sharp,
+                                          color: customTheme['mainTextColor'],
                                         ),
                                       ),
-                                    ],
-                                  )
-                                : _certImageUrl.value.isEmpty ||
-                                        _authController.user?.certImageUrl !=
-                                            null
-                                    ? Stack(
-                                        clipBehavior: Clip.none,
-                                        alignment: AlignmentDirectional.center,
-                                        children: [
-                                          Container(
-                                            width: MediaQuery.sizeOf(context)
-                                                    .width /
-                                                1.5,
-                                            height: MediaQuery.sizeOf(context)
-                                                    .height /
-                                                5,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: FileImage(
-                                                  File(
-                                                    _authController.user
-                                                            ?.certImageUrl ??
-                                                        '',
-                                                  ),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.85,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      FilePickerResult? result =
+                                          await FilePicker.platform.pickFiles(
+                                        type: FileType.image,
+                                        allowMultiple: false,
+                                      );
+
+                                      if (result != null) {
+                                        PlatformFile file = result.files.first;
+
+                                        log('File Name: ${file.name}');
+                                        log('File Path: ${file.path}');
+
+                                        // Update ValueListenable with the selected file
+                                        certImageUrl.value = File(file.path!);
+                                      }
+                                    },
+                                    child: CustomPaint(
+                                      painter: DashedRectanglePainter(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                          horizontal: 16,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            Icon(
+                                              Iconsax.image5,
+                                              color:
+                                                  customTheme['primaryColor'],
+                                            ),
+                                            RichText(
+                                              text: TextSpan(
+                                                text: 'Click to ',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: customTheme[
+                                                      'mainTextColor'],
                                                 ),
-                                              ),
-                                            ),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              FilePickerResult? result =
-                                                  await FilePicker.platform
-                                                      .pickFiles(
-                                                type: FileType.image,
-                                                allowMultiple: false,
-                                              );
-
-                                              if (result != null) {
-                                                PlatformFile file =
-                                                    result.files.first;
-
-                                                certImageUrl.value = File(file
-                                                    .path!); // Update with new image
-                                              }
-                                            },
-                                            child: CircleAvatar(
-                                              backgroundColor:
-                                                  customTheme['secondaryColor'],
-                                              child: Icon(
-                                                Icons.camera_alt_sharp,
-                                                color: customTheme[
-                                                    'mainTextColor'],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      )
-                                    : SizedBox(
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.85,
-                                        child: InkWell(
-                                          onTap: () async {
-                                            FilePickerResult? result =
-                                                await FilePicker.platform
-                                                    .pickFiles(
-                                              type: FileType.image,
-                                              allowMultiple: false,
-                                            );
-
-                                            if (result != null) {
-                                              PlatformFile file =
-                                                  result.files.first;
-
-                                              certImageUrl.value = File(file
-                                                  .path!); // Update with new image
-                                            }
-                                          },
-                                          child: CustomPaint(
-                                            painter: DashedRectanglePainter(),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 16,
-                                                      horizontal: 16),
-                                              child: Column(
                                                 children: [
-                                                  Icon(
-                                                    Iconsax.image5,
-                                                    color: customTheme[
-                                                        'primaryColor'],
-                                                  ),
-                                                  RichText(
-                                                    text: TextSpan(
-                                                      text: 'Click to ',
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight:
-                                                            FontWeight.w400,
-                                                        color: customTheme[
-                                                            'mainTextColor'],
-                                                      ),
-                                                      children: [
-                                                        TextSpan(
-                                                          text: 'Upload file',
-                                                          style: TextStyle(
-                                                            fontSize: 16,
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: customTheme[
-                                                                'primaryColor'],
-                                                          ),
-                                                        )
-                                                      ],
+                                                  TextSpan(
+                                                    text: 'Upload file',
+                                                    style: TextStyle(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: customTheme[
+                                                          'primaryColor'],
                                                     ),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 4,
-                                                  ),
-                                                  MainText(
-                                                    text:
-                                                        'PNG, JPG, , PDF upto 5MB',
-                                                    fontSize: 14,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: customTheme[
-                                                        'secondaryTextColor'],
                                                   ),
                                                 ],
                                               ),
                                             ),
-                                          ),
+                                            const SizedBox(height: 4),
+                                            MainText(
+                                              text: 'PNG, JPG, PDF up to 5MB',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: customTheme[
+                                                  'secondaryTextColor'],
+                                            ),
+                                          ],
                                         ),
-                                      );
-                          }),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                        },
+                      ),
                       const SizedBox(
                         height: 12,
                       ),
@@ -559,10 +502,15 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                       ValueListenableBuilder<File?>(
                         valueListenable: awardImageUrl,
                         builder: (context, awardImage, child) {
-                          return awardImageUrl.value!.path.isNotEmpty
+                          // Check if a valid image exists
+                          final bool hasImage =
+                              awardImage != null && awardImage.existsSync();
+
+                          return hasImage
                               ? Stack(
                                   alignment: AlignmentDirectional.center,
                                   children: [
+                                    // Display the image
                                     Container(
                                       width: MediaQuery.of(context).size.width /
                                           1.5,
@@ -573,10 +521,12 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                         borderRadius: BorderRadius.circular(16),
                                         image: DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: FileImage(awardImage!),
+                                          image: FileImage(
+                                              awardImage), // Use the file image
                                         ),
                                       ),
                                     ),
+                                    // Upload button
                                     InkWell(
                                       onTap: () async {
                                         FilePickerResult? result =
@@ -592,8 +542,8 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                           log('File Name: ${file.name}');
                                           log('File Size: ${file.size}');
                                           log('File Path: ${file.path}');
-                                          log('File Path: ${file.identifier}');
 
+                                          // Update ValueListenable with the new file
                                           awardImageUrl.value =
                                               File(file.path!);
                                         }
@@ -609,137 +559,78 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                     ),
                                   ],
                                 )
-                              : _awardImageUrl.value.isEmpty ||
-                                      _authController.user?.awardImageUrl !=
-                                          null
-                                  ? Stack(
-                                      clipBehavior: Clip.none,
-                                      alignment: AlignmentDirectional.center,
-                                      children: [
-                                        Container(
-                                          width:
-                                              MediaQuery.sizeOf(context).width /
-                                                  1.5,
-                                          height: MediaQuery.sizeOf(context)
-                                                  .height /
-                                              5,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(16),
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: FileImage(
-                                                File(
-                                                  _authController.user
-                                                          ?.awardImageUrl ??
-                                                      '',
-                                                ),
-                                              ),
-                                            ),
-                                          ),
+                              : SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.85,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      FilePickerResult? result =
+                                          await FilePicker.platform.pickFiles(
+                                        type: FileType.image,
+                                        allowMultiple: false,
+                                      );
+
+                                      if (result != null) {
+                                        PlatformFile file = result.files.first;
+
+                                        log('File Name: ${file.name}');
+                                        log('File Path: ${file.path}');
+
+                                        // Update ValueListenable with the selected file
+                                        awardImageUrl.value = File(file.path!);
+                                      }
+                                    },
+                                    child: CustomPaint(
+                                      painter: DashedRectanglePainter(),
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
+                                          horizontal: 16,
                                         ),
-                                        InkWell(
-                                          onTap: () async {
-                                            FilePickerResult? result =
-                                                await FilePicker.platform
-                                                    .pickFiles(
-                                              type: FileType.image,
-                                              allowMultiple: false,
-                                            );
-
-                                            if (result != null) {
-                                              PlatformFile file =
-                                                  result.files.first;
-
-                                              awardImageUrl.value = File(file
-                                                  .path!); // Update with new image
-                                            }
-                                          },
-                                          child: CircleAvatar(
-                                            backgroundColor:
-                                                customTheme['secondaryColor'],
-                                            child: Icon(
-                                              Icons.camera_alt_sharp,
+                                        child: Column(
+                                          children: [
+                                            Icon(
+                                              Iconsax.image5,
                                               color:
-                                                  customTheme['mainTextColor'],
+                                                  customTheme['primaryColor'],
                                             ),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : SizedBox(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.85,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles(
-                                            type: FileType.image,
-                                            allowMultiple: false,
-                                          );
-
-                                          if (result != null) {
-                                            PlatformFile file =
-                                                result.files.first;
-
-                                            awardImageUrl.value = File(file
-                                                .path!); // Update with new image
-                                          }
-                                        },
-                                        child: CustomPaint(
-                                          painter: DashedRectanglePainter(),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 16, horizontal: 16),
-                                            child: Column(
-                                              children: [
-                                                Icon(
-                                                  Iconsax.image5,
+                                            RichText(
+                                              text: TextSpan(
+                                                text: 'Click to ',
+                                                style: TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
                                                   color: customTheme[
-                                                      'primaryColor'],
+                                                      'mainTextColor'],
                                                 ),
-                                                RichText(
-                                                  text: TextSpan(
-                                                    text: 'Click to ',
+                                                children: [
+                                                  TextSpan(
+                                                    text: 'Upload file',
                                                     style: TextStyle(
                                                       fontSize: 16,
                                                       fontWeight:
                                                           FontWeight.w400,
                                                       color: customTheme[
-                                                          'mainTextColor'],
+                                                          'primaryColor'],
                                                     ),
-                                                    children: [
-                                                      TextSpan(
-                                                        text: 'Upload file',
-                                                        style: TextStyle(
-                                                          fontSize: 16,
-                                                          fontWeight:
-                                                              FontWeight.w400,
-                                                          color: customTheme[
-                                                              'primaryColor'],
-                                                        ),
-                                                      )
-                                                    ],
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                  height: 4,
-                                                ),
-                                                MainText(
-                                                  text:
-                                                      'PNG, JPG, , PDF upto 5MB',
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: customTheme[
-                                                      'secondaryTextColor'],
-                                                ),
-                                              ],
+                                                ],
+                                              ),
                                             ),
-                                          ),
+                                            const SizedBox(height: 4),
+                                            MainText(
+                                              text: 'PNG, JPG, PDF up to 5MB',
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400,
+                                              color: customTheme[
+                                                  'secondaryTextColor'],
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                    );
+                                    ),
+                                  ),
+                                );
                         },
                       ),
                       const SizedBox(

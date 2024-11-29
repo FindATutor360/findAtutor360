@@ -31,6 +31,7 @@ class BooksController extends BaseProvider {
   String? _category;
   String? _image;
   String? _smallImage;
+  String? _textSnippet;
 
   Future<void> addBookBasicDetails(
       String? title, String? author, String? description, String? price) async {
@@ -50,10 +51,14 @@ class BooksController extends BaseProvider {
   }
 
   Future<void> addBookPublishDetails(
-      String? publisher, String? category) async {
+    String? publisher,
+    String? textSnippet,
+    String? category,
+  ) async {
     _isLoading.value = true;
     try {
       _publisher = publisher;
+      _textSnippet = textSnippet;
       _category = category;
       _isLoading.value = false;
       notifyListeners();
@@ -107,6 +112,7 @@ class BooksController extends BaseProvider {
         _publisher,
         _category,
         _smallImage,
+        _textSnippet,
       );
       _isLoading.value = false;
       log("Book saved successfully", name: "debug");
@@ -150,7 +156,7 @@ class BooksController extends BaseProvider {
     }
   }
 
-  Stream<List<UserBooks>> fetchUserBooks() {
+  Stream<List<Book>> fetchUserBooks() {
     return _booksServiceImpl.fetchUserBooks();
   }
 
