@@ -15,7 +15,7 @@ import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/edit_profile_education_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
@@ -46,6 +46,25 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
   void initState() {
     super.initState();
     _authController = context.read<AuthController>();
+  }
+
+  //Request Storage Permission
+  Future<void> requestStoragePermission() async {
+    var status = await Permission.storage.status;
+    FilePickerResult? result;
+    if (!status.isGranted) {
+      // Requesting permission
+      await Permission.storage.request();
+      result = await FilePicker.platform.pickFiles(
+        type: FileType.image,
+        allowMultiple: false,
+      );
+    }
+    if (result != null) {
+      PlatformFile file = result.files.first;
+      profileImageUrl.value = File(file
+          .path!); // Update with new image
+    }
   }
 
   @override
@@ -188,18 +207,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                     ),
                                     InkWell(
                                       onTap: () async {
-                                        FilePickerResult? result =
-                                            await FilePicker.platform.pickFiles(
-                                          type: FileType.image,
-                                          allowMultiple: false,
-                                        );
-
-                                        if (result != null) {
-                                          PlatformFile file =
-                                              result.files.first;
-                                          profileImageUrl.value = File(file
-                                              .path!); // Update with new image
-                                        }
+                                       await requestStoragePermission();
                                       },
                                       child: CircleAvatar(
                                         backgroundColor:
@@ -238,19 +246,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                         ),
                                         InkWell(
                                           onTap: () async {
-                                            FilePickerResult? result =
-                                                await FilePicker.platform
-                                                    .pickFiles(
-                                              type: FileType.image,
-                                              allowMultiple: false,
-                                            );
-
-                                            if (result != null) {
-                                              PlatformFile file =
-                                                  result.files.first;
-                                              profileImageUrl.value = File(file
-                                                  .path!); // Update with new image
-                                            }
+                                            await requestStoragePermission();
                                           },
                                           child: CircleAvatar(
                                             backgroundColor:
@@ -270,19 +266,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                           0.85,
                                       child: InkWell(
                                         onTap: () async {
-                                          FilePickerResult? result =
-                                              await FilePicker.platform
-                                                  .pickFiles(
-                                            type: FileType.image,
-                                            allowMultiple: false,
-                                          );
-
-                                          if (result != null) {
-                                            PlatformFile file =
-                                                result.files.first;
-                                            profileImageUrl.value = File(file
-                                                .path!); // Update with new image
-                                          }
+                                        await  requestStoragePermission();
                                         },
                                         child: CustomPaint(
                                           painter: DashedRectanglePainter(),
@@ -446,3 +430,4 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     }
   }
 }
+

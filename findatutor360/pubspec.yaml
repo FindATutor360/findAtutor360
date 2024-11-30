@@ -85,6 +85,7 @@ dependencies:
   # webview_flutter_web: any
   webview_flutter_wkwebview: any
   webview_flutter_android: any
+  permission_handler: ^11.3.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
