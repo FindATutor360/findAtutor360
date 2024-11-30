@@ -2,12 +2,11 @@ import 'dart:developer';
 
 import 'package:findatutor360/core/models/main/books_model.dart';
 import 'package:findatutor360/core/services/main/book_service.dart';
-import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/base_provider.dart';
 import 'package:findatutor360/utils/injection_container.dart';
+import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class BooksController extends BaseProvider {
   final BooksServiceImpl _booksServiceImpl = locator.get<BooksServiceImpl>();
@@ -33,8 +32,8 @@ class BooksController extends BaseProvider {
   String? _smallImage;
   String? _textSnippet;
 
-  Future<void> addBookBasicDetails(
-      String? title, String? author, String? description, String? price) async {
+  Future<void> addBookBasicDetails(String? title, String? author,
+      String? description, String? price, BuildContext context) async {
     _isLoading.value = true;
     try {
       _title = title;
@@ -46,6 +45,8 @@ class BooksController extends BaseProvider {
       log("BookBasicDetails saved successfully", name: "debug");
     } catch (e) {
       _isLoading.value = false;
+      showSnackMessage(context, "Book Basic Details saved successfully",
+          isError: true);
       throw Exception("Basic details are missing");
     }
   }
@@ -54,6 +55,7 @@ class BooksController extends BaseProvider {
     String? publisher,
     String? textSnippet,
     String? category,
+    BuildContext context,
   ) async {
     _isLoading.value = true;
     try {
@@ -66,6 +68,9 @@ class BooksController extends BaseProvider {
     } catch (e) {
       _isLoading.value = false;
       log('Publishing details are missing', name: 'debug');
+      showSnackMessage(context, "Publishing details are missing",
+          isError: true);
+
       throw Exception("Publishing details are missing");
     }
   }
@@ -83,7 +88,7 @@ class BooksController extends BaseProvider {
     }
   }
 
-  Future<void> saveBookDetails() async {
+  Future<void> saveBookDetails(BuildContext context) async {
     _isLoading.value = true;
     if (_title == null ||
         _author == null ||
@@ -95,10 +100,6 @@ class BooksController extends BaseProvider {
     if (_publisher == null || _category == null) {
       _isLoading.value = false;
       throw Exception("Publishing details are missing");
-    }
-    if (_image == null) {
-      _isLoading.value = false;
-      throw Exception("Images are missing");
     }
 
     // Attempt to save the complete book details to the database
@@ -116,10 +117,13 @@ class BooksController extends BaseProvider {
       );
       _isLoading.value = false;
       log("Book saved successfully", name: "debug");
+      // ignore: use_build_context_synchronously
+      showSnackMessage(context, "Book added successfully", isError: true);
       resetBookDetails();
     } catch (e) {
       _isLoading.value = false;
       log("Error saving book: $e", name: "debug");
+
       rethrow;
     }
   }
@@ -169,7 +173,7 @@ class BooksController extends BaseProvider {
     }
   }
 
-  void addToCart(Book data) async {
+  void addToCart(Book data, BuildContext context) async {
     bool isAlreadyInCart = cart.any((book) => book.id == data.id);
 
     if (!isAlreadyInCart) {
@@ -179,14 +183,9 @@ class BooksController extends BaseProvider {
       notifyListeners();
     } else {
       log('Book is already in the cart: ${data.title}', name: 'debug');
-      Fluttertoast.showToast(
-        msg: "${data.title} Book is already in the cart",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: customTheme['primaryColor'],
-        textColor: customTheme['whiteColor'],
-        fontSize: 16.0,
-      );
+
+      showSnackMessage(context, "${data.title} Book is already in the cart",
+          isError: true);
     }
   }
 

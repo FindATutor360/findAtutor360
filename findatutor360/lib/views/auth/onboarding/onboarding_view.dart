@@ -1,18 +1,20 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_onboard/flutter_onboard.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class OnboardingView extends StatelessWidget {
   OnboardingView({super.key});
   static const path = '/onboarding';
 
-  final PageController _pageController = PageController();
+  final _pageController = PageController();
+
+  final appPreferences = AppPreferences();
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +44,7 @@ class OnboardingView extends StatelessWidget {
         //Skip button
         skipButton: TextButton(
           onPressed: () async {
-            SharedPreferences preferences =
-                await SharedPreferences.getInstance();
-            await preferences.setBool('userToken', true);
+            await appPreferences.setBool('hasSeenOnboarding', true);
             context.pushReplacement(WelcomeView.path);
           },
           child: Text(
@@ -92,8 +92,8 @@ class OnboardingView extends StatelessWidget {
           curve: Curves.easeInOutSine);
     } else {
       //print("nextButton pressed");
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      await preferences.setBool('userToken', true);
+
+      await appPreferences.setBool('hasSeenOnboarding', true);
       context.pushReplacement(WelcomeView.path);
     }
   }

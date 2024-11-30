@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SettingUserCard extends StatelessWidget {
   const SettingUserCard({
@@ -30,7 +31,7 @@ class SettingUserCard extends StatelessWidget {
         );
       },
       child: StreamBuilder<Users?>(
-          stream: authController.getUserInfo(auth!.uid),
+          stream: authController.getUserInfo(auth?.uid ?? 'gg'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -41,6 +42,9 @@ class SettingUserCard extends StatelessWidget {
             }
 
             final user = snapshot.data;
+
+            final isFile =
+                user?.photoUrl != null && File(user!.photoUrl!).existsSync();
 
             if (user == null) {
               return const Center(child: Text('No user data available.'));
@@ -60,12 +64,19 @@ class SettingUserCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     ListTile(
-                        leading: user.photoUrl == null
+                        leading: !isFile
                             ? CircleAvatar(
                                 backgroundColor: const Color(0xFFE6F6FE),
                                 backgroundImage: NetworkImage(user.photoUrl ??
                                     'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg'),
                                 radius: 20,
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: const CircleAvatar(
+                                    radius: 20,
+                                  ),
+                                ),
                               )
                             : CircleAvatar(
                                 radius: 20,
@@ -73,6 +84,13 @@ class SettingUserCard extends StatelessWidget {
                                 backgroundImage: FileImage(
                                   File(
                                     user.photoUrl ?? '',
+                                  ),
+                                ),
+                                child: Shimmer.fromColors(
+                                  baseColor: Colors.grey.shade300,
+                                  highlightColor: Colors.grey.shade100,
+                                  child: const CircleAvatar(
+                                    radius: 20,
                                   ),
                                 ),
                               ),

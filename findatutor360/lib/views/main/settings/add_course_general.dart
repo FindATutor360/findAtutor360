@@ -447,13 +447,16 @@ class _AddCourseGeneralViewState extends State<AddCourseGeneralView> {
   }
 
   Future<void> addCourseBasicDetails() async {
-    if (formKey.currentState != null &&
-        formKey.currentState!.validate() &&
-        selectedFile != null) {
+    if (formKey.currentState != null && formKey.currentState!.validate()) {
       try {
         _coursesController.isLoading.value = true;
-        await _coursesController.addCourseBasicDetails(selectedFile?.path,
-            _titleController.text, _descriptionController.text, typeDropdown);
+        await _coursesController.addCourseBasicDetails(
+          selectedFile?.path,
+          _titleController.text,
+          _descriptionController.text,
+          typeDropdown,
+          context,
+        );
         _coursesController.isLoading.value = false;
 
         router.push(

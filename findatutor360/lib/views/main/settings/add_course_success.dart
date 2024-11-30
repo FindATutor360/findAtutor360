@@ -146,7 +146,7 @@ class AddCourseSuccessView extends StatelessWidget {
                                   coursesController.isLoading.value =
                                       false; // Set loading back to false after 2 seconds
                                 });
-                                coursesController.saveCourseDetails();
+                                coursesController.saveCourseDetails(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);

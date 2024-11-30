@@ -127,7 +127,7 @@ class _ShopViewState extends State<ShopView> {
                                   title: book.title,
                                   author: book.author ?? 'Unknown Author',
                                   buyTap: () {
-                                    _booksController.addToCart(book);
+                                    _booksController.addToCart(book, context);
                                     router.go(CartView.path);
                                   },
                                 ),

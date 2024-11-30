@@ -312,36 +312,34 @@ class _AddBookImageViewState extends State<AddBookImageView> {
   }
 
   Future<void> addBookImage() async {
-    if (selectedFile != null || selectedFile2 != null) {
-      try {
-        _booksController.isLoading.value = true;
-        Future.delayed(const Duration(seconds: 2), () {
-          _booksController.isLoading.value =
-              false; // Set loading back to false after 2 seconds
-        });
+    try {
+      _booksController.isLoading.value = true;
+      Future.delayed(const Duration(seconds: 2), () {
+        _booksController.isLoading.value =
+            false; // Set loading back to false after 2 seconds
+      });
 
-        await _booksController.addBookImage(
-          selectedFile?.path,
-          selectedFile2?.path,
-        );
+      await _booksController.addBookImage(
+        selectedFile?.path,
+        selectedFile2?.path,
+      );
 
-        _booksController.isLoading.value = false;
+      _booksController.isLoading.value = false;
 
-        router.push(
-          AddBookSuccessView.path,
-        );
-      } catch (e) {
-        _booksController.isLoading.value = false;
-        log("Error saving book images: $e", name: "debug");
-        Fluttertoast.showToast(
-          msg: "Error saving book images",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          backgroundColor: customTheme['badgeColor'],
-          textColor: customTheme['whiteColor'],
-          fontSize: 16.0,
-        );
-      }
+      router.push(
+        AddBookSuccessView.path,
+      );
+    } catch (e) {
+      _booksController.isLoading.value = false;
+      log("Error saving book images: $e", name: "debug");
+      Fluttertoast.showToast(
+        msg: "Error saving book images",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: customTheme['badgeColor'],
+        textColor: customTheme['whiteColor'],
+        fontSize: 16.0,
+      );
     }
   }
 }

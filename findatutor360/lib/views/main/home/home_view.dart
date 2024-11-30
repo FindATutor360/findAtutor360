@@ -43,7 +43,8 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
 
-    Provider.of<AuthController>(context, listen: false).getUserInfo(auth!.uid);
+    Provider.of<AuthController>(context, listen: false)
+        .getUserInfo(auth?.uid ?? 'gg');
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final booksController =

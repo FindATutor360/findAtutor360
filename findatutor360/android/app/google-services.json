@@ -2,7 +2,7 @@
   "project_info": {
     "project_number": "989449612573",
     "project_id": "findautor-app",
-    "storage_bucket": "findautor-app.appspot.com"
+    "storage_bucket": "findautor-app.firebasestorage.app"
   },
   "client": [
     {
@@ -14,7 +14,7 @@
       },
       "oauth_client": [
         {
-          "client_id": "989449612573-emrhkrk8j9s2u3jok1p13e57d09bujdi.apps.googleusercontent.com",
+          "client_id": "989449612573-932ac2513dvg92f1qrre6ki4psv4fgu7.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.findatutor360",
@@ -22,7 +22,7 @@
           }
         },
         {
-          "client_id": "989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com",
+          "client_id": "989449612573-vh1r7n3epth1c6vk26pb8enkdpd7kdsd.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -35,11 +35,11 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "989449612573-s47h91r12m4vkg03mi8tg8o82gefjlrj.apps.googleusercontent.com",
+              "client_id": "989449612573-vh1r7n3epth1c6vk26pb8enkdpd7kdsd.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "989449612573-2revpi4h96uroivl09fc3et79i00igrr.apps.googleusercontent.com",
+              "client_id": "989449612573-odrvfdvvlnthifmio2uqsjcdr62fuk21.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.example.findatutor360"

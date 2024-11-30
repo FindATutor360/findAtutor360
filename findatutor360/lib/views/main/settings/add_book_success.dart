@@ -88,7 +88,7 @@ class AddBookSuccessView extends StatelessWidget {
                                   booksController.isLoading.value =
                                       false; // Set loading back to false after 2 seconds
                                 });
-                                booksController.saveBookDetails();
+                                booksController.saveBookDetails(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);

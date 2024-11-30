@@ -279,6 +279,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
           _publisherController.text,
           _textSnippetController.text,
           typeDropdown,
+           context,
         );
         log(typeDropdown, name: 'debug');
         _booksController.isLoading.value = false;

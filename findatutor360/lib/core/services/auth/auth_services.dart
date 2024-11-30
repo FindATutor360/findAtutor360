@@ -1,13 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -87,22 +87,24 @@ class AuthServiceImpl implements AuthService {
   final FacebookAuth facebookAuth = FacebookAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
   final String webClientID = dotenv.env['WEB_CLIENT_ID'] ?? '';
+  final String hostedDomainID = dotenv.env['HOSTED_DOMAIN'] ?? '';
 
   @override
   Future<User?> continueWithGoogle(BuildContext context) async {
     try {
       final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: Platform.isWindows ? webClientID : null,
+        clientId: kIsWeb ? webClientID : null,
+        hostedDomain: kIsWeb ? hostedDomainID : null,
       );
 
       GoogleSignInAccount? googleUser;
 
-      if (Platform.isAndroid || Platform.isIOS) {
-        // Native sign-in for Android/iOS
-        googleUser = await googleSignIn.signIn();
-      } else if (Platform.isWindows) {
-        // Silent sign-in for web
+      if (kIsWeb) {
+        // For Web
         googleUser = await googleSignIn.signInSilently();
+      } else {
+        // For Native (Android/iOS/Desktop)
+        googleUser = await googleSignIn.signIn();
       }
 
       // If user is null, the sign-in process was canceled or failed
@@ -119,8 +121,9 @@ class AuthServiceImpl implements AuthService {
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-
-      await GoogleSignIn().signOut();
+      if (!kIsWeb) {
+        await GoogleSignIn().signOut();
+      }
 
       // Sign in with Firebase
       final UserCredential userCredential =

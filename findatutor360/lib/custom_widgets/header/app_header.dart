@@ -12,6 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? badgeCount;
@@ -45,6 +46,8 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                 }),
                 icon: const Icon(Iconsax.menu_1),
               ),
+
+              // Spacer(),
               Container(
                 margin: const EdgeInsets.only(right: 10),
                 child: Row(
@@ -73,70 +76,90 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                     const SizedBox(width: 5),
-                    StreamBuilder<Users?>(
-                      stream: authController.getUserInfo(auth!.uid),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                                ConnectionState.waiting ||
-                            snapshot.hasError) {
-                          return const SizedBox.shrink();
-                        }
+                    auth != null
+                        ? StreamBuilder<Users?>(
+                            stream: authController.getUserInfo(auth.uid),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                      ConnectionState.waiting ||
+                                  snapshot.hasError) {
+                                return const SizedBox.shrink();
+                              }
 
-                        final user = snapshot.data;
+                              final user = snapshot.data;
 
-                        final isFile = user?.photoUrl != null &&
-                            File(user!.photoUrl!).existsSync();
+                              final isFile = user?.photoUrl != null &&
+                                  File(user!.photoUrl!).existsSync();
 
-                        if (user == null) {
-                          return const Center(
-                              child: Text('No user data available.'));
-                        }
-                        return DashedCircle(
-                          dashes: 20,
-                          color: customTheme['secondaryColor']!,
-                          child: InkWell(
-                            onTap: () {
-                              router.push(
-                                PersonalProfileView.path,
+                              if (user == null) {
+                                return const Center(
+                                    child: Text('No user data available.'));
+                              }
+                              return DashedCircle(
+                                dashes: 20,
+                                color: customTheme['secondaryColor']!,
+                                child: InkWell(
+                                  onTap: () {
+                                    router.push(
+                                      PersonalProfileView.path,
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: !isFile
+                                        ? CachedNetworkImage(
+                                            imageUrl: user.photoUrl ??
+                                                'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                                            placeholder: (context, url) =>
+                                                Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade300,
+                                              highlightColor:
+                                                  Colors.grey.shade100,
+                                              child: const CircleAvatar(
+                                                radius: 20,
+                                              ),
+                                            ),
+                                            imageBuilder: (context, image) =>
+                                                CircleAvatar(
+                                              backgroundImage: image,
+                                              backgroundColor: customTheme[
+                                                  'secondaryColor']!,
+                                              radius: 20,
+                                            ),
+                                            errorWidget:
+                                                (context, url, error) => Icon(
+                                              Icons.person_2,
+                                              color:
+                                                  customTheme['secondaryColor'],
+                                            ),
+                                          )
+                                        : CircleAvatar(
+                                            radius: 20,
+                                            backgroundColor:
+                                                customTheme['secondaryColor']!,
+                                            backgroundImage: FileImage(
+                                              File(
+                                                user.photoUrl ?? '',
+                                              ),
+                                            ),
+                                          ),
+                                  ),
+                                ),
                               );
                             },
-                            child: Padding(
-                              padding: const EdgeInsets.all(3.0),
-                              child: !isFile
-                                  ? CachedNetworkImage(
-                                      imageUrl: user.photoUrl ??
-                                          'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                      placeholder: (context, url) =>
-                                          CircleAvatar(
-                                        backgroundColor:
-                                            customTheme['secondaryColor']!,
-                                        radius: 20,
-                                      ),
-                                      imageBuilder: (context, image) =>
-                                          CircleAvatar(
-                                        backgroundImage: image,
-                                        backgroundColor:
-                                            customTheme['secondaryColor']!,
-                                        radius: 20,
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor:
-                                          customTheme['secondaryColor']!,
-                                      backgroundImage: FileImage(
-                                        File(
-                                          user.photoUrl ?? '',
-                                        ),
-                                      ),
-                                    ),
+                          )
+                        : DashedCircle(
+                            color: customTheme['secondaryColor']!,
+                            dashes: 20,
+                            child: CircleAvatar(
+                              backgroundColor: customTheme['whiteColor'],
+                              radius: 20,
+                              child: Icon(
+                                Icons.person_2,
+                                color: customTheme['secondaryColor'],
+                              ),
                             ),
                           ),
-                        );
-                      },
-                    ),
                   ],
                 ),
               ),
