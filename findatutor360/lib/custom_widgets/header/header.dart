@@ -87,12 +87,15 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
 
                               final user = snapshot.data;
 
+                              final isFile = user?.photoUrl != null &&
+                                  File(user!.photoUrl!).existsSync();
+
                               if (user == null) {
                                 return const Center(
                                     child: Text('No user data available.'));
                               }
                               return Center(
-                                child: user.photoUrl == null
+                                child: !isFile
                                     ? CircleAvatar(
                                         backgroundColor:
                                             const Color(0xFF0476AF),

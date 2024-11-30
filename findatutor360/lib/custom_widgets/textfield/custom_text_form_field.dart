@@ -45,7 +45,9 @@ class CustomTextFormField extends StatelessWidget {
           style: GoogleFonts.manrope(
             fontSize: 16,
             fontWeight: FontWeight.w400,
-            color: customTheme['mainTextColor'],
+            color: Theme.of(context).brightness != Brightness.dark
+                ? customTheme['mainTextColor']
+                : customTheme['whiteColor'],
           ),
           keyboardType: keyboardType,
           obscureText: obscureText,

@@ -179,10 +179,6 @@ class _CartViewState extends State<CartView> {
                                             children: [
                                               TextSpan(
                                                 text: '  x${book.quantity}',
-                                                style: TextStyle(
-                                                  color: customTheme[
-                                                      'mainTextColor'],
-                                                ),
                                               ),
                                             ],
                                           ),

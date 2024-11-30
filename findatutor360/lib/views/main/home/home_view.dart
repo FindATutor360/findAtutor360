@@ -161,7 +161,7 @@ class _HomeViewState extends State<HomeView> {
                           final courses = snapshot.data!;
 
                           return Container(
-                            height: MediaQuery.of(context).size.height * 0.33,
+                            height: MediaQuery.of(context).size.height * 0.35,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                             child: ListView.separated(
                               padding: EdgeInsets.zero,

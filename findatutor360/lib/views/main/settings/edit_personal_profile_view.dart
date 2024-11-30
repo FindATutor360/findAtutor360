@@ -167,7 +167,10 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                               value: sex.value,
                               icon: const Icon(
                                   Icons.keyboard_arrow_down_outlined),
-                              dropdownColor: Colors.white,
+                              dropdownColor: Theme.of(context).brightness ==
+                                      Brightness.dark
+                                  ? customTheme['secondaryTextColor']
+                                  : customTheme['whiteColor'],
                               decoration: InputDecoration(
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10),
@@ -199,7 +202,10 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                                   value: "Male",
                                   child: MainText(
                                     text: 'Male',
-                                    color: customTheme['secondaryTextColor'],
+                                    color: Theme.of(context).brightness !=
+                                            Brightness.dark
+                                        ? customTheme['secondaryTextColor']
+                                        : customTheme['whiteColor'],
                                     fontSize: 16,
                                   ),
                                 ),
@@ -207,7 +213,10 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                                   value: "Female",
                                   child: MainText(
                                     text: 'Female',
-                                    color: customTheme['secondaryTextColor'],
+                                    color: Theme.of(context).brightness !=
+                                            Brightness.dark
+                                        ? customTheme['secondaryTextColor']
+                                        : customTheme['whiteColor'],
                                     fontSize: 16,
                                   ),
                                 ),
@@ -215,7 +224,10 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
                                   value: "Other",
                                   child: MainText(
                                     text: 'Other',
-                                    color: customTheme['secondaryTextColor'],
+                                    color: Theme.of(context).brightness !=
+                                            Brightness.dark
+                                        ? customTheme['secondaryTextColor']
+                                        : customTheme['whiteColor'],
                                     fontSize: 16,
                                   ),
                                 ),

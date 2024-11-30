@@ -25,8 +25,6 @@ class ActiveCourseCard extends StatelessWidget {
         : Colors.white);
 
     final isFile = image != null && File(image!).existsSync();
-    final isUrl =
-        image != null && Uri.tryParse(image!)?.hasAbsolutePath == true;
 
     return Container(
       width: MediaQuery.sizeOf(context).width / 2.2,
@@ -35,6 +33,7 @@ class ActiveCourseCard extends StatelessWidget {
           : MediaQuery.of(context).size.height * 0.29,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
+        color: dynamicColor,
         border: Border.all(
           color: const Color(0xFFC3C8CC),
         ),
@@ -122,7 +121,6 @@ class ActiveCourseCard extends StatelessWidget {
                   MainText(
                     text: title ?? '',
                     fontSize: 14,
-                    color: const Color(0XFF303539),
                     overflow: TextOverflow.clip,
                     softWrap: true,
                   ),

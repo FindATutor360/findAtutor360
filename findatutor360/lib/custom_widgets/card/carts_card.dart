@@ -57,8 +57,7 @@ class _CartsCardState extends State<CartsCard> {
 
     final isFile = widget.book.thumbnail != null &&
         File(widget.book.thumbnail!).existsSync();
-    final isUrl = widget.book.thumbnail != null &&
-        Uri.tryParse(widget.book.thumbnail!)?.hasAbsolutePath == true;
+
     return SizedBox(
       width: double.infinity,
       child: Row(

@@ -118,11 +118,12 @@ class BooksController extends BaseProvider {
       _isLoading.value = false;
       log("Book saved successfully", name: "debug");
       // ignore: use_build_context_synchronously
-      showSnackMessage(context, "Book added successfully", isError: true);
+      showSnackMessage(context, "Book added successfully", isError: false);
       resetBookDetails();
     } catch (e) {
       _isLoading.value = false;
       log("Error saving book: $e", name: "debug");
+      showSnackMessage(context, "Error saving book: $e", isError: true);
 
       rethrow;
     }
@@ -192,6 +193,11 @@ class BooksController extends BaseProvider {
   void removeFromCart(Book book) async {
     cart.removeWhere((item) => item.id == book.id);
     await appPreferences.setBool('removedFromCart', true);
+    notifyListeners();
+  }
+
+  void removeAllFromCart() async {
+    cart.clear();
     notifyListeners();
   }
 
