@@ -488,10 +488,12 @@ class _AddCoursePricingViewState extends State<AddCoursePricingView> {
       try {
         _coursesController.isLoading.value = true;
         await _coursesController.addCoursePricingDetails(
-            _durationController.text,
-            _coursePrice,
-            typeDropdown,
-            [_startTimeController.text, _endTimeController.text]);
+          _durationController.text,
+          _coursePrice,
+          typeDropdown,
+          [_startTimeController.text, _endTimeController.text],
+          context,
+        );
         _coursesController.isLoading.value = false;
 
         router.push(

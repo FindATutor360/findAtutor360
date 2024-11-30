@@ -7,7 +7,6 @@ import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/custom_widgets/button/outline_button.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/card/active_course_card.dart';
-import 'package:findatutor360/custom_widgets/card/recommended_tutor_card.dart';
 import 'package:findatutor360/custom_widgets/card/statistics_card.dart';
 import 'package:findatutor360/custom_widgets/dialogs/pop_up_dialog.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
@@ -62,7 +61,7 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
           showIcon: false,
         ),
         body: StreamBuilder<Users?>(
-          stream: authController.getUserInfo(auth!.uid),
+          stream: authController.getUserInfo(auth?.uid ?? 'gg'),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

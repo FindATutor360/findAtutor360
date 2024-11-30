@@ -64,8 +64,6 @@ class _BookDetailsState extends State<BookDetails> {
 
     final isFile = widget.books.thumbnail != null &&
         File(widget.books.thumbnail!).existsSync();
-    final isUrl = widget.books.thumbnail != null &&
-        Uri.tryParse(widget.books.thumbnail!)?.hasAbsolutePath == true;
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -475,7 +473,7 @@ class _BookDetailsState extends State<BookDetails> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          _booksController.addToCart(widget.books);
+                          _booksController.addToCart(widget.books, context);
                           Fluttertoast.showToast(
                             msg: "${widget.books.title} added to cart",
                             toastLength: Toast.LENGTH_SHORT,
@@ -509,7 +507,7 @@ class _BookDetailsState extends State<BookDetails> {
                     Expanded(
                       child: InkWell(
                         onTap: () {
-                          _booksController.addToCart(widget.books);
+                          _booksController.addToCart(widget.books, context);
                           context.go(CartView.path);
                         },
                         child: Container(

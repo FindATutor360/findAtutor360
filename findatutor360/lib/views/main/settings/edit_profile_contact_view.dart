@@ -163,10 +163,11 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                       ValueListenableBuilder<File?>(
                         valueListenable: profileImageUrl,
                         builder: (context, profileImage, child) {
-                          final isFile = _profileImageUrl.value.isNotEmpty &&
-                              profileImageUrl.value!.existsSync();
+                          final isFile =
+                              profileImage != null && profileImage.existsSync();
 
                           return isFile
+                              // Show the uploaded image if file exists
                               ? Stack(
                                   alignment: AlignmentDirectional.center,
                                   children: [
@@ -180,7 +181,8 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                         borderRadius: BorderRadius.circular(16),
                                         image: DecorationImage(
                                           fit: BoxFit.cover,
-                                          image: FileImage(profileImage!),
+                                          image: FileImage(
+                                              profileImage), // Show the local image
                                         ),
                                       ),
                                     ),
@@ -195,14 +197,8 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                         if (result != null) {
                                           PlatformFile file =
                                               result.files.first;
-
-                                          log('File Name: ${file.name}');
-                                          log('File Size: ${file.size}');
-                                          log('File Path: ${file.path}');
-                                          log('File Path: ${file.identifier}');
-
-                                          profileImageUrl.value =
-                                              File(file.path!);
+                                          profileImageUrl.value = File(file
+                                              .path!); // Update with new image
                                         }
                                       },
                                       child: CircleAvatar(
@@ -216,7 +212,9 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                     ),
                                   ],
                                 )
-                              : !isFile
+                              : (user.photoUrl != null &&
+                                      user.photoUrl!.isNotEmpty)
+                                  // Show network image if user.photoUrl is available and not empty
                                   ? Stack(
                                       clipBehavior: Clip.none,
                                       alignment: AlignmentDirectional.center,
@@ -233,9 +231,8 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                                 BorderRadius.circular(16),
                                             image: DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: NetworkImage(
-                                                user.photoUrl ?? '',
-                                              ),
+                                              image: NetworkImage(user
+                                                  .photoUrl!), // Use network image
                                             ),
                                           ),
                                         ),
@@ -251,7 +248,6 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                             if (result != null) {
                                               PlatformFile file =
                                                   result.files.first;
-
                                               profileImageUrl.value = File(file
                                                   .path!); // Update with new image
                                             }
@@ -268,6 +264,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                         ),
                                       ],
                                     )
+                                  // Fallback: if no image, show upload button
                                   : SizedBox(
                                       width: MediaQuery.of(context).size.width *
                                           0.85,
@@ -283,7 +280,6 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                           if (result != null) {
                                             PlatformFile file =
                                                 result.files.first;
-
                                             profileImageUrl.value = File(file
                                                 .path!); // Update with new image
                                           }
@@ -329,7 +325,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                                 ),
                                                 MainText(
                                                   text:
-                                                      'PNG, JPG, , PDF upto 5MB',
+                                                      'PNG, JPG, PDF up to 5MB',
                                                   fontSize: 14,
                                                   fontWeight: FontWeight.w400,
                                                   color: customTheme[
@@ -403,9 +399,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
 
   Future<void> updateContactDetails() async {
     if (formKey.currentState != null &&
-            formKey.currentState!.validate() &&
-            profileImageUrl.value != null ||
-        _profileImageUrl.value.isNotEmpty) {
+            formKey.currentState!.validate()) {
       final FirebaseAuth auth = FirebaseAuth.instance;
 
       try {

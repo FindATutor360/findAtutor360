@@ -2,13 +2,13 @@
 
 import 'dart:developer';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:findatutor360/views/auth/onboarding/onboarding_view.dart';
-import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,13 +31,23 @@ class _SplashViewState extends State<SplashView> {
   }
 
   Future<void> _navigateUser() async {
-    if (!mounted) return;
-
     await Future.delayed(const Duration(seconds: 3));
 
     AppPreferences appPreferences = AppPreferences();
+    var connectivityResult = await Connectivity().checkConnectivity();
+    bool isConnected = connectivityResult.contains(ConnectivityResult.none);
+
+    // If not connected to the internet, show an error and return
+    if (isConnected) {
+      showSnackMessage(
+          context, "No internet connection. Please connect to the internet.",
+          isError: true);
+      context.pushReplacement(LoginView.path);
+      return;
+    }
 
     try {
+      if (!mounted) return;
       User? user = FirebaseAuth.instance.currentUser;
 
       // Check if user exists and reload to ensure the state is up-to-date
@@ -47,7 +57,6 @@ class _SplashViewState extends State<SplashView> {
       String? userToken = await user?.getIdToken();
 
       if (user != null && user.emailVerified && userToken != null) {
-        // User is logged in, email is verified, and token is available
         AuthController authController =
             Provider.of<AuthController>(context, listen: false);
 
@@ -55,34 +64,24 @@ class _SplashViewState extends State<SplashView> {
 
         log('User id: ${user.uid}', name: 'debug');
 
-        authController.userStream?.listen((updatedUserInfo) async {
-          if (updatedUserInfo != null) {
-            authController.setUserInfo(updatedUserInfo);
-            log('${updatedUserInfo.sex}', name: 'debug');
-            context.pushReplacement(HomeView.path);
-          }
-        });
-      } else if (user!.email == null) {
-        // User account is deleted
-        showSnackMessage(context, "Account deleted. Please sign up again.",
-            isError: true);
-        context.pushReplacement(WelcomeView.path);
-      } else if (user.email != null && user.emailVerified) {
-        // User email is not verified
-        showSnackMessage(context, "Please login to continue.", isError: true);
-        context.pushReplacement(LoginView.path);
-      } else {
-        // Handle token issues or other unknown cases
-        bool showOnboarding = await appPreferences.getBool('userToken');
+        bool showOnboarding = await appPreferences.getBool('hasSeenOnboarding');
         if (showOnboarding) {
-          context.pushReplacement(OnboardingView.path);
+          authController.userStream?.listen((updatedUserInfo) async {
+            if (updatedUserInfo != null) {
+              authController.setUserInfo(updatedUserInfo);
+
+              context.pushReplacement(HomeView.path);
+            }
+          });
         } else {
           context.pushReplacement(LoginView.path);
         }
+      } else {
+        context.pushReplacement(OnboardingView.path);
       }
     } catch (e) {
       // Handle network or unexpected errors
-      context.pushReplacement(WelcomeView.path);
+      context.pushReplacement(LoginView.path);
       showSnackMessage(context, "Network Error", isError: true);
     }
   }

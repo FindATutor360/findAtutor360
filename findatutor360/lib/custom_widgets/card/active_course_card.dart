@@ -43,54 +43,75 @@ class ActiveCourseCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           isFile
-              ? Container(
-                  width: double.infinity,
-                  height: MediaQuery.sizeOf(context).height / 7.5,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: customTheme['fieldColor'],
-                    image: DecorationImage(
-                      image: FileImage(
-                        File(image ?? ''),
+              ? RepaintBoundary(
+                  child: Container(
+                    width: double.infinity,
+                    height: MediaQuery.sizeOf(context).height / 7.5,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: customTheme['fieldColor'],
+                      image: DecorationImage(
+                        image: FileImage(
+                          File(image ?? ''),
+                        ),
+                        fit: BoxFit.cover,
                       ),
-                      fit: BoxFit.cover,
                     ),
-                  ),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height / 7.5,
-                    ),
+                    child: image == null
+                        ? Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: MediaQuery.sizeOf(context).height / 7.5,
+                            ),
+                          )
+                        : SizedBox(
+                            width: double.infinity,
+                            height: MediaQuery.sizeOf(context).height / 7.5,
+                          ),
                   ),
                 )
-              : CachedNetworkImage(
-                  imageUrl: image!,
-                  imageBuilder: (context, imageProvider) {
-                    return Container(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height / 7.5,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: customTheme['fieldColor'],
-                        image: DecorationImage(
-                          image: NetworkImage(image ?? ''),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                  placeholder: (context, image) {
-                    return Shimmer.fromColors(
-                      baseColor: Colors.grey.shade300,
-                      highlightColor: Colors.grey.shade100,
-                      child: SizedBox(
+              : RepaintBoundary(
+                  child: CachedNetworkImage(
+                    imageUrl: image!,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
                         width: double.infinity,
                         height: MediaQuery.sizeOf(context).height / 7.5,
-                      ),
-                    );
-                  },
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: customTheme['fieldColor'],
+                          image: DecorationImage(
+                            image: NetworkImage(image ?? ''),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return Container(
+                        width: double.infinity,
+                        color: Colors.grey,
+                        height: MediaQuery.sizeOf(context).height / 7.5,
+                        child: const Icon(
+                          Icons.error_outline_sharp,
+                          color: Colors.red,
+                        ),
+                      );
+                    },
+                    placeholder: (context, image) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: double.infinity,
+                          color: Colors.grey,
+                          height: MediaQuery.sizeOf(context).height / 7.5,
+                        ),
+                      );
+                    },
+                  ),
                 ),
           Expanded(
             child: Padding(

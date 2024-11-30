@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
     appId: '1:989449612573:android:af5d8c48e727d742a445f4',
     messagingSenderId: '989449612573',
     projectId: 'findautor-app',
-    storageBucket: 'findautor-app.appspot.com',
+    storageBucket: 'findautor-app.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -66,11 +66,9 @@ class DefaultFirebaseOptions {
     appId: '1:989449612573:ios:867e3d28df94f060a445f4',
     messagingSenderId: '989449612573',
     projectId: 'findautor-app',
-    storageBucket: 'findautor-app.appspot.com',
-    androidClientId:
-        '989449612573-emrhkrk8j9s2u3jok1p13e57d09bujdi.apps.googleusercontent.com',
-    iosClientId:
-        '989449612573-2revpi4h96uroivl09fc3et79i00igrr.apps.googleusercontent.com',
+    storageBucket: 'findautor-app.firebasestorage.app',
+    androidClientId: '989449612573-932ac2513dvg92f1qrre6ki4psv4fgu7.apps.googleusercontent.com',
+    iosClientId: '989449612573-odrvfdvvlnthifmio2uqsjcdr62fuk21.apps.googleusercontent.com',
     iosBundleId: 'com.example.findatutor360',
   );
 
@@ -80,7 +78,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '989449612573',
     projectId: 'findautor-app',
     authDomain: 'findautor-app.firebaseapp.com',
-    storageBucket: 'findautor-app.appspot.com',
+    storageBucket: 'findautor-app.firebasestorage.app',
     measurementId: 'G-6T7JLVFXN8',
   );
+
 }

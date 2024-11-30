@@ -65,54 +65,70 @@ class _CartsCardState extends State<CartsCard> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           isFile
-              ? Container(
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  height: MediaQuery.of(context).size.height / 7,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: customTheme['fieldColor'],
-                    image: DecorationImage(
-                      image: FileImage(
-                        File(widget.book.thumbnail ?? ''),
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  child: Shimmer.fromColors(
-                    baseColor: Colors.grey.shade300,
-                    highlightColor: Colors.grey.shade100,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height / 7.5,
-                    ),
-                  ),
-                )
-              : CachedNetworkImage(
-                  imageUrl: widget.book.thumbnail ?? '',
-                  imageBuilder: (context, imageProvider) {
-                    return Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height / 7,
-                      decoration: BoxDecoration(
-                        color: customTheme['secondaryColor'],
-                        borderRadius: BorderRadius.circular(10),
-                        image: DecorationImage(
-                          image: NetworkImage(widget.book.thumbnail ?? ''),
-                          fit: BoxFit.cover,
+              ? RepaintBoundary(
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    height: MediaQuery.of(context).size.height / 7,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: customTheme['fieldColor'],
+                      image: DecorationImage(
+                        image: FileImage(
+                          File(widget.book.thumbnail ?? ''),
                         ),
+                        fit: BoxFit.cover,
                       ),
-                    );
-                  },
-                  placeholder: (context, image) {
-                    return Shimmer.fromColors(
+                    ),
+                    child: Shimmer.fromColors(
                       baseColor: Colors.grey.shade300,
                       highlightColor: Colors.grey.shade100,
                       child: SizedBox(
+                        width: double.infinity,
+                        height: MediaQuery.sizeOf(context).height / 7.5,
+                      ),
+                    ),
+                  ),
+                )
+              : RepaintBoundary(
+                  child: CachedNetworkImage(
+                    imageUrl: widget.book.thumbnail ?? '',
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
                         width: MediaQuery.of(context).size.width * 0.35,
                         height: MediaQuery.of(context).size.height / 7,
-                      ),
-                    );
-                  },
+                        decoration: BoxDecoration(
+                          color: customTheme['secondaryColor'],
+                          borderRadius: BorderRadius.circular(10),
+                          image: DecorationImage(
+                            image: NetworkImage(widget.book.thumbnail ?? ''),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    },
+                    placeholder: (context, image) {
+                      return Shimmer.fromColors(
+                        baseColor: Colors.grey.shade300,
+                        highlightColor: Colors.grey.shade100,
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.35,
+                          height: MediaQuery.of(context).size.height / 7,
+                          color: Colors.grey,
+                        ),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return Container(
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        height: MediaQuery.of(context).size.height / 7,
+                        color: Colors.grey,
+                        child: const Icon(
+                          Icons.error_outline_sharp,
+                          color: Colors.red,
+                        ),
+                      );
+                    },
+                  ),
                 ),
           Expanded(
             child: Padding(

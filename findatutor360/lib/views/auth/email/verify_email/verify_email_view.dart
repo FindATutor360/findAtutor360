@@ -53,7 +53,7 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
   }
 
   void startCountdown() {
-    countdown.value = 60;
+    countdown.value = 30;
     setIsLoading(true);
 
     emailVerificationTimer =

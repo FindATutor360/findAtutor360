@@ -4,6 +4,7 @@ import 'package:findatutor360/core/models/main/course_model.dart';
 import 'package:findatutor360/core/services/main/course_service.dart';
 import 'package:findatutor360/utils/base_provider.dart';
 import 'package:findatutor360/utils/injection_container.dart';
+import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:flutter/material.dart';
 
 class CoursesController extends BaseProvider {
@@ -23,12 +24,8 @@ class CoursesController extends BaseProvider {
   String? _day;
   List<String>? _availability;
 
-  Future<void> addCourseBasicDetails(
-    String? image,
-    String? name,
-    String? description,
-    String? category,
-  ) async {
+  Future<void> addCourseBasicDetails(String? image, String? name,
+      String? description, String? category, BuildContext context) async {
     _isLoading.value = true;
     try {
       _name = name;
@@ -40,6 +37,7 @@ class CoursesController extends BaseProvider {
       log("CourseBasicDetails saved successfully", name: "debug");
     } catch (e) {
       _isLoading.value = false;
+      showSnackMessage(context, "Basic details are missing", isError: true);
       throw Exception("Basic details are missing");
     }
   }
@@ -49,6 +47,7 @@ class CoursesController extends BaseProvider {
     double? actualPriceUsd,
     String? day,
     List<String>? availability,
+    BuildContext context,
   ) async {
     _isLoading.value = true;
     try {
@@ -61,17 +60,15 @@ class CoursesController extends BaseProvider {
       log("CoursePricingDetails saved successfully", name: "debug");
     } catch (e) {
       _isLoading.value = false;
+      showSnackMessage(context, "Pricing details are missing", isError: true);
       throw Exception("Pricing details are missing");
     }
   }
 
-  Future<void> saveCourseDetails() async {
+  Future<void> saveCourseDetails(BuildContext context) async {
     _isLoading.value = true;
 
-    if (_name == null ||
-        _description == null ||
-        _category == null ||
-        _image == null) {
+    if (_name == null || _description == null || _category == null) {
       _isLoading.value = false;
       throw Exception("Basic details are missing");
     }
@@ -87,6 +84,8 @@ class CoursesController extends BaseProvider {
           _description, _category, _duration, _day, _availability);
       _isLoading.value = false;
       log("Course saved successfully", name: "debug");
+      // ignore: use_build_context_synchronously
+      showSnackMessage(context, "Course added successfully", isError: true);
       resetBookDetails();
     } catch (e) {
       _isLoading.value = false;

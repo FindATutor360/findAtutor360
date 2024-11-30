@@ -76,6 +76,7 @@ dependencies:
   url_launcher: ^6.3.1
   webview_flutter: ^4.8.0
   shimmer: ^3.0.0
+  connectivity_plus: ^6.0.5
 
   flutter_chat_types: any
   http: any

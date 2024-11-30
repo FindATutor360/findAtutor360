@@ -4,6 +4,7 @@ import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
+import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -69,48 +70,59 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                                   : Colors.black,
                             ))),
                     const SizedBox(width: 5),
-                    StreamBuilder<Users?>(
-                      stream: authController.getUserInfo(auth!.uid),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
+                    auth != null
+                        ? StreamBuilder<Users?>(
+                            stream: authController.getUserInfo(auth.uid),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              }
 
-                        if (snapshot.hasError) {
-                          return Center(
-                              child: Text('Error: ${snapshot.error}'));
-                        }
+                              if (snapshot.hasError) {
+                                return Center(
+                                    child: Text('Error: ${snapshot.error}'));
+                              }
 
-                        final user = snapshot.data;
+                              final user = snapshot.data;
 
-                        if (user == null) {
-                          return const Center(
-                              child: Text('No user data available.'));
-                        }
-                        return Center(
-                          child: user.photoUrl == null
-                              ? CircleAvatar(
-                                  backgroundColor: const Color(0xFF0476AF),
-                                  radius: 20,
-                                  backgroundImage: NetworkImage(
-                                    user.photoUrl ??
-                                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                  ),
-                                )
-                              : CircleAvatar(
-                                  backgroundColor: const Color(0xFF0476AF),
-                                  radius: 20,
-                                  backgroundImage: FileImage(
-                                    File(
-                                      user.photoUrl ?? '',
-                                    ),
-                                  ),
-                                ), //CircleAvatar
-                        );
-                      },
-                    ),
+                              if (user == null) {
+                                return const Center(
+                                    child: Text('No user data available.'));
+                              }
+                              return Center(
+                                child: user.photoUrl == null
+                                    ? CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xFF0476AF),
+                                        radius: 20,
+                                        backgroundImage: NetworkImage(
+                                          user.photoUrl ??
+                                              'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
+                                        ),
+                                      )
+                                    : CircleAvatar(
+                                        backgroundColor:
+                                            const Color(0xFF0476AF),
+                                        radius: 20,
+                                        backgroundImage: FileImage(
+                                          File(
+                                            user.photoUrl ?? '',
+                                          ),
+                                        ),
+                                      ), //CircleAvatar
+                              );
+                            },
+                          )
+                        : CircleAvatar(
+                            backgroundColor: const Color(0xFF0476AF),
+                            radius: 20,
+                            child: Icon(
+                              Icons.person_2,
+                              color: customTheme['secondaryColor'],
+                            ),
+                          ),
                   ],
                 ),
               ),
