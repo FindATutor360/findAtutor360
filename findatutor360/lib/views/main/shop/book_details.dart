@@ -139,7 +139,12 @@ class _BookDetailsState extends State<BookDetails> {
                                     softWrap: true,
                                   ),
                                   MainText(
-                                    text: widget.books.author ?? 'Unknown',
+                                    text: (widget.books.author != null &&
+                                            widget.books.author!
+                                                .trim()
+                                                .isNotEmpty)
+                                        ? widget.books.author!.trim()
+                                        : widget.books.authorName!.trim(),
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     color: customTheme['secondaryTextColor'],
@@ -149,7 +154,8 @@ class _BookDetailsState extends State<BookDetails> {
                                     height: 8,
                                   ),
                                   MainText(
-                                    text: widget.books.price != null
+                                    text: (widget.books.price?.isNotEmpty ??
+                                            false)
                                         ? '\$${widget.books.price}'
                                         : '\$256.50',
                                     fontSize: 16,

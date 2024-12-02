@@ -308,7 +308,7 @@ class _AddCoursePricingViewState extends State<AddCoursePricingView> {
                                           width: 1,
                                           color:
                                               Color.fromRGBO(4, 118, 175, 1))),
-                                  hintText: 'Choose a category',
+                                  hintText: 'Choose a day',
                                   hintStyle: TextStyle(
                                     color: customTheme['whiteColor'],
                                     fontSize: 14,
@@ -407,6 +407,7 @@ class _AddCoursePricingViewState extends State<AddCoursePricingView> {
                 CustomTextFormField(
                   controller: _priceController,
                   hint: 'Enter price',
+                  keyboardType: TextInputType.number,
                   onChanged: (value) {
                     _coursePrice = double.tryParse(_priceController.text);
                   },

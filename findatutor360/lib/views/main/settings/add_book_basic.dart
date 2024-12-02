@@ -38,7 +38,7 @@ class _AddBookBasicViewState extends State<AddBookBasicView> {
 
   @override
   Widget build(BuildContext context) {
-    _booksController = context.read<BooksController>();
+    _booksController = context.watch<BooksController>();
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -77,6 +77,7 @@ class _AddBookBasicViewState extends State<AddBookBasicView> {
                 CustomTextFormField(
                   hint: 'Enter Book Title',
                   controller: _titleController,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter book title';
@@ -99,6 +100,7 @@ class _AddBookBasicViewState extends State<AddBookBasicView> {
                 CustomTextFormField(
                   hint: 'Enter Author Name',
                   controller: _authorController,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter book author';

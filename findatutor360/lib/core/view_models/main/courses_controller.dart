@@ -84,11 +84,11 @@ class CoursesController extends BaseProvider {
           _description, _category, _duration, _day, _availability);
       _isLoading.value = false;
       log("Course saved successfully", name: "debug");
-      // ignore: use_build_context_synchronously
-      showSnackMessage(context, "Course added successfully", isError: true);
+
       resetBookDetails();
     } catch (e) {
       _isLoading.value = false;
+      showSnackMessage(context, "Error saving book: $e", isError: true);
       log("Error saving book: $e", name: "debug");
       rethrow;
     }

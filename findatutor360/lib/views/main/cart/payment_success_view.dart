@@ -1,3 +1,4 @@
+import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/progress_indicator/progress_bar.dart';
@@ -5,13 +6,22 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/shop/shop_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class PaymentSuccessView extends StatelessWidget {
+class PaymentSuccessView extends StatefulWidget {
   const PaymentSuccessView({super.key});
   static const path = '/paymentSuccess';
 
   @override
+  State<PaymentSuccessView> createState() => _PaymentSuccessViewState();
+}
+
+class _PaymentSuccessViewState extends State<PaymentSuccessView> {
+  late BooksController booksController;
+
+  @override
   Widget build(BuildContext context) {
+    booksController = context.read<BooksController>();
     return SafeArea(
       child: Scaffold(
         appBar: const BackIconHeader(
@@ -69,6 +79,8 @@ class PaymentSuccessView extends StatelessWidget {
                   isIconPresent: false,
                   text: 'Continue',
                   onPressed: () {
+                    booksController.removeAllFromCart();
+
                     router.go(ShopView.path);
                   },
                 ),

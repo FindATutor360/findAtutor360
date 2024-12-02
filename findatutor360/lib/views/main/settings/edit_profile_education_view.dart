@@ -147,7 +147,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                   value: eduLevel.value,
                                   icon: const Icon(
                                       Icons.keyboard_arrow_down_outlined),
-                                  dropdownColor: Colors.white,
+                                  dropdownColor: Theme.of(context).brightness ==
+                                          Brightness.dark
+                                      ? customTheme['secondaryTextColor']
+                                      : customTheme['whiteColor'],
                                   decoration: InputDecoration(
                                     enabledBorder: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10),
@@ -183,8 +186,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                       value: "Diploma",
                                       child: MainText(
                                         text: 'Diploma',
-                                        color:
-                                            customTheme['secondaryTextColor'],
+                                        color: Theme.of(context).brightness !=
+                                                Brightness.dark
+                                            ? customTheme['secondaryTextColor']
+                                            : customTheme['whiteColor'],
                                         fontSize: 16,
                                       ),
                                     ),
@@ -192,8 +197,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                       value: "Degree",
                                       child: MainText(
                                         text: 'Degree',
-                                        color:
-                                            customTheme['secondaryTextColor'],
+                                        color: Theme.of(context).brightness !=
+                                                Brightness.dark
+                                            ? customTheme['secondaryTextColor']
+                                            : customTheme['whiteColor'],
                                         fontSize: 16,
                                       ),
                                     ),
@@ -201,8 +208,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                       value: "Masters",
                                       child: MainText(
                                         text: 'Masters',
-                                        color:
-                                            customTheme['secondaryTextColor'],
+                                        color: Theme.of(context).brightness !=
+                                                Brightness.dark
+                                            ? customTheme['secondaryTextColor']
+                                            : customTheme['whiteColor'],
                                         fontSize: 16,
                                       ),
                                     ),
@@ -210,8 +219,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                       value: "PHD",
                                       child: MainText(
                                         text: 'PHD',
-                                        color:
-                                            customTheme['secondaryTextColor'],
+                                        color: Theme.of(context).brightness !=
+                                                Brightness.dark
+                                            ? customTheme['secondaryTextColor']
+                                            : customTheme['whiteColor'],
                                         fontSize: 16,
                                       ),
                                     ),
@@ -219,8 +230,10 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
                                       value: "Doctrate",
                                       child: MainText(
                                         text: 'Doctrate',
-                                        color:
-                                            customTheme['secondaryTextColor'],
+                                        color: Theme.of(context).brightness !=
+                                                Brightness.dark
+                                            ? customTheme['secondaryTextColor']
+                                            : customTheme['whiteColor'],
                                         fontSize: 16,
                                       ),
                                     ),

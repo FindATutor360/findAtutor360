@@ -13,16 +13,16 @@ abstract class BooksService {
 
   Future<List<Book>> searchBooks(String query);
 
-  Future<void> addBook(
+  Future<Book?> addBook(
     String? title,
-    String? author,
+    String? authorName,
     String? description,
     String? image,
     String? price,
     String? publisher,
     String? category,
     String? smallImage,
-      String? textSnippet,
+    String? textSnippet,
   );
 }
 
@@ -56,9 +56,9 @@ class BooksServiceImpl implements BooksService {
   }
 
   @override
-  Future<void> addBook(
+  Future<Book?> addBook(
     String? title,
-    String? author,
+    String? authorName,
     String? description,
     String? image,
     String? price,
@@ -72,7 +72,7 @@ class BooksServiceImpl implements BooksService {
         id: null,
         userId: _auth?.uid,
         title: title,
-        author: author,
+        authorName: authorName,
         description: description,
         thumbnail: image,
         price: price,
@@ -94,6 +94,7 @@ class BooksServiceImpl implements BooksService {
       log("Error adding book to DB: $e", name: 'debug');
       rethrow;
     }
+    return null;
   }
 
   Stream<List<Book>> fetchUserBooks() {

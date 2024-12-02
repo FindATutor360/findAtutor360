@@ -81,6 +81,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                 CustomTextFormField(
                   hint: 'Enter Book Publisher',
                   controller: _publisherController,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter book publisher';
@@ -102,6 +103,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                 ),
                 CustomTextFormField(
                   hint: 'Enter Book Details',
+                  textCapitalization: TextCapitalization.words,
                   controller: _textSnippetController,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -126,7 +128,10 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                   width: MediaQuery.of(context).size.width * 0.85,
                   child: DropdownButtonFormField(
                     icon: const Icon(Icons.keyboard_arrow_down_outlined),
-                    dropdownColor: Colors.white,
+                    dropdownColor:
+                        Theme.of(context).brightness == Brightness.dark
+                            ? customTheme['secondaryTextColor']
+                            : customTheme['whiteColor'],
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -155,7 +160,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Promgramming",
                         child: MainText(
                           text: 'Promgramming',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -163,7 +170,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Geography",
                         child: MainText(
                           text: 'Geography',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -171,7 +180,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Music",
                         child: MainText(
                           text: 'Music',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -179,7 +190,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Mathematics",
                         child: MainText(
                           text: 'Mathematics',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -187,7 +200,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Health",
                         child: MainText(
                           text: 'Health',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -195,7 +210,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Finance",
                         child: MainText(
                           text: 'Finance',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -203,7 +220,9 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                         value: "Crypto",
                         child: MainText(
                           text: 'Crypto',
-                          color: customTheme['secondaryTextColor'],
+                          color: Theme.of(context).brightness != Brightness.dark
+                              ? customTheme['secondaryTextColor']
+                              : customTheme['whiteColor'],
                           fontSize: 16,
                         ),
                       ),
@@ -279,7 +298,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
           _publisherController.text,
           _textSnippetController.text,
           typeDropdown,
-           context,
+          context,
         );
         log(typeDropdown, name: 'debug');
         _booksController.isLoading.value = false;

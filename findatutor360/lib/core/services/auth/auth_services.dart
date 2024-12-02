@@ -109,6 +109,7 @@ class AuthServiceImpl implements AuthService {
 
       // If user is null, the sign-in process was canceled or failed
       if (googleUser == null) {
+        showSnackMessage(context, "Google sign-in error", isError: true);
         return null;
       }
 
@@ -132,6 +133,7 @@ class AuthServiceImpl implements AuthService {
       return userCredential.user;
     } catch (e) {
       // Handle exceptions and errors
+      showSnackMessage(context, "Google sign-in error: $e", isError: true);
       log("Google sign-in error: $e", name: 'Google sign in');
       return null;
     }
@@ -200,10 +202,14 @@ class AuthServiceImpl implements AuthService {
 
         return userCredential.user; // Return the authenticated user
       } else {
+        showSnackMessage(context, "${result.status}", isError: true);
         log('Facebook sign-in failed: ${result.status}', name: 'Facebook');
         return null;
       }
     } catch (e) {
+      showSnackMessage(context,
+          "An account already exists with the same email address but different sign-in credentials.",
+          isError: true);
       log('Error during Facebook sign-in: $e', name: 'Facebook');
       return null;
     }

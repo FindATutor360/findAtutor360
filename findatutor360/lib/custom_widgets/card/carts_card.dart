@@ -57,8 +57,7 @@ class _CartsCardState extends State<CartsCard> {
 
     final isFile = widget.book.thumbnail != null &&
         File(widget.book.thumbnail!).existsSync();
-    final isUrl = widget.book.thumbnail != null &&
-        Uri.tryParse(widget.book.thumbnail!)?.hasAbsolutePath == true;
+
     return SizedBox(
       width: double.infinity,
       child: Row(
@@ -142,7 +141,9 @@ class _CartsCardState extends State<CartsCard> {
                     softWrap: true,
                   ),
                   MainText(
-                    text: widget.book.author ?? 'Unknown',
+                    text: widget.book.author ??
+                        widget.book.authorName ??
+                        'Unknown',
                     fontSize: 10,
                     fontWeight: FontWeight.w400,
                     color: customTheme['secondaryTextColor'],

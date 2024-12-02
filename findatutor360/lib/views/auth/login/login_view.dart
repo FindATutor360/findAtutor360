@@ -177,11 +177,13 @@ class _LoginViewState extends State<LoginView> {
               ),
               const SizedBox(height: 20),
               Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text('Don\'t have an account?',
-                    style: GoogleFonts.manrope(
-                        color: customTheme['mainTextColor'],
-                        fontSize: 15,
-                        fontWeight: FontWeight.w400)),
+                Text(
+                  'Don\'t have an account?',
+                  style: GoogleFonts.manrope(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
                 TextButton(
                   onPressed: () {
                     context.go(RegisterView.path);

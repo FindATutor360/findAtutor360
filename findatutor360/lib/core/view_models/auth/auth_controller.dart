@@ -101,9 +101,6 @@ class AuthController extends BaseProvider {
           photoUrl: user.photoURL,
         );
 
-        // await user.updateProfile(displayName: user.displayName);
-        // await user.verifyBeforeUpdateEmail(user.email!);
-
         await storeUserToken(user);
       }
 
@@ -133,9 +130,6 @@ class AuthController extends BaseProvider {
       );
 
       if (user != null) {
-        // await user.updateProfile(displayName: fullName);
-        // await user.verifyBeforeUpdateEmail(email);
-
         await sendEmailVerification(
           user,
           context,
@@ -145,9 +139,6 @@ class AuthController extends BaseProvider {
 
         await storeUserToken(user);
       } else {
-        // await user?.updateProfile(displayName: fullName);
-        // await user?.verifyBeforeUpdateEmail(email);
-
         await sendEmailVerification(
           user,
           context,
@@ -199,22 +190,19 @@ class AuthController extends BaseProvider {
     _isLoadings.value = true;
 
     try {
-      User? user = await _authServiceImpl.continueWithFacebook(context);
+      User? user = await _authServiceImpl.continueWithFacebook(
+        context,
+      );
 
       if (user != null) {
-        await sendEmailVerification(user, context,
-            name: user.displayName, email: user.email, photoUrl: user.photoURL);
+        await sendEmailVerification(
+          user,
+          context,
+          name: user.displayName ?? '',
+          email: user.email ?? '',
+          photoUrl: user.photoURL ?? '',
+        );
         await storeUserToken(user);
-      } else {
-        // await user?.updateProfile(displayName: user.displayName ?? '');
-        // await user?.verifyBeforeUpdateEmail(user.email ?? '');
-
-        await sendEmailVerification(user, context,
-            name: user?.displayName,
-            email: user?.email,
-            photoUrl: user?.photoURL);
-
-        await storeUserToken(user!);
       }
 
       return user;
