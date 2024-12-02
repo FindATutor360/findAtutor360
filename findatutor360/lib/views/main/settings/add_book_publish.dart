@@ -81,6 +81,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                 CustomTextFormField(
                   hint: 'Enter Book Publisher',
                   controller: _publisherController,
+                  textCapitalization: TextCapitalization.words,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return 'Please enter book publisher';
@@ -102,6 +103,7 @@ class _AddBookPublishViewState extends State<AddBookPublishView> {
                 ),
                 CustomTextFormField(
                   hint: 'Enter Book Details',
+                  textCapitalization: TextCapitalization.words,
                   controller: _textSnippetController,
                   validator: (value) {
                     if (value!.isEmpty) {

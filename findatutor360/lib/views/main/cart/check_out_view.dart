@@ -357,6 +357,7 @@ class _CheckOutViewState extends State<CheckOutView> {
                                                 3.8,
                                         child: MainText(
                                           text: book.author ??
+                                              book.authorName ??
                                               'Marcelos Ramequin',
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400,

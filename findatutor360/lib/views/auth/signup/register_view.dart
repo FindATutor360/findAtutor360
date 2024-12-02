@@ -31,12 +31,12 @@ class RegisterView extends StatefulWidget {
 }
 
 class _RegisterViewState extends OperationRunnerState<RegisterView> {
-  bool checkedValue = false;
   final _formKey = GlobalKey<FormState>();
   final _fullNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final checkedValue = ValueNotifier<bool>(false);
 
   String? password, confirmPassword;
 
@@ -168,24 +168,26 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                   ),
                 ),
                 const SizedBox(height: 15),
-                Container(
-                  margin: const EdgeInsets.only(left: 15),
-                  child: CheckboxListTile(
-                    title: Text(
-                      "I accept the Terms and Conditions",
-                      style: GoogleFonts.manrope(
-                          fontSize: 17, fontWeight: FontWeight.w400),
-                    ),
-                    value: checkedValue,
-                    activeColor: customTheme['primaryColor'],
-                    onChanged: (newValue) {
-                      setState(() {
-                        checkedValue = newValue!;
-                      });
-                    },
-                    controlAffinity: ListTileControlAffinity.leading,
-                  ),
-                ),
+                ValueListenableBuilder<bool>(
+                    valueListenable: checkedValue,
+                    builder: (context, value, child) {
+                      return Container(
+                        margin: const EdgeInsets.only(left: 15),
+                        child: CheckboxListTile(
+                          title: Text(
+                            "I accept the Terms and Conditions",
+                            style: GoogleFonts.manrope(
+                                fontSize: 17, fontWeight: FontWeight.w400),
+                          ),
+                          value: value,
+                          activeColor: customTheme['primaryColor'],
+                          onChanged: (bool? newValue) {
+                            checkedValue.value = newValue!;
+                          },
+                          controlAffinity: ListTileControlAffinity.leading,
+                        ),
+                      );
+                    }),
                 const SizedBox(height: 20),
                 Align(
                   child: ValueListenableBuilder<bool>(
@@ -198,7 +200,8 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                               text: 'Create Account',
                               fontWeight: FontWeight.w600,
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (_formKey.currentState!.validate() &&
+                                    checkedValue.value != false) {
                                   await signUp();
                                 }
                               },
@@ -229,11 +232,13 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                 ),
                 const SizedBox(height: 20),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text('Already have an account?',
-                      style: GoogleFonts.manrope(
-                          color: customTheme['mainTextColor'],
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400)),
+                  Text(
+                    'Already have an account?',
+                    style: GoogleFonts.manrope(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
                   TextButton(
                     onPressed: () {
                       context.go(LoginView.path);

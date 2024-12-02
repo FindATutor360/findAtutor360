@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:findatutor360/custom_widgets/button/custom_like_button.dart';
 import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class TrendingBookWidget extends StatelessWidget {
   const TrendingBookWidget({
@@ -34,17 +36,44 @@ class TrendingBookWidget extends StatelessWidget {
         child: Row(
           children: [
             RepaintBoundary(
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.34,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  color: customTheme['secondaryColor'],
-                  borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(image ?? ''),
-                    fit: BoxFit.cover,
-                  ),
-                ),
+              child: CachedNetworkImage(
+                imageUrl: image!,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width * 0.34,
+                    height: MediaQuery.of(context).size.height,
+                    decoration: BoxDecoration(
+                      color: customTheme['fieldColor'],
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                        image: NetworkImage(image ?? ''),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
+                },
+                placeholder: (context, image) {
+                  return Shimmer.fromColors(
+                    baseColor: Colors.grey.shade300,
+                    highlightColor: Colors.grey.shade100,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.34,
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.grey,
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return Container(
+                    width: MediaQuery.of(context).size.width * 0.34,
+                    height: MediaQuery.of(context).size.height,
+                    color: Colors.grey,
+                    child: const Icon(
+                      Icons.error_outline_sharp,
+                      color: Colors.red,
+                    ),
+                  );
+                },
               ),
             ),
             const SizedBox(

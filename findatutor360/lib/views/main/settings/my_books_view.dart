@@ -105,6 +105,7 @@ class _MyBooksViewState extends State<MyBooksView> {
                             child: ActiveBookCard(
                               image: userBook.thumbnail ?? '',
                               title: userBook.title ?? '',
+                              author: userBook.authorName ?? '',
                               lessonPecent: '77%',
                             ),
                           );

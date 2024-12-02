@@ -4,6 +4,7 @@ import 'package:findatutor360/custom_widgets/button/primary_button.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
+import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -147,6 +148,9 @@ class AddCourseSuccessView extends StatelessWidget {
                                       false; // Set loading back to false after 2 seconds
                                 });
                                 coursesController.saveCourseDetails(context);
+                                showSnackMessage(
+                                    context, "Course added successfully",
+                                    isError: true);
                                 Navigator.pop(context);
                                 Navigator.pop(context);
                                 Navigator.pop(context);

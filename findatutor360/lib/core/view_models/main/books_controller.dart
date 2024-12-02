@@ -23,7 +23,7 @@ class BooksController extends BaseProvider {
   double totalPrice = 0.0;
 
   String? _title;
-  String? _author;
+  String? _authorName;
   String? _description;
   String? _price;
   String? _publisher;
@@ -32,12 +32,17 @@ class BooksController extends BaseProvider {
   String? _smallImage;
   String? _textSnippet;
 
-  Future<void> addBookBasicDetails(String? title, String? author,
-      String? description, String? price, BuildContext context) async {
+  Future<void> addBookBasicDetails(
+    String? title,
+    String? authorName,
+    String? description,
+    String? price,
+    BuildContext context,
+  ) async {
     _isLoading.value = true;
     try {
       _title = title;
-      _author = author;
+      _authorName = authorName;
       _description = description;
       _price = price;
       _isLoading.value = false;
@@ -88,10 +93,10 @@ class BooksController extends BaseProvider {
     }
   }
 
-  Future<void> saveBookDetails(BuildContext context) async {
+  Future<Book?> saveBookDetails(BuildContext context) async {
     _isLoading.value = true;
     if (_title == null ||
-        _author == null ||
+        _authorName == null ||
         _description == null ||
         _price == null) {
       _isLoading.value = false;
@@ -106,7 +111,7 @@ class BooksController extends BaseProvider {
     try {
       await _booksServiceImpl.addBook(
         _title,
-        _author,
+        _authorName,
         _description,
         _image,
         _price,
@@ -118,7 +123,7 @@ class BooksController extends BaseProvider {
       _isLoading.value = false;
       log("Book saved successfully", name: "debug");
       // ignore: use_build_context_synchronously
-      showSnackMessage(context, "Book added successfully", isError: false);
+
       resetBookDetails();
     } catch (e) {
       _isLoading.value = false;
@@ -127,11 +132,12 @@ class BooksController extends BaseProvider {
 
       rethrow;
     }
+    return null;
   }
 
   void resetBookDetails() {
     _title = null;
-    _author = null;
+    _authorName = null;
     _description = null;
     _price = null;
     _publisher = null;

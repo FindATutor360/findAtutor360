@@ -8,11 +8,13 @@ class ActiveBookCard extends StatelessWidget {
   const ActiveBookCard({
     required this.image,
     required this.title,
+    required this.author,
     required this.lessonPecent,
     super.key,
   });
   final String image;
   final String title;
+  final String author;
   final String lessonPecent;
 
   @override
@@ -28,31 +30,52 @@ class ActiveBookCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: MediaQuery.sizeOf(context).width / 2.2,
-            height: MediaQuery.sizeOf(context).height / 5.2,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              color: customTheme['fieldColor'],
-              image: DecorationImage(
-                image: FileImage(
-                  File(image),
+          image.isEmpty
+              ? Container(
+                  width: MediaQuery.sizeOf(context).width / 2.2,
+                  height: MediaQuery.sizeOf(context).height / 6,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: customTheme['fieldColor'],
+                  ),
+                  child: const Icon(
+                    Icons.error_outline_sharp,
+                    color: Colors.red,
+                  ),
+                )
+              : Container(
+                  width: MediaQuery.sizeOf(context).width / 2.2,
+                  height: MediaQuery.sizeOf(context).height / 6,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: customTheme['fieldColor'],
+                    image: DecorationImage(
+                      image: FileImage(
+                        File(image),
+                      ),
+                      fit: BoxFit.fill,
+                    ),
+                  ),
                 ),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   MainText(
                     text: title,
-                    fontSize: 17,
+                    fontSize: 15,
                     softWrap: true,
                     overflow: TextOverflow.clip,
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  MainText(
+                    text: author,
+                    fontSize: 14,
+                    softWrap: true,
                   ),
                   const SizedBox(
                     height: 8,

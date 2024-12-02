@@ -141,7 +141,9 @@ class _CartsCardState extends State<CartsCard> {
                     softWrap: true,
                   ),
                   MainText(
-                    text: widget.book.author ?? 'Unknown',
+                    text: widget.book.author ??
+                        widget.book.authorName ??
+                        'Unknown',
                     fontSize: 10,
                     fontWeight: FontWeight.w400,
                     color: customTheme['secondaryTextColor'],

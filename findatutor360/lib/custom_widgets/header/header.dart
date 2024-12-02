@@ -6,6 +6,7 @@ import 'package:findatutor360/custom_widgets/button/custom_icon_button.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/views/main/settings/notification_not_setup.dart';
+import 'package:findatutor360/views/main/settings/personal_profile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -94,27 +95,34 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                                 return const Center(
                                     child: Text('No user data available.'));
                               }
-                              return Center(
-                                child: !isFile
-                                    ? CircleAvatar(
-                                        backgroundColor:
-                                            const Color(0xFF0476AF),
-                                        radius: 20,
-                                        backgroundImage: NetworkImage(
-                                          user.photoUrl ??
-                                              'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                        ),
-                                      )
-                                    : CircleAvatar(
-                                        backgroundColor:
-                                            const Color(0xFF0476AF),
-                                        radius: 20,
-                                        backgroundImage: FileImage(
-                                          File(
-                                            user.photoUrl ?? '',
+                              return InkWell(
+                                onTap: () {
+                                  router.push(
+                                    PersonalProfileView.path,
+                                  );
+                                },
+                                child: Center(
+                                  child: !isFile
+                                      ? CircleAvatar(
+                                          backgroundColor:
+                                              const Color(0xFF0476AF),
+                                          radius: 20,
+                                          backgroundImage: NetworkImage(
+                                            user.photoUrl ??
+                                                'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
                                           ),
-                                        ),
-                                      ), //CircleAvatar
+                                        )
+                                      : CircleAvatar(
+                                          backgroundColor:
+                                              const Color(0xFF0476AF),
+                                          radius: 20,
+                                          backgroundImage: FileImage(
+                                            File(
+                                              user.photoUrl ?? '',
+                                            ),
+                                          ),
+                                        ), //CircleAvatar
+                                ),
                               );
                             },
                           )

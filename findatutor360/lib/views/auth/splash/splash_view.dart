@@ -8,7 +8,7 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
-import 'package:findatutor360/views/auth/onboarding/onboarding_view.dart';
+import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -35,10 +35,9 @@ class _SplashViewState extends State<SplashView> {
 
     AppPreferences appPreferences = AppPreferences();
     var connectivityResult = await Connectivity().checkConnectivity();
-    bool isConnected = connectivityResult.contains(ConnectivityResult.none);
+    bool isNotConnected = connectivityResult.contains(ConnectivityResult.none);
 
-    // If not connected to the internet, show an error and return
-    if (isConnected) {
+    if (isNotConnected) {
       showSnackMessage(
           context, "No internet connection. Please connect to the internet.",
           isError: true);
@@ -50,34 +49,41 @@ class _SplashViewState extends State<SplashView> {
       if (!mounted) return;
       User? user = FirebaseAuth.instance.currentUser;
 
-      // Check if user exists and reload to ensure the state is up-to-date
+      bool hasSeenOnboarding =
+          await appPreferences.getBool('hasSeenOnboarding');
+
       await user?.reload();
-      user = FirebaseAuth.instance.currentUser; // Refresh user data
+      user = FirebaseAuth.instance.currentUser;
 
-      String? userToken = await user?.getIdToken();
+      log('$hasSeenOnboarding', name: 'hasSeenOnboarding');
 
-      if (user != null && user.emailVerified && userToken != null) {
-        AuthController authController =
-            Provider.of<AuthController>(context, listen: false);
+      if (user != null) {
+        String? userToken = await user.getIdToken();
 
-        authController.startUserInfo(user.uid);
+        if (user.emailVerified && userToken != null) {
+          AuthController authController =
+              Provider.of<AuthController>(context, listen: false);
 
-        log('User id: ${user.uid}', name: 'debug');
+          authController.startUserInfo(user.uid);
 
-        bool showOnboarding = await appPreferences.getBool('hasSeenOnboarding');
-        if (showOnboarding) {
-          authController.userStream?.listen((updatedUserInfo) async {
-            if (updatedUserInfo != null) {
-              authController.setUserInfo(updatedUserInfo);
+          log('User ID: ${user.uid}', name: 'debug');
 
-              context.pushReplacement(HomeView.path);
-            }
-          });
+          if (hasSeenOnboarding) {
+            authController.userStream?.listen((updatedUserInfo) async {
+              if (updatedUserInfo != null) {
+                authController.setUserInfo(updatedUserInfo);
+                context.pushReplacement(HomeView.path);
+              }
+            });
+          } else {
+            context.pushReplacement(WelcomeView.path);
+          }
         } else {
           context.pushReplacement(LoginView.path);
         }
       } else {
-        context.pushReplacement(OnboardingView.path);
+        context.pushReplacement(
+            hasSeenOnboarding ? LoginView.path : WelcomeView.path);
       }
     } catch (e) {
       // Handle network or unexpected errors

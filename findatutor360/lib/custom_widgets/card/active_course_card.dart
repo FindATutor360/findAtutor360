@@ -56,19 +56,6 @@ class ActiveCourseCard extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: image == null
-                        ? Shimmer.fromColors(
-                            baseColor: Colors.grey.shade300,
-                            highlightColor: Colors.grey.shade100,
-                            child: SizedBox(
-                              width: double.infinity,
-                              height: MediaQuery.sizeOf(context).height / 7.5,
-                            ),
-                          )
-                        : SizedBox(
-                            width: double.infinity,
-                            height: MediaQuery.sizeOf(context).height / 7.5,
-                          ),
                   ),
                 )
               : RepaintBoundary(

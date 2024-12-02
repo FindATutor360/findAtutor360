@@ -14,8 +14,6 @@ class OnboardingView extends StatelessWidget {
 
   final _pageController = PageController();
 
-  final appPreferences = AppPreferences();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +21,6 @@ class OnboardingView extends StatelessWidget {
         pageController: _pageController,
         onBoardData: onBoardData,
         titleStyles: GoogleFonts.manrope(
-          color: customTheme['mainTextColor'],
           fontSize: 34,
           fontWeight: FontWeight.w700,
           letterSpacing: 0.15,
@@ -44,6 +41,7 @@ class OnboardingView extends StatelessWidget {
         //Skip button
         skipButton: TextButton(
           onPressed: () async {
+            final appPreferences = AppPreferences();
             await appPreferences.setBool('hasSeenOnboarding', true);
             context.pushReplacement(WelcomeView.path);
           },
@@ -90,9 +88,11 @@ class OnboardingView extends StatelessWidget {
       _pageController.animateToPage(onBoardState.page + 1,
           duration: const Duration(milliseconds: 250),
           curve: Curves.easeInOutSine);
+      final appPreferences = AppPreferences();
+      await appPreferences.setBool('hasSeenOnboarding', true);
     } else {
       //print("nextButton pressed");
-
+      final appPreferences = AppPreferences();
       await appPreferences.setBool('hasSeenOnboarding', true);
       context.pushReplacement(WelcomeView.path);
     }
