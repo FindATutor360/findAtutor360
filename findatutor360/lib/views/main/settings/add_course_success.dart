@@ -169,7 +169,7 @@ class AddCourseSuccessView extends StatelessWidget {
                               isIconPresent: false,
                               fontSize: 16,
                               onPressed: () {
-                                coursesController.resetBookDetails();
+                                coursesController.resetCourseDetails();
                               },
                             ),
                           ],

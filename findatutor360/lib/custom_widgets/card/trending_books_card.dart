@@ -108,7 +108,8 @@ class TrendingBookWidget extends StatelessWidget {
                     ),
                     CustomRatingBar(
                       initialRating: 4,
-                      onRatingUpdate: (double) {},
+                      onRatingUpdate: (v) {},
+                      canRate: false,
                     ),
                     const Flexible(
                       child: Row(

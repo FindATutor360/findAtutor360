@@ -53,7 +53,7 @@ class BookShopCard extends StatelessWidget {
             children: [
               CustomRatingBar(
                 initialRating: 3,
-                onRatingUpdate: (double) {},
+                onRatingUpdate: (v) {},
               ),
               Expanded(
                 child: Row(

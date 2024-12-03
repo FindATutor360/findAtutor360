@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:flutter/foundation.dart';
@@ -28,7 +29,7 @@ Future<T?> runPersistedQuery<T>(
           return deserializer(data);
         }
       } catch (e) {
-        print("===>error $e");
+        log("===>error $e", name: 'debug');
       }
     }
 
@@ -41,7 +42,7 @@ Future<T?> runPersistedQuery<T>(
       );
       return newData;
     } catch (e) {
-      print('Error fetching data: $e');
+      log('Error fetching data: $e', name: 'debug');
       return null;
     }
   } catch (e) {

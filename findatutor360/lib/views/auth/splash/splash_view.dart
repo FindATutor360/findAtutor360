@@ -103,18 +103,6 @@ class _SplashViewState extends State<SplashView> {
           height: 200,
         ),
       ),
-
-      //     AnimatedSplash(
-      //   type: Transition.fade,
-      //   backgroundColor: customTheme['whiteColor']!,
-      //   navigator: OnboardingView(),
-      //   // durationInSeconds: 4,
-      //   child: Image.asset(
-      //     'assets/images/logo.png',
-      //     width: 200,
-      //     height: 200,
-      //   ),
-      //  )
     );
   }
 

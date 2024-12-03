@@ -61,7 +61,6 @@ class MyApp extends StatelessWidget {
               displayColor: customTheme['mainTextColor'],
             ),
           ),
-
           darkTheme: ThemeData.dark().copyWith(
             appBarTheme: const AppBarTheme(color: Color(0xFF253341)),
             brightness: Brightness.dark,
@@ -79,9 +78,6 @@ class MyApp extends StatelessWidget {
               thickness: 1,
             ),
           ),
-          //Get the current theme value from the settings screen and set it here
-          // themeMode: isDarkModeEnabled ? ThemeMode.dark : ThemeMode.light,
-          //themeMode: ThemeMode.light,
           debugShowCheckedModeBanner: false,
           themeMode: themeController.currentTheme,
         );

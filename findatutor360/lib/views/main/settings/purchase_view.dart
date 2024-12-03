@@ -1,5 +1,5 @@
 import 'package:findatutor360/custom_widgets/button/primary_button.dart';
-import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
+import 'package:findatutor360/custom_widgets/card/expansion_tile.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';

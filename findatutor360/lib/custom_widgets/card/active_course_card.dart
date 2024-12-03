@@ -105,11 +105,13 @@ class ActiveCourseCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  MainText(
-                    text: title ?? '',
-                    fontSize: 14,
-                    overflow: TextOverflow.clip,
-                    softWrap: true,
+                  Flexible(
+                    child: MainText(
+                      text: title ?? '',
+                      fontSize: 14,
+                      softWrap: true,
+                      overflow: TextOverflow.clip,
+                    ),
                   ),
                   const SizedBox(
                     height: 10,

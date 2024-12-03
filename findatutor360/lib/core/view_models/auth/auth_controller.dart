@@ -28,6 +28,7 @@ class AuthController extends BaseProvider {
 
   late Stream<Users?>? userStream;
 
+  // Temporary variables to store User info
   String? _fullName;
   String? _photoUrl;
   String? _phoneNumber;
@@ -43,6 +44,7 @@ class AuthController extends BaseProvider {
   String? _awardDetails;
   String? _awardImageUrl;
 
+  // Set User Info
   void setUserInfo(Users users) {
     _user = users;
     notifyListeners();
@@ -57,6 +59,7 @@ class AuthController extends BaseProvider {
     });
   }
 
+  // Store user token
   Future<void> storeUserToken(User user) async {
     String? userToken = await user.getIdToken();
     if (userToken != null) {
@@ -67,6 +70,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Clear user Data
   void clearUserData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (user != null) {
@@ -79,11 +83,13 @@ class AuthController extends BaseProvider {
     });
   }
 
+  // Handle errors
   Future<void> _handleError(BuildContext context, dynamic e) async {
     log('$e', name: 'debug');
     showSnackMessage(context, '$e', isError: true);
   }
 
+// Google Sign-In implementation
   Future<User?> continueWithGoogle(BuildContext context) async {
     _isLoadings.value = true;
     try {
@@ -113,6 +119,7 @@ class AuthController extends BaseProvider {
     return null;
   }
 
+  // Registers a user
   Future<User?> signUp(
     BuildContext context, {
     required String fullName,
@@ -158,6 +165,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+// Logs in a user,
   Future<User?> logIn(
     BuildContext context, {
     required String email,
@@ -186,6 +194,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+// Facebook Sign-In implementation
   Future<User?> continueWithFacebook(BuildContext context) async {
     _isLoadings.value = true;
 
@@ -215,6 +224,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Sends password reset email
   Future<void> resetPassword({required String email}) async {
     _isLoadings.value = true;
     try {
@@ -225,6 +235,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Update personal details
   Future<void> updatePersonalDetails(
     String? fullName,
     String? backGround,
@@ -245,6 +256,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Update contact details
   Future<void> updateContactDetails(
     String? phoneNumber,
     String? photoUrl,
@@ -261,6 +273,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Update education details
   Future<void> updateEducationDetails(
     String? eduLevel,
     String? college,
@@ -289,6 +302,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Update User info
   Future<void> updateUserInfo(BuildContext context) async {
     _isLoadings.value = true;
     try {
@@ -333,12 +347,14 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Logs out
   Future<void> logout() async {
     await appPreferences.remove('userToken');
     await _authServiceImpl.logout();
     log('Log out successfully', name: 'debug');
   }
 
+  // Send Email verification
   Future<void> sendEmailVerification(
     User? user,
     BuildContext context, {
@@ -378,9 +394,6 @@ class AuthController extends BaseProvider {
             updatedUserInfo.awardImageUrl ?? _awardImageUrl,
           );
 
-          // await user.updateProfile(photoURL: photoUrl);
-          // await user.reload();
-
           await user.sendEmailVerification();
 
           log('Verification email sent', name: 'debug');
@@ -408,12 +421,8 @@ class AuthController extends BaseProvider {
             updatedUserInfo.awardDetails ?? _awardDetails,
             updatedUserInfo.awardImageUrl ?? _awardImageUrl,
           );
-
-          // await user.updateProfile(photoURL: photoUrl);
-          // await user.reload();
         }
 
-        // Stop the stream once we are done
         break;
       }
     } catch (e) {
@@ -422,6 +431,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Adds a user's information
   Future<void> addUserInfo(
     User user,
     String? userName,
@@ -468,6 +478,7 @@ class AuthController extends BaseProvider {
     }
   }
 
+  // Get user info by ID
   Stream<Users?> getUserInfo(String userId) {
     clearUserData();
     try {
@@ -477,35 +488,7 @@ class AuthController extends BaseProvider {
     }
   }
 
-  Stream<List<Users>> getUserStream() {
-    return _authServiceImpl.getUsersStream();
-  }
-
-  Future<void> markEmailAsVerified(String userId) async {
-    try {
-      await _authServiceImpl.markEmailAsVerified(userId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<void> checkEmailVerified(String userId) async {
-    try {
-      await _authServiceImpl.checkEmailVerified(userId);
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  Future<Users?> getUserByEmail(String email) async {
-    try {
-      await _authServiceImpl.getUserByEmail(email);
-    } catch (e) {
-      log('Error fetching user by email: $e', name: 'debug');
-    }
-    return null;
-  }
-
+  // Reset user's information details
   void resetUserInfoDetails() {
     _fullName = null;
     _backGround = null;
