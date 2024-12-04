@@ -92,7 +92,7 @@ class ShopBookWidget extends StatelessWidget {
                   const SizedBox(height: 5),
                   CustomRatingBar(
                     initialRating: 2.5,
-                    onRatingUpdate: (double) {},
+                    onRatingUpdate: (v) {},
                   ),
                   const SizedBox(height: 5),
                   Row(

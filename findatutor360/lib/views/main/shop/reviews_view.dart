@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/main/review_model.dart';
 import 'package:findatutor360/core/view_models/main/review_controller.dart';
-import 'package:findatutor360/custom_widgets/card/expansionTile.dart';
+import 'package:findatutor360/custom_widgets/card/expansion_tile.dart';
 import 'package:findatutor360/custom_widgets/dialogs/review_dialog.dart';
 import 'package:findatutor360/custom_widgets/header/back_icon_header.dart';
 import 'package:findatutor360/custom_widgets/rating/custom_rating_bar.dart';
@@ -219,7 +219,7 @@ class Reviews extends StatelessWidget {
                           review: review.comment ?? '',
                           date: formattedDate,
                           rate: review.rating ?? 0,
-                          onRatingUpdate: (double) {},
+                          onRatingUpdate: (v) {},
                         );
                       },
                     );

@@ -15,24 +15,34 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:provider/provider.dart';
 
 abstract class AuthService {
+  // Handles Google sign-in and returns the authenticated Firebase user
   Future<User?> continueWithGoogle(BuildContext context);
+
+  // Registers a new user with email and password
   Future<User?> signUp(
     BuildContext context, {
     required String fullName,
     required String email,
     required String password,
   });
+
+  // Logs in a user with email and password, ensuring the email is verified
   Future<User?> logIn(
     BuildContext context, {
     required String email,
     required String password,
   });
-  Future<User?> continueWithFacebook(
-    BuildContext context,
-  );
+
+  // Handles Facebook sign-in and returns the authenticated Firebase user
+  Future<User?> continueWithFacebook(BuildContext context);
+
+  // Sends a password reset email to the user
   Future<void> resetPassword({required String email});
+
+  // Logs out the user from all authentication providers
   Future<void> logout();
 
+  // Adds user information to Firestore database after registration
   Future<void> addUserInfo(
     User user,
     String? userName,
@@ -52,6 +62,7 @@ abstract class AuthService {
     String? awardImageUrl,
   );
 
+  // Updates existing user information in Firestore
   Future<void> updateUserInfo(
     BuildContext context, {
     String? fullName,
@@ -70,15 +81,8 @@ abstract class AuthService {
     String? awardImageUrl,
   });
 
-  Future<Users?> getUserByEmail(String email);
-
+  // Retrieves a user document from Firestore by userID
   Stream<Users?> getUserInfo(String userId);
-
-  Stream<List<Users>> getUsersStream();
-
-  Future<void> markEmailAsVerified(String userId);
-
-  Future<void> checkEmailVerified(String userId);
 }
 
 class AuthServiceImpl implements AuthService {
@@ -89,6 +93,7 @@ class AuthServiceImpl implements AuthService {
   final String webClientID = dotenv.env['WEB_CLIENT_ID'] ?? '';
   final String hostedDomainID = dotenv.env['HOSTED_DOMAIN'] ?? '';
 
+  // Google Sign-In implementation for both Web and Native platforms
   @override
   Future<User?> continueWithGoogle(BuildContext context) async {
     try {
@@ -139,6 +144,7 @@ class AuthServiceImpl implements AuthService {
     }
   }
 
+  // Registers a user and returns the created user
   @override
   Future<User?> signUp(
     BuildContext context, {
@@ -154,6 +160,7 @@ class AuthServiceImpl implements AuthService {
     return user;
   }
 
+  // Logs in a user, requiring email verification
   @override
   Future<User?> logIn(
     BuildContext context, {
@@ -181,6 +188,7 @@ class AuthServiceImpl implements AuthService {
     return null;
   }
 
+  // Facebook Sign-In implementation
   @override
   Future<User?> continueWithFacebook(BuildContext context) async {
     try {
@@ -215,11 +223,13 @@ class AuthServiceImpl implements AuthService {
     }
   }
 
+  // Sends password reset email
   @override
   Future<void> resetPassword({required String email}) async {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
+// Adds a user's information to Firestore after registration
   @override
   Future<void> addUserInfo(
     User user,
@@ -271,6 +281,7 @@ class AuthServiceImpl implements AuthService {
     log("User added to DB successfully!", name: 'debug');
   }
 
+// Updates existing user information in Firestore
   @override
   Future<void> updateUserInfo(
     BuildContext context, {
@@ -320,6 +331,7 @@ class AuthServiceImpl implements AuthService {
     log("User info updated successfully!", name: 'debug');
   }
 
+  // Retrieves a user document from Firestore by userID
   @override
   Stream<Users?> getUserInfo(String userId) {
     return _fireStore.collection('Users').doc(userId).snapshots().map((data) {
@@ -331,62 +343,7 @@ class AuthServiceImpl implements AuthService {
     });
   }
 
-  @override
-  Future<void> markEmailAsVerified(String userId) async {
-    await FirebaseFirestore.instance.collection('Users').doc(userId).update({
-      'emailVerified': true,
-    });
-  }
-
-  @override
-  Future<void> checkEmailVerified(String userId) async {
-    final userInfo = await getUserInfo(userId).first;
-
-    if (userInfo != null) {
-      bool emailVerifiedBefore = userInfo.emailVerified;
-
-      if (emailVerifiedBefore) {
-        log("Email was verified before.");
-      } else {
-        log("Email was not verified before.");
-      }
-    }
-  }
-
-  @override
-  Stream<List<Users>> getUsersStream() {
-    return FirebaseFirestore.instance
-        .collection('Users')
-        .snapshots()
-        .map((QuerySnapshot query) {
-      List<Users> users = [];
-      for (var doc in query.docs) {
-        users.add(Users.fromJson(doc.data() as Map<String, dynamic>));
-      }
-      return users.where((user) => user.uId != _auth.currentUser?.uid).toList();
-    });
-  }
-
-  @override
-  Future<Users?> getUserByEmail(String email) async {
-    // Query the Firestore collection to find the user by email
-    final querySnapshot = await _fireStore
-        .collection('Users') // Replace 'users' with your actual collection name
-        .where('email', isEqualTo: email)
-        .limit(1) // Limit to 1 result for optimization
-        .get();
-
-    // Check if the user was found
-    if (querySnapshot.docs.isNotEmpty) {
-      // Convert the document data to a Users instance
-      final userData = querySnapshot.docs.first.data();
-      return Users.fromJson(userData);
-    }
-
-    // Return null if no user is found or an error occurs
-    return null;
-  }
-
+  // Logs out from Firebase and Facebook
   @override
   Future<void> logout() async {
     await _auth.signOut();
