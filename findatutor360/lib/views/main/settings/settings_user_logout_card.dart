@@ -1,4 +1,5 @@
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
+import 'package:findatutor360/custom_widgets/dialogs/log_out_dialog.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -23,9 +24,19 @@ class _SettingsUserLogoutCardState extends State<SettingsUserLogoutCard> {
     _authController = context.watch<AuthController>();
     return InkWell(
       onTap: () async {
-        await _authController.logout().then(
-              (value) => context.pushReplacement(LoginView.path),
-            );
+        // await _authController.logout().then(
+        //       (value) => context.pushReplacement(LoginView.path),
+        //     );
+        Navigator.of(context).push(
+          LogOutDialog(
+            context,
+            logOutTap: () async {
+              await _authController.logout(context).then(
+                    (value) => context.pushReplacement(LoginView.path),
+                  );
+            },
+          ),
+        );
       },
       child: Container(
         width: MediaQuery.of(context).size.width,

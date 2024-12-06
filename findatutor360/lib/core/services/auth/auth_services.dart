@@ -348,6 +348,7 @@ class AuthServiceImpl implements AuthService {
   Future<void> logout() async {
     await _auth.signOut();
     await facebookAuth.logOut();
+
     log('Log out successfully', name: 'debug');
   }
 }

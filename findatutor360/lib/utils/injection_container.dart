@@ -4,6 +4,7 @@ import 'package:findatutor360/core/services/main/course_service.dart';
 import 'package:findatutor360/core/services/main/message_service.dart';
 import 'package:findatutor360/core/services/main/review_service.dart';
 import 'package:findatutor360/core/services/main/theme.service.dart';
+import 'package:findatutor360/core/services/main/tutor_service.dart';
 import 'package:get_it/get_it.dart';
 
 GetIt locator = GetIt.instance;
@@ -25,5 +26,8 @@ void setupLocator() {
   );
   locator.registerLazySingleton(
     () => ReviewServiceImpl(),
+  );
+  locator.registerLazySingleton(
+    () => TutorsServiceImpl(),
   );
 }

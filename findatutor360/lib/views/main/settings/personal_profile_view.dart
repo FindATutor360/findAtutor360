@@ -159,6 +159,7 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                             onPressed: () {
                               Navigator.of(context).push(
                                 PopUpDialog(
+                                  context,
                                   firstText: 'Book',
                                   secondText: 'Course',
                                   firstTextTap: () {

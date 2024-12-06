@@ -49,6 +49,7 @@ class _SettingsViewContentState extends State<SettingsViewContent> {
                 onTap: () {
                   Navigator.of(context).push(
                     PopUpDialog(
+                      context,
                       firstText: 'English',
                       secondText: ' French',
                     ),

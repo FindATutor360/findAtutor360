@@ -5,6 +5,7 @@ import 'package:findatutor360/core/view_models/main/courses_controller.dart';
 import 'package:findatutor360/core/view_models/main/message_controller.dart';
 import 'package:findatutor360/core/view_models/main/review_controller.dart';
 import 'package:findatutor360/core/view_models/main/theme_controller.dart';
+import 'package:findatutor360/core/view_models/main/tutors_controller.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -27,6 +28,9 @@ class AppProviders {
     ),
     ChangeNotifierProvider(
       create: (_) => ReviewController(),
+    ),
+    ChangeNotifierProvider<TutorsController>(
+      create: (_) => TutorsController(),
     ),
   ];
 }
