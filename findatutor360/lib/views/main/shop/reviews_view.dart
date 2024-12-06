@@ -99,6 +99,7 @@ class Reviews extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).push(
                     RatingDialog(
+                      context,
                       initialRating: 1,
                       onSubmit: (rating, comment) async {
                         await reviewController.saveReview(

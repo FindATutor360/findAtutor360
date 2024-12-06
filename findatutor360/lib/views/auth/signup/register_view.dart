@@ -47,6 +47,9 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
   @override
   Widget build(BuildContext context) {
     _authController = context.read<AuthController>();
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black);
 
     return PopScope(
       canPop: false,
@@ -114,7 +117,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                             _passwordvisible == true
                                 ? Iconsax.eye
                                 : Iconsax.eye_slash,
-                            color: customTheme['mainTextColor'],
+                            color: dynamicColor,
                           ),
                         ),
                         onChanged: (String value) {
@@ -150,7 +153,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                             _confirmPasswordvisible == true
                                 ? Iconsax.eye
                                 : Iconsax.eye_slash,
-                            color: customTheme['mainTextColor'],
+                            color: dynamicColor,
                           ),
                         ),
                         onChanged: (String value) {
@@ -231,25 +234,26 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Text(
-                    'Already have an account?',
-                    style: GoogleFonts.manrope(
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const MainText(
+                      text: 'Already have an account?',
                       fontSize: 15,
                       fontWeight: FontWeight.w400,
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.go(LoginView.path);
-                    },
-                    child: Text('Login',
-                        style: GoogleFonts.manrope(
-                            color: customTheme['primaryColor'],
-                            fontSize: 15,
-                            fontWeight: FontWeight.w400)),
-                  ),
-                ]),
+                    TextButton(
+                      onPressed: () {
+                        context.go(LoginView.path);
+                      },
+                      child: Text('Login',
+                          style: GoogleFonts.manrope(
+                              color: customTheme['primaryColor'],
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400)),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -296,7 +300,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
-        textColor: customTheme['whiteColor'],
+        textColor: customTheme['errorColor'],
         fontSize: 16.0,
       );
     } finally {
@@ -338,6 +342,14 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
             users?.awardDetails,
             users?.awardImageUrl,
           );
+          Fluttertoast.showToast(
+            msg: "Account created successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         } else {
           // Send email verification and update profile
           await _authController.sendEmailVerification(
@@ -366,6 +378,14 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
             users?.awardDetails ?? '',
             users?.awardImageUrl ?? '',
           );
+          Fluttertoast.showToast(
+            msg: "Account created successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         }
 
         // Navigate to home
@@ -378,11 +398,11 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     } catch (e) {
       _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Login fail",
+        msg: "Accout creation fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
-        textColor: customTheme['whiteColor'],
+        textColor: customTheme['errorColor'],
         fontSize: 16.0,
       );
     }
@@ -418,6 +438,14 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
             users?.awardDetails,
             users?.awardImageUrl,
           );
+          Fluttertoast.showToast(
+            msg: "Account created successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         } else {
           // Send email verification and update profile
           await _authController.sendEmailVerification(
@@ -446,6 +474,14 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
             users?.awardDetails ?? '',
             users?.awardImageUrl ?? '',
           );
+          Fluttertoast.showToast(
+            msg: "Account created successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         }
 
         _authController.isLoading.value = false;
@@ -455,11 +491,11 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
     } catch (e) {
       _authController.isLoading.value = false;
       Fluttertoast.showToast(
-        msg: "Login fail",
+        msg: "Account creation fail",
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
-        textColor: customTheme['whiteColor'],
+        textColor: customTheme['errorColor'],
         fontSize: 16.0,
       );
     }

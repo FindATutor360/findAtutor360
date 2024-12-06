@@ -5,19 +5,22 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
 class RatingDialog extends PopupRoute<void> {
-  RatingDialog({
+  RatingDialog(this.context,{
     required this.initialRating,
     required this.onSubmit,
   });
 
   final double initialRating;
   final Function(double rating, String comment) onSubmit;
+   final BuildContext context;
 
   @override
-  Color? get barrierColor => const Color(0xFFE0E0E0).withOpacity(0.5);
+  Color? get barrierColor => Theme.of(context).brightness != Brightness.dark
+      ? Colors.black.withOpacity(0.5)
+      : Colors.white.withOpacity(0.2);
 
   @override
-  bool get barrierDismissible => false;
+  bool get barrierDismissible => true;
 
   @override
   String? get barrierLabel => 'Rating dialog';
@@ -34,6 +37,9 @@ class RatingDialog extends PopupRoute<void> {
 
     return StatefulBuilder(
       builder: (BuildContext context, setState) {
+        Color dynamicColor = (Theme.of(context).brightness != Brightness.dark
+            ? Colors.white
+            : Colors.black);
         return Align(
           child: ConstrainedBox(
             constraints: BoxConstraints(
@@ -44,7 +50,7 @@ class RatingDialog extends PopupRoute<void> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
-                  color: Colors.white,
+                  color: dynamicColor,
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 40),
                 child: SingleChildScrollView(

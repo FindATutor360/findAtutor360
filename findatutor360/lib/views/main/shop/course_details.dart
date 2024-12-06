@@ -143,7 +143,7 @@ class _CourseDetailsState extends State<CourseDetails> {
                       ),
                       TextExpansionTile(
                         title: const MainText(
-                          text: 'Coruse Description',
+                          text: 'Course Description',
                           fontSize: 18,
                         ),
                         description: MainText(

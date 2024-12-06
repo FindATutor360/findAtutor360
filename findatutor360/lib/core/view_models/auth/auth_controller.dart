@@ -348,10 +348,11 @@ class AuthController extends BaseProvider {
   }
 
   // Logs out
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     await appPreferences.remove('userToken');
     await _authServiceImpl.logout();
     log('Log out successfully', name: 'debug');
+    showSnackMessage(context, "Log out successfully", isError: true);
   }
 
   // Send Email verification

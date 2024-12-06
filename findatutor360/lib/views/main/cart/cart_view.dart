@@ -95,6 +95,7 @@ class _CartViewState extends State<CartView> {
                               deleteTap: () {
                                 Navigator.of(context).push(
                                   DeleteDialog(
+                                    context,
                                     removeTap: () {
                                       booksController.removeFromCart(book);
                                       //Show toast
@@ -104,7 +105,7 @@ class _CartViewState extends State<CartView> {
                                         gravity: ToastGravity.BOTTOM,
                                         backgroundColor:
                                             customTheme['primaryColor'],
-                                        textColor: customTheme['whiteColor'],
+                                        textColor: customTheme['badgeColor'],
                                         fontSize: 16.0,
                                       );
                                       context.pop();

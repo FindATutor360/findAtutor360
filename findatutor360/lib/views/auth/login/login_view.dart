@@ -46,83 +46,86 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     _authController = context.read<AuthController>();
+    Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black);
     return PopScope(
       canPop: false,
       child: Scaffold(
-          body: SingleChildScrollView(
-        child: SafeArea(
-          child: Column(
-            children: [
-              const CustomHeader(),
-              const SizedBox(height: 20),
-              const MainText(
-                text: 'Login to get started',
-              ),
-              const SizedBox(height: 80),
-              Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomTextFormField(
-                      controller: _emailController,
-                      textCapitalization: TextCapitalization.none,
-                      label: Text('Email',
-                          style: TextStyle(
-                              color: customTheme['secondaryTextColor'])),
-                      hint: 'Enter your email',
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Please enter your email';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 30),
-                    CustomTextFormField(
-                        controller: _passwordController,
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Column(
+              children: [
+                const CustomHeader(),
+                const SizedBox(height: 20),
+                const MainText(
+                  text: 'Login to get started',
+                ),
+                const SizedBox(height: 80),
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomTextFormField(
+                        controller: _emailController,
                         textCapitalization: TextCapitalization.none,
-                        label: Text('Password',
+                        label: Text('Email',
                             style: TextStyle(
                                 color: customTheme['secondaryTextColor'])),
-                        hint: 'Enter your password',
-                        obscureText: _passwordvisible ? true : false,
-                        autofocus: true,
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(
-                              () {
-                                _passwordvisible = !_passwordvisible;
-                              },
-                            );
-                          },
-                          child: Icon(
-                            _passwordvisible == true
-                                ? Iconsax.eye
-                                : Iconsax.eye_slash,
-                            color: customTheme['mainTextColor'],
-                          ),
-                        ),
-                        onChanged: (String value) {
-                          password = _passwordController.text;
-                        },
-                        keyboardType: TextInputType.visiblePassword,
+                        hint: 'Enter your email',
+                        keyboardType: TextInputType.emailAddress,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Please enter your password';
+                            return 'Please enter your email';
                           }
                           return null;
-                        }),
-                  ],
+                        },
+                      ),
+                      const SizedBox(height: 30),
+                      CustomTextFormField(
+                          controller: _passwordController,
+                          textCapitalization: TextCapitalization.none,
+                          label: Text('Password',
+                              style: TextStyle(
+                                  color: customTheme['secondaryTextColor'])),
+                          hint: 'Enter your password',
+                          obscureText: _passwordvisible ? true : false,
+                          autofocus: true,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(
+                                () {
+                                  _passwordvisible = !_passwordvisible;
+                                },
+                              );
+                            },
+                            child: Icon(
+                              _passwordvisible == true
+                                  ? Iconsax.eye
+                                  : Iconsax.eye_slash,
+                              color: dynamicColor,
+                            ),
+                          ),
+                          onChanged: (String value) {
+                            password = _passwordController.text;
+                          },
+                          keyboardType: TextInputType.visiblePassword,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter your password';
+                            }
+                            return null;
+                          }),
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height: 15),
-              InkWell(
-                onTap: () {
-                  router.push(ForgetPasswordView.path);
-                },
-                child: Container(
+                const SizedBox(height: 15),
+                InkWell(
+                  onTap: () {
+                    router.push(ForgetPasswordView.path);
+                  },
+                  child: Container(
                     alignment: Alignment.centerRight,
                     margin: const EdgeInsets.only(right: 30),
                     child: TextButton(
@@ -132,73 +135,77 @@ class _LoginViewState extends State<LoginView> {
                               color: customTheme['primaryColor'],
                               fontSize: 15,
                               fontWeight: FontWeight.w400)),
-                    )),
-              ),
-              const SizedBox(height: 20),
-              Align(
-                child: ValueListenableBuilder<bool>(
-                  valueListenable: _authController.isLoading,
-                  builder: (context, isLoading, child) {
-                    return isLoading
-                        ? const CircularProgressIndicator()
-                        : PrimaryButton(
-                            isIconPresent: false,
-                            text: 'Login',
-                            fontWeight: FontWeight.w600,
-                            onPressed: () async {
-                              if (_formKey.currentState!.validate()) {
-                                await logIn(
-                                  email: _emailController.text,
-                                  password: _passwordController.text,
-                                );
-                              }
-                            });
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SecondaryButton(
-                      imageSrc: 'assets/images/google.png',
-                      onPressed: () async {
-                        await continueWithGoogle();
-                      },
-                      buttonColor: Colors.transparent),
-                  const SizedBox(width: 20),
-                  SecondaryButton(
-                      imageSrc: 'assets/images/facebook.png',
-                      onPressed: () async {
-                        await continueWithFacebook();
-                      },
-                      buttonColor: Colors.transparent),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                Text(
-                  'Don\'t have an account?',
-                  style: GoogleFonts.manrope(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w400,
+                    ),
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    context.go(RegisterView.path);
-                  },
-                  child: Text('Sign up',
-                      style: GoogleFonts.manrope(
-                          color: customTheme['primaryColor'],
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400)),
+                const SizedBox(height: 20),
+                Align(
+                  child: ValueListenableBuilder<bool>(
+                    valueListenable: _authController.isLoading,
+                    builder: (context, isLoading, child) {
+                      return isLoading
+                          ? const CircularProgressIndicator()
+                          : PrimaryButton(
+                              isIconPresent: false,
+                              text: 'Login',
+                              fontWeight: FontWeight.w600,
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  await logIn(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
+                                }
+                              },
+                            );
+                    },
+                  ),
                 ),
-              ]),
-            ],
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SecondaryButton(
+                        imageSrc: 'assets/images/google.png',
+                        onPressed: () async {
+                          await continueWithGoogle();
+                        },
+                        buttonColor: Colors.transparent),
+                    const SizedBox(width: 20),
+                    SecondaryButton(
+                        imageSrc: 'assets/images/facebook.png',
+                        onPressed: () async {
+                          await continueWithFacebook();
+                        },
+                        buttonColor: Colors.transparent),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const MainText(
+                      text: 'Don\'t have an account?',
+                      fontSize: 15,
+                      fontWeight: FontWeight.w400,
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.go(RegisterView.path);
+                      },
+                      child: Text('Sign up',
+                          style: GoogleFonts.manrope(
+                              color: customTheme['primaryColor'],
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400)),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      )),
+      ),
     );
   }
 
@@ -216,7 +223,7 @@ class _LoginViewState extends State<LoginView> {
       _authController.isLoading.value = false;
       if (user != null && user.emailVerified) {
         Fluttertoast.showToast(
-          msg: "Login successful",
+          msg: "Login successfully",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           backgroundColor: customTheme['primaryColor'],
@@ -235,7 +242,7 @@ class _LoginViewState extends State<LoginView> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
-        textColor: customTheme['whiteColor'],
+        textColor: customTheme['errorColor'],
         fontSize: 16.0,
       );
     }
@@ -268,6 +275,14 @@ class _LoginViewState extends State<LoginView> {
             users?.awardDetails,
             users?.awardImageUrl,
           );
+          Fluttertoast.showToast(
+            msg: "Login successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         } else {
           // Send email verification and update profile
           await _authController.sendEmailVerification(
@@ -296,6 +311,14 @@ class _LoginViewState extends State<LoginView> {
             users?.awardDetails ?? '',
             users?.awardImageUrl ?? '',
           );
+          Fluttertoast.showToast(
+            msg: "Login successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         }
 
         // Navigate to home
@@ -312,7 +335,7 @@ class _LoginViewState extends State<LoginView> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
-        textColor: customTheme['whiteColor'],
+        textColor: customTheme['errorColor'],
         fontSize: 16.0,
       );
     }
@@ -348,6 +371,14 @@ class _LoginViewState extends State<LoginView> {
             users?.awardDetails,
             users?.awardImageUrl,
           );
+          Fluttertoast.showToast(
+            msg: "Login successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         } else {
           // Send email verification and update profile
           await _authController.sendEmailVerification(
@@ -376,6 +407,14 @@ class _LoginViewState extends State<LoginView> {
             users?.awardDetails ?? '',
             users?.awardImageUrl ?? '',
           );
+          Fluttertoast.showToast(
+            msg: "Login successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            backgroundColor: customTheme['primaryColor'],
+            textColor: customTheme['whiteColor'],
+            fontSize: 16.0,
+          );
         }
 
         _authController.isLoading.value = false;
@@ -389,7 +428,7 @@ class _LoginViewState extends State<LoginView> {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: customTheme['badgeColor'],
-        textColor: customTheme['whiteColor'],
+        textColor: customTheme['errorColor'],
         fontSize: 16.0,
       );
     }

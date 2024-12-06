@@ -3,7 +3,8 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
 class PopUpDialog extends PopupRoute<void> {
-  PopUpDialog({
+  PopUpDialog(
+    this.context, {
     required this.firstText,
     required this.secondText,
     this.firstTextTap,
@@ -13,9 +14,12 @@ class PopUpDialog extends PopupRoute<void> {
   String secondText;
   VoidCallback? firstTextTap;
   VoidCallback? secondTextTap;
+  final BuildContext context;
 
   @override
-  Color? get barrierColor => const Color(0xFFE0E0E0).withOpacity(0.5);
+  Color? get barrierColor => Theme.of(context).brightness != Brightness.dark
+      ? Colors.black.withOpacity(0.5)
+      : Colors.white.withOpacity(0.2);
 
   @override
   bool get barrierDismissible => true;
@@ -33,6 +37,9 @@ class PopUpDialog extends PopupRoute<void> {
       type: MaterialType.transparency,
       child: StatefulBuilder(
         builder: (BuildContext context, setInnerState) {
+          Color dynamicColor = (Theme.of(context).brightness != Brightness.dark
+              ? Colors.white
+              : Colors.black);
           return Padding(
             padding: const EdgeInsets.only(left: 100, bottom: 250),
             child: UnconstrainedBox(
@@ -40,7 +47,7 @@ class PopUpDialog extends PopupRoute<void> {
                 width: MediaQuery.of(context).size.width * 0.50,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Colors.white,
+                  color: dynamicColor,
                 ),
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 24),

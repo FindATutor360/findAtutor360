@@ -2,12 +2,13 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/theme/index.dart';
 import 'package:flutter/material.dart';
 
-class DeleteDialog extends PopupRoute<void> {
-  DeleteDialog(
+class LogOutDialog extends PopupRoute<void> {
+  LogOutDialog(
     this.context, {
-    required this.removeTap,
+    required this.logOutTap,
   });
-  final VoidCallback? removeTap;
+  final VoidCallback? logOutTap;
+
   final BuildContext context;
 
   @override
@@ -19,7 +20,7 @@ class DeleteDialog extends PopupRoute<void> {
   bool get barrierDismissible => false;
 
   @override
-  String? get barrierLabel => 'Delete dialog';
+  String? get barrierLabel => 'LogOut dialog';
 
   @override
   Widget buildPage(
@@ -57,7 +58,7 @@ class DeleteDialog extends PopupRoute<void> {
                 ),
                 MainText(
                   text:
-                      'This action will delete your card permanently. This action is irrevisible',
+                      'This action will log you out. This action is irrevisible',
                   fontSize: 14,
                   fontWeight: FontWeight.w300,
                   color: customTheme['secondaryTextColor'],
@@ -98,7 +99,7 @@ class DeleteDialog extends PopupRoute<void> {
                     ),
                     Expanded(
                       child: InkWell(
-                        onTap: removeTap,
+                        onTap: logOutTap,
                         child: Container(
                           height: MediaQuery.of(context).size.height / 20,
                           decoration: BoxDecoration(
@@ -107,7 +108,7 @@ class DeleteDialog extends PopupRoute<void> {
                           ),
                           child: Align(
                             child: MainText(
-                              text: 'Remove',
+                              text: 'Log out',
                               fontSize: 18,
                               color: customTheme['whiteColor'],
                             ),
