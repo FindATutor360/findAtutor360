@@ -50,6 +50,8 @@ class ReviewServiceImpl implements ReviewService {
       createdAt: null, // Timestamp will be added when saving to Firestore
     );
 
+    debugPrint('Photo URL: ${_auth.currentUser?.photoURL}');
+
     final reviewsCollection = _fireStore.collection('Reviews');
 
     // Check if a review from this user for the same course already exists

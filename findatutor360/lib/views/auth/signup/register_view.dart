@@ -73,6 +73,7 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                                 color: customTheme['secondaryTextColor'])),
                         hint: 'Enter your fullname',
                         keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'Please enter your fullname';
@@ -175,14 +176,19 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                     valueListenable: checkedValue,
                     builder: (context, value, child) {
                       return Container(
-                        margin: const EdgeInsets.only(left: 15),
+                        margin: const EdgeInsets.only(left: 15, right: 15),
                         child: CheckboxListTile(
-                          title: Text(
-                            "I accept the Terms and Conditions",
-                            style: GoogleFonts.manrope(
-                                fontSize: 17, fontWeight: FontWeight.w400),
+                          tileColor: !value
+                              ? customTheme['primaryColor']
+                              : customTheme['whiteColor'],
+                          title: const MainText(
+                            text: "I accept the Terms and Conditions",
+                            fontSize: 17,
+                            fontWeight: FontWeight.w400,
+                            softWrap: true,
                           ),
                           value: value,
+                          checkColor: dynamicColor,
                           activeColor: customTheme['primaryColor'],
                           onChanged: (bool? newValue) {
                             checkedValue.value = newValue!;

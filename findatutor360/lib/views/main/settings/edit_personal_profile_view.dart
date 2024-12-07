@@ -327,6 +327,8 @@ class _EditPersonalProfileViewState extends State<EditPersonalProfileView> {
           textColor: customTheme['whiteColor'],
           fontSize: 16.0,
         );
+      } finally {
+        _authController.isLoading.value = false;
       }
     }
   }

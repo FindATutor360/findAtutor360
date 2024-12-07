@@ -75,6 +75,12 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
             final isFile =
                 user?.photoUrl != null && File(user!.photoUrl!).existsSync();
 
+            final image = user?.photoUrl ??
+                'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg';
+
+            bool isNetworkImage =
+                image.startsWith('http') || image.startsWith('https');
+
             if (user == null) {
               return const Center(child: Text('No user data available.'));
             }
@@ -92,24 +98,17 @@ class _PersonalProfileViewState extends State<PersonalProfileView> {
                     Align(
                       child: Column(
                         children: [
-                          !isFile
-                              ? CircleAvatar(
-                                  backgroundColor: customTheme['primaryColor'],
-                                  radius: 20,
-                                  backgroundImage: NetworkImage(
-                                    user.photoUrl ??
-                                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                  ),
-                                )
-                              : CircleAvatar(
-                                  backgroundColor: customTheme['primaryColor'],
-                                  radius: 20,
-                                  backgroundImage: FileImage(
-                                    File(
-                                      user.photoUrl ?? '',
-                                    ),
-                                  ),
-                                ),
+                          CircleAvatar(
+                            backgroundColor: const Color(0xFF0476AF),
+                            radius: 20,
+                            backgroundImage: isNetworkImage
+                                ? NetworkImage(user.photoUrl ?? '')
+                                : FileImage(File(user.photoUrl ?? ''))
+                                    as ImageProvider,
+                            child: !isNetworkImage && !isFile
+                                ? const Icon(Icons.person, color: Colors.white)
+                                : null, // Placeholder icon if no image is available
+                          ),
                           const SizedBox(
                             height: 10,
                           ),

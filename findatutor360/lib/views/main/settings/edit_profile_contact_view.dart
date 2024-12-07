@@ -52,18 +52,35 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
   Future<void> requestStoragePermission() async {
     var status = await Permission.storage.status;
     FilePickerResult? result;
+
     if (!status.isGranted) {
       // Requesting permission
-      await Permission.storage.request();
-      result = await FilePicker.platform.pickFiles(
-        type: FileType.image,
-        allowMultiple: false,
-      );
+      status = await Permission.storage.request();
+      if (!status.isGranted) {
+        // Handle denied permission
+        return;
+      }
     }
-    if (result != null) {
+
+    // Pick an image
+    result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
+
+    if (result != null && result.files.isNotEmpty) {
       PlatformFile file = result.files.first;
-      profileImageUrl.value = File(file
-          .path!); // Update with new image
+
+      // Check if the file has a valid path
+      if (file.path != null) {
+        profileImageUrl.value = File(file.path!); // Update with new image
+      } else {
+        // Handle the case where the file path is null
+        log("File path is null.", name: "debug");
+      }
+    } else {
+      // Handle the case where no file is selected
+      log("No file selected.", name: 'debug');
     }
   }
 
@@ -207,7 +224,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                     ),
                                     InkWell(
                                       onTap: () async {
-                                       await requestStoragePermission();
+                                        await requestStoragePermission();
                                       },
                                       child: CircleAvatar(
                                         backgroundColor:
@@ -266,7 +283,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
                                           0.85,
                                       child: InkWell(
                                         onTap: () async {
-                                        await  requestStoragePermission();
+                                          await requestStoragePermission();
                                         },
                                         child: CustomPaint(
                                           painter: DashedRectanglePainter(),
@@ -382,8 +399,7 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
   }
 
   Future<void> updateContactDetails() async {
-    if (formKey.currentState != null &&
-            formKey.currentState!.validate()) {
+    if (formKey.currentState != null && formKey.currentState!.validate()) {
       final FirebaseAuth auth = FirebaseAuth.instance;
 
       try {
@@ -412,6 +428,8 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
           textColor: customTheme['whiteColor'],
           fontSize: 16.0,
         );
+      } finally {
+        _authController.isLoading.value = false;
       }
     }
   }
@@ -430,4 +448,3 @@ class _EditProfileContactViewState extends State<EditProfileContactView> {
     }
   }
 }
-

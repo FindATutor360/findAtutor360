@@ -741,6 +741,8 @@ class _EditProfileEducationViewState extends State<EditProfileEducationView> {
           textColor: customTheme['whiteColor'],
           fontSize: 16.0,
         );
+      } finally {
+        _authController.isLoading.value = false;
       }
     }
   }

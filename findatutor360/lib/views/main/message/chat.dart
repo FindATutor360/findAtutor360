@@ -280,56 +280,60 @@ class _ChatViewsState extends State<ChatViews> {
           padding: const EdgeInsets.symmetric(horizontal: 30),
           height: 60,
           color: const Color(0xFFF2F3F4),
-          width: double.infinity,
+          width: MediaQuery.sizeOf(context).width,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                width: _focusNode.hasFocus ? 300 : 350,
-                height: 45,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: _focusNode.hasFocus
-                      ? Colors.transparent
-                      : const Color(0xFFDEE0E3),
-                  border: Border.all(
+              Flexible(
+                child: Container(
+                  width: _focusNode.hasFocus
+                      ? MediaQuery.sizeOf(context).width / 1.5
+                      : MediaQuery.sizeOf(context).width / 1.2,
+                  height: 45,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
                     color: _focusNode.hasFocus
-                        ? Colors.blue
+                        ? Colors.transparent
                         : const Color(0xFFDEE0E3),
-                  ),
-                ),
-                child: TextFormField(
-                  focusNode: _focusNode,
-                  controller: _messageController,
-                  style: TextStyle(
-                    fontSize: 17,
-                    fontWeight: FontWeight.w500,
-                    color: customTheme['mainTextSecondaryColor'],
-                  ),
-                  decoration: InputDecoration(
-                    hintText: 'Enter message',
-                    hintStyle: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w400,
-                      color: customTheme['secondaryTextColor'],
+                    border: Border.all(
+                      color: _focusNode.hasFocus
+                          ? Colors.blue
+                          : const Color(0xFFDEE0E3),
                     ),
-                    prefixIcon: InkWell(
-                      onTap: () {
-                        _handleAttachmentPressed();
-                      },
-                      child: const Icon(
-                        Iconsax.sticker,
+                  ),
+                  child: TextFormField(
+                    focusNode: _focusNode,
+                    controller: _messageController,
+                    style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w500,
+                      color: customTheme['mainTextSecondaryColor'],
+                    ),
+                    decoration: InputDecoration(
+                      hintText: 'Enter message',
+                      hintStyle: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: customTheme['secondaryTextColor'],
+                      ),
+                      prefixIcon: InkWell(
+                        onTap: () {
+                          _handleAttachmentPressed();
+                        },
+                        child: const Icon(
+                          Iconsax.sticker,
+                        ),
+                      ),
+                      prefixIconColor: customTheme['secondaryTextColor'],
+                      border: const OutlineInputBorder(
+                        borderSide: BorderSide.none,
                       ),
                     ),
-                    prefixIconColor: customTheme['secondaryTextColor'],
-                    border: const OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
+                    onChanged: (nameController) {
+                      text = nameController;
+                    },
+                    textCapitalization: TextCapitalization.sentences,
                   ),
-                  onChanged: (nameController) {
-                    text = nameController;
-                  },
-                  textCapitalization: TextCapitalization.sentences,
                 ),
               ),
               ValueListenableBuilder<bool>(

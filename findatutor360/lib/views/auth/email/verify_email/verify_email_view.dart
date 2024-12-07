@@ -131,7 +131,18 @@ class _VerifyEmailViewState extends State<VerifyEmailView> {
 
   void resendVerificationEmail() {
     user?.sendEmailVerification();
-    startCountdown();
+    countdown.value = 60;
+    setIsLoading(true);
+
+    emailVerificationTimer =
+        Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (countdown.value > 0) {
+        countdown.value -= 1;
+      } else {
+        setIsLoading(false);
+        timer.cancel();
+      }
+    });
     showSnackMessage(context, 'Verification email resent.', isError: false);
   }
 
