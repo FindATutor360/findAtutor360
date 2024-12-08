@@ -91,6 +91,11 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                               final isFile = user?.photoUrl != null &&
                                   File(user!.photoUrl!).existsSync();
 
+                              final image = user?.photoUrl ?? '';
+
+                              bool isNetworkImage = image.startsWith('http') ||
+                                  image.startsWith('https');
+
                               if (user == null) {
                                 return const Center(
                                     child: Text('No user data available.'));
@@ -102,26 +107,18 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
                                   );
                                 },
                                 child: Center(
-                                  child: !isFile
-                                      ? CircleAvatar(
-                                          backgroundColor:
-                                              const Color(0xFF0476AF),
-                                          radius: 20,
-                                          backgroundImage: NetworkImage(
-                                            user.photoUrl ??
-                                                'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                          ),
-                                        )
-                                      : CircleAvatar(
-                                          backgroundColor:
-                                              const Color(0xFF0476AF),
-                                          radius: 20,
-                                          backgroundImage: FileImage(
-                                            File(
-                                              user.photoUrl ?? '',
-                                            ),
-                                          ),
-                                        ), //CircleAvatar
+                                  child: CircleAvatar(
+                                    backgroundColor: const Color(0xFF0476AF),
+                                    radius: 20,
+                                    backgroundImage: isNetworkImage
+                                        ? NetworkImage(user.photoUrl ?? '')
+                                        : FileImage(File(user.photoUrl ?? ''))
+                                            as ImageProvider,
+                                    child: !isNetworkImage && !isFile
+                                        ? const Icon(Icons.person,
+                                            color: Colors.white)
+                                        : null, // Placeholder icon if no image is available
+                                  ),
                                 ),
                               );
                             },

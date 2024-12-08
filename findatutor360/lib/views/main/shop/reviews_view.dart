@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:findatutor360/core/models/main/review_model.dart';
 import 'package:findatutor360/core/view_models/main/review_controller.dart';
@@ -283,6 +285,11 @@ class ReviewData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isNetworkImage =
+        userImage.startsWith('http') || userImage.startsWith('https');
+
+    final isFile = userImage.isNotEmpty && File(userImage).existsSync();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -291,11 +298,12 @@ class ReviewData extends StatelessWidget {
             CircleAvatar(
               backgroundColor: const Color(0xFF0476AF),
               radius: 20,
-              child: MainText(
-                text: userImage,
-                fontSize: 16,
-                color: customTheme['whiteColor'],
-              ),
+              backgroundImage: isNetworkImage
+                  ? NetworkImage(userImage)
+                  : FileImage(File(userImage)) as ImageProvider,
+              child: !isNetworkImage && !isFile
+                  ? const Icon(Icons.person, color: Colors.white)
+                  : null, // Placeholder icon if no image is available
             ),
             const SizedBox(
               width: 12,

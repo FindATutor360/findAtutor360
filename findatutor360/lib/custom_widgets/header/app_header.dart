@@ -91,6 +91,12 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                               final isFile = user?.photoUrl != null &&
                                   File(user!.photoUrl!).existsSync();
 
+                              final image = user?.photoUrl ??
+                                  'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg';
+
+                              bool isNetworkImage = image.startsWith('http') ||
+                                  image.startsWith('https');
+
                               if (user == null) {
                                 return const Center(
                                     child: Text('No user data available.'));
@@ -106,43 +112,18 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.all(3.0),
-                                    child: !isFile
-                                        ? CachedNetworkImage(
-                                            imageUrl: user.photoUrl ??
-                                                'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                            placeholder: (context, url) =>
-                                                Shimmer.fromColors(
-                                              baseColor: Colors.grey.shade300,
-                                              highlightColor:
-                                                  Colors.grey.shade100,
-                                              child: const CircleAvatar(
-                                                radius: 20,
-                                              ),
-                                            ),
-                                            imageBuilder: (context, image) =>
-                                                CircleAvatar(
-                                              backgroundImage: image,
-                                              backgroundColor: customTheme[
-                                                  'secondaryColor']!,
-                                              radius: 20,
-                                            ),
-                                            errorWidget:
-                                                (context, url, error) => Icon(
-                                              Icons.person_2,
-                                              color:
-                                                  customTheme['secondaryColor'],
-                                            ),
-                                          )
-                                        : CircleAvatar(
-                                            radius: 20,
-                                            backgroundColor:
-                                                customTheme['secondaryColor']!,
-                                            backgroundImage: FileImage(
-                                              File(
-                                                user.photoUrl ?? '',
-                                              ),
-                                            ),
-                                          ),
+                                    child: CircleAvatar(
+                                      backgroundColor: const Color(0xFF0476AF),
+                                      radius: 20,
+                                      backgroundImage: isNetworkImage
+                                          ? NetworkImage(user.photoUrl ?? '')
+                                          : FileImage(File(user.photoUrl ?? ''))
+                                              as ImageProvider,
+                                      child: !isNetworkImage && !isFile
+                                          ? const Icon(Icons.person,
+                                              color: Colors.white)
+                                          : null, // Placeholder icon if no image is available
+                                    ),
                                   ),
                                 ),
                               );

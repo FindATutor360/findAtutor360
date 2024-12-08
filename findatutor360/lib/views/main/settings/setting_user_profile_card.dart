@@ -23,6 +23,7 @@ class SettingUserCard extends StatelessWidget {
     Color dynamicColor = (Theme.of(context).brightness == Brightness.dark
         ? Colors.black
         : Colors.white);
+
     return InkWell(
       onTap: () {
         router.push(
@@ -63,29 +64,27 @@ class SettingUserCard extends StatelessWidget {
                         final isFile = user?.photoUrl != null &&
                             File(user!.photoUrl!).existsSync();
 
+                        final image = user?.photoUrl ?? '';
+
+                        bool isNetworkImage = image.startsWith('http') ||
+                            image.startsWith('https');
+
                         if (user == null) {
                           return const Center(
                               child: Text('No user data available.'));
                         }
                         return ListTile(
-                          leading: !isFile
-                              ? CircleAvatar(
-                                  backgroundColor: const Color(0xFF0476AF),
-                                  radius: 20,
-                                  backgroundImage: NetworkImage(
-                                    user.photoUrl ??
-                                        'https://images.freeimages.com/images/large-previews/7cb/woman-05-1241044.jpg',
-                                  ),
-                                )
-                              : CircleAvatar(
-                                  backgroundColor: const Color(0xFF0476AF),
-                                  radius: 20,
-                                  backgroundImage: FileImage(
-                                    File(
-                                      user.photoUrl ?? '',
-                                    ),
-                                  ),
-                                ), //
+                          leading: CircleAvatar(
+                            backgroundColor: const Color(0xFF0476AF),
+                            radius: 20,
+                            backgroundImage: isNetworkImage
+                                ? NetworkImage(user.photoUrl ?? '')
+                                : FileImage(File(user.photoUrl ?? ''))
+                                    as ImageProvider,
+                            child: !isNetworkImage && !isFile
+                                ? const Icon(Icons.person, color: Colors.white)
+                                : null, // Placeholder icon if no image is available
+                          ),
                           title: Text(
                             user.fullName ?? 'Unknown',
                             style: const TextStyle(
