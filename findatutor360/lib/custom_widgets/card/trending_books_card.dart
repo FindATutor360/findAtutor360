@@ -23,7 +23,7 @@ class TrendingBookWidget extends StatelessWidget {
         ? Colors.black
         : Colors.white);
     return SizedBox(
-      height: title!.length > 120
+      height: title!.length > 190
           ? MediaQuery.of(context).size.height * 0.17
           : MediaQuery.of(context).size.height * 0.20,
       width: MediaQuery.of(context).size.width * 0.9,

@@ -1,4 +1,4 @@
-import 'package:findatutor360/core/services/main/theme.service.dart';
+import 'package:findatutor360/core/services/main/theme_service.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
 import 'package:findatutor360/core/view_models/main/books_controller.dart';
 import 'package:findatutor360/core/view_models/main/courses_controller.dart';

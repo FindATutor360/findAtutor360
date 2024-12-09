@@ -139,11 +139,14 @@ class _PaymentViewState extends State<PaymentView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Radio(
-                          value: 1,
-                          groupValue: 1,
-                          onChanged: (value) {},
+                        Flexible(
+                          child: Radio(
+                            value: 1,
+                            groupValue: 1,
+                            onChanged: (value) {},
+                          ),
                         ),
                         const SizedBox(
                           width: 6,
@@ -155,33 +158,41 @@ class _PaymentViewState extends State<PaymentView> {
                         const SizedBox(
                           width: 16,
                         ),
-                        Image.asset(
-                          'assets/images/payVisa.png',
-                          height: MediaQuery.of(context).size.height / 28,
+                        Flexible(
+                          child: Image.asset(
+                            'assets/images/payVisa.png',
+                            height: MediaQuery.of(context).size.height / 28,
+                          ),
                         ),
                         const SizedBox(
                           width: 6,
                         ),
-                        Image.asset(
-                          'assets/images/payBank.png',
-                          height: MediaQuery.of(context).size.height / 28,
+                        Flexible(
+                          child: Image.asset(
+                            'assets/images/payBank.png',
+                            height: MediaQuery.of(context).size.height / 28,
+                          ),
                         ),
                         const SizedBox(
                           width: 6,
                         ),
-                        Icon(
-                          Icons.more_horiz_outlined,
-                          color: customTheme['primaryColor'],
+                        Flexible(
+                          child: Icon(
+                            Icons.more_horiz_outlined,
+                            color: customTheme['primaryColor'],
+                          ),
                         ),
                         const Spacer(),
-                        CircleAvatar(
-                          backgroundColor: customTheme['primaryColor'],
-                          radius: 13,
-                          child: Icon(
-                            showDescriptions[1]
-                                ? Icons.keyboard_arrow_up_outlined
-                                : Icons.keyboard_arrow_down_outlined,
-                            color: customTheme['whiteColor'],
+                        Flexible(
+                          child: CircleAvatar(
+                            backgroundColor: customTheme['primaryColor'],
+                            radius: 13,
+                            child: Icon(
+                              showDescriptions[1]
+                                  ? Icons.keyboard_arrow_up_outlined
+                                  : Icons.keyboard_arrow_down_outlined,
+                              color: customTheme['whiteColor'],
+                            ),
                           ),
                         ),
                       ],

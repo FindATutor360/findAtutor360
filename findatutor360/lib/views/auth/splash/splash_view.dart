@@ -8,6 +8,7 @@ import 'package:findatutor360/theme/index.dart';
 import 'package:findatutor360/utils/operation_runner.dart';
 import 'package:findatutor360/utils/shared_pref.dart';
 import 'package:findatutor360/views/auth/login/login_view.dart';
+import 'package:findatutor360/views/auth/onboarding/onboarding_view.dart';
 import 'package:findatutor360/views/auth/welcome/welcome_view.dart';
 import 'package:findatutor360/views/main/home/home_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -83,7 +84,7 @@ class _SplashViewState extends State<SplashView> {
         }
       } else {
         context.pushReplacement(
-            hasSeenOnboarding ? LoginView.path : WelcomeView.path);
+            hasSeenOnboarding ? WelcomeView.path : OnboardingView.path);
       }
     } catch (e) {
       // Handle network or unexpected errors

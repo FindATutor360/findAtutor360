@@ -12,7 +12,7 @@ Course _$CourseFromJson(Map<String, dynamic> json) => Course(
       userEmail: json['userEmail'] as String?,
       image: json['image'] as String?,
       name: json['name'] as String?,
-      actualPriceUsd: (json['actualPriceUsd'] as num?)?.toDouble(),
+      actualPriceUsd: (json['actual_price_usd'] as num?)?.toDouble(),
       description: json['description'] as String?,
       category: json['category'] as String?,
       duration: json['duration'] as String?,

@@ -78,6 +78,7 @@ class _BooksCategorViewState extends State<BooksCategorView> {
                         child: MainText(
                           text: 'Error: ${snapshot.error}',
                           fontSize: 12,
+                          softWrap: true,
                         ),
                       );
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {

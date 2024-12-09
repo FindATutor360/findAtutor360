@@ -10,6 +10,7 @@ import 'package:findatutor360/custom_widgets/textfield/custom_text_form_field.da
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/shop/course_details.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
 
@@ -117,18 +118,21 @@ class _BookShopViewState extends State<BookShopView> {
                       );
                     } else {
                       final courses = snapshot.data!;
-                      return GridView.builder(
+                      return AlignedGridView.count(
                         padding: const EdgeInsets.symmetric(horizontal: 15),
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: 10,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1,
-                          mainAxisSpacing: 16,
-                          crossAxisSpacing: 16,
-                        ),
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 15.0,
+                        crossAxisSpacing: 15.0,
+                        // gridDelegate:
+                        //     const SliverGridDelegateWithFixedCrossAxisCount(
+                        //   crossAxisCount: 2,
+                        //   // childAspectRatio: 1,
+                        //   // mainAxisSpacing: 16,
+                        //   // crossAxisSpacing: 16,
+                        // ),
                         itemBuilder: ((BuildContext context, int index) {
                           final Course course = courses[index];
                           return InkWell(
@@ -140,7 +144,7 @@ class _BookShopViewState extends State<BookShopView> {
                             },
                             child: BookShopCard(
                               name: course.name ?? '',
-                              price: course.actualPriceUsd,
+                              price: course.actualPriceUsd ?? 9990.0,
                             ),
                           );
                         }),

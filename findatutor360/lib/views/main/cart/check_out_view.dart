@@ -220,7 +220,7 @@ class _CheckOutViewState extends State<CheckOutView> {
                 height: 24,
               ),
               SizedBox(
-                height: MediaQuery.of(context).size.height / 7,
+                height: MediaQuery.of(context).size.height / 6,
                 child: ListView.separated(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,

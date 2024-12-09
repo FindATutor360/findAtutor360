@@ -18,7 +18,6 @@ import 'package:findatutor360/custom_widgets/text/main_text.dart';
 import 'package:findatutor360/custom_widgets/text/text_option.dart';
 import 'package:findatutor360/routes/routes_notifier.dart';
 import 'package:findatutor360/views/main/home/active_courses/active_courses.dart';
-import 'package:findatutor360/views/main/home/category/category_view.dart';
 import 'package:findatutor360/views/main/shop/book_details.dart';
 import 'package:findatutor360/views/main/shop/course_details.dart';
 //import 'package:findatutor360/views/main/shop/course_details.dart';
@@ -97,9 +96,8 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     TextOption(
                       mainText: 'Category',
-                      onPressed: () {
-                        router.push(CategoryView.path);
-                      },
+                      subText: '',
+                      onPressed: () {},
                     ),
                     const CategoryScrollview(),
                     const SizedBox(
