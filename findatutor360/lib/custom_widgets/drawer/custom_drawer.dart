@@ -187,6 +187,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                             logOutTap: () async {
                               await _authController.logout(context).then(
                                     (value) =>
+                                        // ignore: use_build_context_synchronously
                                         context.pushReplacement(LoginView.path),
                                   );
                               //Show toast

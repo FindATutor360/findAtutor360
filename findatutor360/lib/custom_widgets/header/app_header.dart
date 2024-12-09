@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dashed_circle/dashed_circle.dart';
 import 'package:findatutor360/core/models/auth/user_model.dart';
 import 'package:findatutor360/core/view_models/auth/auth_controller.dart';
@@ -12,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   final String? badgeCount;

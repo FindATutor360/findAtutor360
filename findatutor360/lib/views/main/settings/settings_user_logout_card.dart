@@ -32,6 +32,7 @@ class _SettingsUserLogoutCardState extends State<SettingsUserLogoutCard> {
             context,
             logOutTap: () async {
               await _authController.logout(context).then(
+                    // ignore: use_build_context_synchronously
                     (value) => context.pushReplacement(LoginView.path),
                   );
             },
