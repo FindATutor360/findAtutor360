@@ -134,7 +134,7 @@ class _BookDetailsState extends State<BookDetails> {
                                     height: 16,
                                   ),
                                   MainText(
-                                    text: widget.books.title ?? '',
+                                    text: widget.books.title ?? 'Flutter',
                                     fontSize: 18,
                                     softWrap: true,
                                   ),
@@ -143,8 +143,10 @@ class _BookDetailsState extends State<BookDetails> {
                                             widget.books.author!
                                                 .trim()
                                                 .isNotEmpty)
-                                        ? widget.books.author!.trim()
-                                        : widget.books.authorName!.trim(),
+                                        ? widget.books.author ??
+                                            'Unknown Author'
+                                        : widget.books.authorName ??
+                                            'Unknown Author',
                                     fontSize: 14,
                                     fontWeight: FontWeight.w400,
                                     color: customTheme['secondaryTextColor'],

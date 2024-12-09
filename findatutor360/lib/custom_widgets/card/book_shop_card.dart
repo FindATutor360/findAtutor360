@@ -31,21 +31,17 @@ class BookShopCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: MainText(
-              text: name ?? '',
-              fontSize: 14,
-              softWrap: true,
-            ),
+          MainText(
+            text: name ?? '',
+            fontSize: 14,
+            softWrap: true,
           ),
           const SizedBox(height: 5),
-          Expanded(
-            child: MainText(
-              text: 'Marcelos Ramequin',
-              fontSize: 10,
-              color: customTheme['secondaryTextColor']!,
-              fontWeight: FontWeight.w400,
-            ),
+          MainText(
+            text: 'Marcelos Ramequin',
+            fontSize: 10,
+            color: customTheme['secondaryTextColor']!,
+            fontWeight: FontWeight.w400,
           ),
           const SizedBox(height: 8),
           Row(
@@ -55,58 +51,55 @@ class BookShopCard extends StatelessWidget {
                 initialRating: 3,
                 onRatingUpdate: (v) {},
               ),
-              Expanded(
-                child: Row(
-                  children: [
-                    Icon(
-                      Iconsax.clock,
-                      size: 11,
-                      color: customTheme['secondaryTextColor']!,
-                    ),
-                    const SizedBox(width: 2),
-                    MainText(
-                      text: 'Sunday-3pm',
-                      fontSize: 8,
-                      color: customTheme['secondaryTextColor']!,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ],
-                ),
+              Row(
+                children: [
+                  Icon(
+                    Iconsax.clock,
+                    size: 11,
+                    color: customTheme['secondaryTextColor']!,
+                  ),
+                  const SizedBox(width: 2),
+                  MainText(
+                    text: 'Sunday-3pm',
+                    fontSize: 8,
+                    color: customTheme['secondaryTextColor']!,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ],
               )
             ],
           ),
           const SizedBox(height: 8),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ),
-                  width: 70,
-                  height: MediaQuery.of(context).size.width * 0.1,
-                  decoration: BoxDecoration(
-                    color: customTheme['primaryColor'],
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(
-                      color: customTheme['primaryColor']!,
-                    ),
-                  ),
-                  child: Align(
-                    child: MainText(
-                      text: price != null
-                          ? '\$${price!.toStringAsFixed(2)} | Join'
-                          : ' Join',
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400,
-                      color: customTheme['whiteColor']!,
-                    ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
+                height: MediaQuery.sizeOf(context).height / 20,
+                decoration: BoxDecoration(
+                  color: customTheme['primaryColor'],
+                  borderRadius: BorderRadius.circular(4),
+                  border: Border.all(
+                    color: customTheme['primaryColor']!,
                   ),
                 ),
-                const CustomLikeButton(),
-              ],
-            ),
+                child: Align(
+                  child: MainText(
+                    text: price != null
+                        ? '\$${price!.toStringAsFixed(2)} | Join'
+                        : ' Join',
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                    color: customTheme['whiteColor']!,
+                  ),
+                ),
+              ),
+              const Expanded(
+                child: CustomLikeButton(),
+              ),
+            ],
           ),
         ],
       ),

@@ -1,4 +1,4 @@
-import 'package:findatutor360/core/services/main/theme.service.dart';
+import 'package:findatutor360/core/services/main/theme_service.dart';
 import 'package:findatutor360/utils/base_provider.dart';
 import 'package:flutter/material.dart';
 
