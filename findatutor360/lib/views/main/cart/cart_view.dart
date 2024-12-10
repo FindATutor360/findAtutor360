@@ -190,7 +190,7 @@ class _CartViewState extends State<CartView> {
                                             '\$${(itemPrice * book.quantity).toStringAsFixed(2)}',
                                         fontSize: 16,
                                         overflow: TextOverflow.ellipsis,
-                                        fontWeight: FontWeight.w400,
+                                        fontWeight: FontWeight.w600,
                                         color:
                                             customTheme['secondaryTextColor'],
                                       ),

@@ -92,16 +92,17 @@ class TrendingBookWidget extends StatelessWidget {
                       text: title ?? '',
                       fontSize: 16,
                       softWrap: true,
-                      // overflow: TextOverflow.clip,
                     ),
                     const SizedBox(
                       height: 5,
                     ),
-                    MainText(
-                      text: author ?? '',
-                      fontSize: 10,
-                      color: customTheme['secondaryTextColor']!,
-                      softWrap: true,
+                    Flexible(
+                      child: MainText(
+                        text: author ?? '',
+                        fontSize: 10,
+                        color: customTheme['secondaryTextColor']!,
+                        softWrap: true,
+                      ),
                     ),
                     const SizedBox(
                       height: 10,

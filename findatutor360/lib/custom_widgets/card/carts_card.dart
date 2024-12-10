@@ -145,6 +145,7 @@ class _CartsCardState extends State<CartsCard> {
                         widget.book.authorName ??
                         'Unknown',
                     fontSize: 10,
+                    softWrap: true,
                     fontWeight: FontWeight.w400,
                     color: customTheme['secondaryTextColor'],
                   ),
@@ -156,7 +157,7 @@ class _CartsCardState extends State<CartsCard> {
                     text:
                         '\$${(widget.itemPrice * quantity).toStringAsFixed(2)}',
                     fontSize: 12,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w600,
                     color: customTheme['smainTextSecondaryColor'],
                   ),
                   const SizedBox(

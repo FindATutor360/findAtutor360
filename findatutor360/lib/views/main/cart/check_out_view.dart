@@ -50,12 +50,6 @@ class _CheckOutViewState extends State<CheckOutView> {
     });
   }
 
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  // }
-
   @override
   Widget build(BuildContext context) {
     booksController = context.watch<BooksController>();
@@ -361,6 +355,7 @@ class _CheckOutViewState extends State<CheckOutView> {
                                               'Marcelos Ramequin',
                                           fontSize: 10,
                                           fontWeight: FontWeight.w400,
+                                          overflow: TextOverflow.ellipsis,
                                           softWrap: true,
                                           color:
                                               customTheme['secondaryTextColor'],
@@ -383,7 +378,7 @@ class _CheckOutViewState extends State<CheckOutView> {
                                     text:
                                         '\$${(itemPrice * book.quantity).toStringAsFixed(2)}',
                                     fontSize: 12,
-                                    fontWeight: FontWeight.w400,
+                                    fontWeight: FontWeight.w600,
                                     softWrap: true,
                                     color:
                                         customTheme['smainTextSecondaryColor'],

@@ -165,7 +165,6 @@ class _HomeViewState extends State<HomeView> {
 
                               return InkWell(
                                 onTap: () async {
-                                  log('print', name: 'Tapss');
                                   final tutorUrl = tutor.source ?? '';
                                   final sanitizedTutorName =
                                       (tutor.tutorName ?? '')

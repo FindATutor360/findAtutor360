@@ -177,23 +177,25 @@ class _RegisterViewState extends OperationRunnerState<RegisterView> {
                     builder: (context, value, child) {
                       return Container(
                         margin: const EdgeInsets.only(left: 15, right: 15),
-                        child: CheckboxListTile(
-                          tileColor: !value
-                              ? customTheme['primaryColor']
-                              : customTheme['whiteColor'],
-                          title: const MainText(
-                            text: "I accept the Terms and Conditions",
-                            fontSize: 17,
-                            fontWeight: FontWeight.w400,
-                            softWrap: true,
+                        child: Align(
+                          child: CheckboxListTile(
+                            tileColor: !value
+                                ? customTheme['primaryColor']
+                                : customTheme['whiteColor'],
+                            title: const MainText(
+                              text: "I accept the Terms and Conditions",
+                              fontSize: 17,
+                              fontWeight: FontWeight.w400,
+                              softWrap: true,
+                            ),
+                            value: value,
+                            checkColor: dynamicColor,
+                            activeColor: customTheme['primaryColor'],
+                            onChanged: (bool? newValue) {
+                              checkedValue.value = newValue!;
+                            },
+                            controlAffinity: ListTileControlAffinity.leading,
                           ),
-                          value: value,
-                          checkColor: dynamicColor,
-                          activeColor: customTheme['primaryColor'],
-                          onChanged: (bool? newValue) {
-                            checkedValue.value = newValue!;
-                          },
-                          controlAffinity: ListTileControlAffinity.leading,
                         ),
                       );
                     }),
